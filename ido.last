@@ -1,0 +1,28 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/guyfawkes/" . ".emacs.d/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/guyfawkes/.emacs.d/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "init.el"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/guyfawkes/Documents/Irene/portfolio/" (23434 31667 486319 181000) "./" "README.md" "fonts/" "css/" ".#index.html" "style.css" ".git/" "../" "img/" "index.html")
+
+ ("/home/guyfawkes/.emacs.d/" (23433 23505 356628 586000) "auto-save-list/" "ido.last~" "network-security.data" "ac-comphist.dat" "./" "url/" "elpa/" "recentf" "ido.last" "init.el~" "../" "init.el")
+
+ ("/home/guyfawkes/" (23432 56590 930658 158000) "Videos/" ".oh-my-zsh/" ".zcompdump-alucard-5.5.1" ".yarn/" ".ICEauthority" ".esd_auth" "Desktop/" "#.zshrc#" ".moc/" "colors.tdesktop-palette" ".ssh/" ".gnupg/" ".python_history" "./" "Pictures/" ".mozilla/" ".config/" ".local/" ".node-gyp/" ".yarnrc" ".w3m/" ".zshrc.pre-oh-my-zsh" ".zshrc" "Downloads/" "Documents/" ".npm/" "Public/" ".zshrc~" ".zsh_history" "Templates/" ".pki/" "../" ".emacs.d/" ".bash_history" ".cache/" ".vscode/" "Music/")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

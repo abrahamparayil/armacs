@@ -1,0 +1,21 @@
+#+STARTUP: showall
+* Emacs Setup
+Most of the configuration is done in the init.el file.
+The main purpose of this is repo is to setup emacs the way I want it on a fresh install.
+That being said I hope you find something worthwhile here
+
+* Packages I Use
+  - try
+  - which-key
+  - counsel
+  - swiper
+  - auto-complete
+
+* Personal Preferences
+  - Name and Email
+  - Default Start-up message has been disabled
+  - Ido mode enabled by default
+  - ibuffer enabled by default
+  - Emacs toolbar disabled by default
+  - windmove enabled by default
+  - linum-mode enabled by default
