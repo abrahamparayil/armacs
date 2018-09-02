@@ -1,7 +1,8 @@
 #+STARTUP: showall
 * Emacs Setup
-Most of the configuration is done in the init.el file.
-The main purpose of this is repo is to setup emacs the way I want it on a fresh install.
+Package sources are configued in the init.el file. All of the actual
+configuration is done in the config.org file.  The main purpose of
+this is repo is to setup emacs the way I want it on a fresh install.
 That being said I hope you find something worthwhile here
 
 * Packages I Use
