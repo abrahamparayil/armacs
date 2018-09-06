@@ -5,18 +5,23 @@ configuration is done in the config.org file.  The main purpose of
 this is repo is to setup emacs the way I want it on a fresh install.
 That being said I hope you find something worthwhile here
 
-* Packages I Use
-  - try
-  - which-key
-  - counsel
-  - swiper
-  - auto-complete
-
 * Personal Preferences
   - Name and Email
+  - Matlab Library
   - Default Start-up message has been disabled
   - Ido mode enabled by default
   - ibuffer enabled by default
   - Emacs toolbar disabled by default
   - windmove enabled by default
   - linum-mode enabled by default
+  - Toggle reveal/hide  menu bar
+
+* Packages I Use
+  - org
+  - try
+  - which-key
+  - ox-reveal
+  - htmlize
+  - auto-complete
+  - org-mode bullets
+  - liso-theme

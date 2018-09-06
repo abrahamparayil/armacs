@@ -1,0 +1,15 @@
+ls
+cd Documents/current-work/4br.github.io/
+ls
+emacs index.html 
+mocp
+moc
+sudo apt update
+sudo apt upgrade
+clear
+clear
+hi
+Hi
+sudo apt install mocp
+sudo apt install moc
+mocp

@@ -2,27 +2,69 @@
 
 ;; ----- ido-last-directory-list -----
 (
+ ("/home/guyfawkes/.emacs.d/org-reveal/" . "reveal.js-master/")
+ ("/home/guyfawkes/Documents/current-work/4br.github.io/assets/" . "css/")
+ ("/home/guyfawkes/Documents/current-work/" . "4br.github.io/")
+ ("/home/" . "guyfawkes/")
+ ("/" . "home/")
+ ("/home/guyfawkes/Documents/" . "code/")
  ("/home/guyfawkes/" . ".emacs.d/")
+ ("/home/guyfawkes/.emacs.d/" . "org-reveal/")
 )
 
 ;; ----- ido-work-directory-list -----
 (
  "/home/guyfawkes/.emacs.d/"
+ "/home/guyfawkes/.emacs.d/org-reveal/"
+ "/home/guyfawkes/Documents/code/"
+ "/home/guyfawkes/Documents/current-work/4br.github.io/assets/css/"
+ "/home/guyfawkes/Documents/current-work/4br.github.io/"
+ "/home/guyfawkes/Documents/Emacs/"
 )
 
 ;; ----- ido-work-file-list -----
 (
+ "README.org"
+ "Readme.org"
  "config.org"
+ "reveal.js"
+ "pyt.py"
+ "python.py"
+ "main.css"
+ "index.html"
  "init.el"
+ "dont-use-terminal-emacs.html"
 )
 
 ;; ----- ido-dir-file-cache -----
 (
- ("/home/guyfawkes/.emacs.d/" (23435 43129 32584 311000) "auto-save-list/" "LICENSE" "ido.last~" "network-security.data" "config.el" "ac-comphist.dat" "./" "url/" "config.org~" "recentf~" "elpa/" "config.org" "recentf" "ido.last" "init.el~" "#recentf#" ".git/" "README.org" "session.10715f61e12a06d7bd153579663253391000000011590066" "../" "README.org~" "init.el")
+ ("/home/guyfawkes/Documents/current-work/4br.github.io/" (23441 20829 62493 143000) "assets/" "./" "LICENSE.html" "README.md" "images/" ".git/" "../" "index.html")
 
- ("/home/guyfawkes/" (23435 31648 736426 379000) "Videos/" ".oh-my-zsh/" ".zcompdump-alucard-5.5.1" ".yarn/" ".ICEauthority" ".esd_auth" "Desktop/" "#.zshrc#" ".moc/" ".ssh/" ".gnupg/" ".python_history" "./" "Pictures/" ".git-credentials" ".mozilla/" ".config/" ".local/" ".node-gyp/" ".yarnrc" ".w3m/" ".zshrc.pre-oh-my-zsh" ".zshrc" "Downloads/" "Documents/" ".npm/" ".gitconfig" "Public/" ".zshrc~" ".zsh_history" "Templates/" ".pki/" "../" ".emacs.d/" ".bash_history" ".cache/" ".vscode/" "Music/")
+ ("/home/guyfawkes/.emacs.d/org-reveal/" (23441 20786 447320 422000) "Readme.org" "reveal.js" "./" "ox-reveal.el" "r.js-master/" "images/" ".git/" "../" ".gitignore" "local.css")
 
- ("/home/guyfawkes/Documents/Irene/portfolio/" (23434 31667 486319 181000) "./" "README.md" "fonts/" "css/" ".#index.html" "style.css" ".git/" "../" "img/" "index.html")
+ ("/home/guyfawkes/.emacs.d/" (23441 21120 753025 967000) "auto-save-list/" "org-reveal/" "ido.last~" "network-security.data" "config.el" "ac-comphist.dat" "matlab-emacs-master/" "./" "config.html~" "config.org~" "matlab-emacs-master.zip" "elpa/" "config.org" "themes/" "ido.last" "init.el~" "config.html" "eshell/" "../" "init.el")
+
+ ("/home/guyfawkes/.emacs.d/org-reveal/reveal.js-master/" (23440 220 234161 684000) "LICENSE" "CONTRIBUTING.md" "./" "package.json" "README.md" "#index.html#" "css/" "js/" "demo.html" "bower.json" ".travis.yml" "test/" "../" "Gruntfile.js" "lib/" "index.html" ".gitignore" "node_modules/" "plugin/")
+
+ ("/home/guyfawkes/Documents/current-work/4br.github.io/assets/css/" (23440 7786 163902 517000) "./" "noscript.css" "images/" "source-sans-pro.css" "main.css" "../" "font-awesome.min.css")
+
+ ("/home/guyfawkes/" (23441 17889 826567 383000) "Videos/" ".oh-my-zsh/" ".ICEauthority" "Desktop/" ".moc/" ".gconf/" ".gnupg/" "./" ".zcompdump-zaphkiel-5.4.2" "Pictures/" ".sudo_as_admin_successful" ".mozilla/" ".config/" ".local/" ".electron/" ".dbus/" ".zcompdump" ".quokka/" ".wget-hsts" ".zshrc.pre-oh-my-zsh" ".zshrc" "Downloads/" "Documents/" ".npm/" "Public/" ".zsh_history" "Templates/" ".pki/" ".gvfs/" "../" ".emacs.d/" ".bash_history" ".cache/" ".vscode/" "Music/" "node_modules/")
+
+ ("/home/guyfawkes/Documents/code/" (23441 20170 689616 540000) "Hello.html~" "#test.org#~" "Neocities/" "Hello.html" "./" "#test.html~" "SJC -TESLA-1 (1).pdf" "ubuntu.css" "#python.py#" "Pink Floyd.html" "test.c" "W3 themes/" "pyt.py" "#Pink Floyd.html#" "Power Outage.pdf" "Html5/" "style.css" "#test.c#" "Vega.pptx" "jibin.html" "python.py" "test.cpp" "#test.org#" "../" "a.out" "#test.html" ".#test.c" "pyt.py~" "Pink Floyd.html~")
+
+ ("/home/guyfawkes/Documents/current-work/4br.github.io/assets/" (23434 61673 344853 510000) "./" "fonts/" "css/" "../")
+
+ ("/home/guyfawkes/Documents/Emacs/" (23440 3208 415256 163000) "hrsconfigfile.html" "Getting_Started_With_Org_Mode.srt" "./" "dotfiles-master.zip" "emacs.d-master.zip" "dont-use-terminal-emacs.html" "emacs-installation.html" "#dont-use-terminal-emacs.html#" "emacs.pdf" "gruber-darker-theme-master.zip" "20130830-The-Grumpy-Guide-How-to-Learn-Emacs-Keyboard-Shortcuts1.png" "refernce.txt" ".#refernce.txt" "hrsconfigfile.tex" "emacs-cheatsheet.txt" "[DownSub.com] Emacs Tutorial.srt" "Getting Started With Org Mode.avi" "emacs-26.1/" "hrsconfigfile.org" "20130830-Emacs-Newbie-How-to-Learn-Emacs-Keyboard-Shortcuts.png" "reference.txt" "How-to-Learn-Emacs8.png" "../" "hrsconfigfile.tex~" "refcard.pdf" "Emacs Tutorial.mp4" "hrsconfigfile.html~")
+
+ ("/home/guyfawkes/.config/" (23440 5541 747916 682000) "gedit/" "nautilus/" "gtk-3.0/" "user-dirs.dirs" "autostart/" "goa-1.0/" "evolution/" "Code/" "./" "mimeapps.list" "ibus/" "Electron/" "monitors.xml" "gnome-control-center/" "dconf/" "pulse/" "update-notifier/" "user-dirs.locale" "gtk-4.0/" "enchant/" "eog/" "../" "gnome-session/" "gnome-initial-setup-done")
+
+ ("/home/guyfawkes/Documents/current-work/" (23434 63063 404791 911000) "Irene/" "html5up-identity/" "./" "4br.github.io/" "revamp website/" "html5up-photon/" "html5up-stellar/" "../")
+
+ ("/home/" (23262 60430 0 0) "./" ".Trash-0/" "guyfawkes/" "../" ".ecryptfs/")
+
+ ("/home/guyfawkes/Documents/" (23439 65154 674010 590000) "current-work/" "ID Cards/" "wordpress/" "Story.doc" "./" "myportfolio-master/" "emacs-26.1.tar.gz" "Itinerary.pdf" "Finding404/" "code/" "blog/" "deb-new-web-static/" "Words.odt" "MVA-Python/" "Viola Â· SlidesCarnival.pptx" "First Year/" "Second Year/" "mpe.neocities/" "feed.xml" "templated-visualize/" "Resources/" "reveal.js-master/" "cloudflare~" "Emacs/" "MagicMirror/" "../" "VPNBook.com-OpenVPN-US1/" "reveal.js-master.zip" "Screenshot_2018-08-05 joshnh Git-Commands.png" "orkney.zip" "cloudflare")
+
+ ("/home/guyfawkes/.emacs.d/elpa/" (23439 62394 828297 351000) "gnupg/" "bind-key-2.3/" "use-package-2.3/" "./" "org-babel-eval-in-repl-readme.txt" "org-9.1.14/" "archives/" "org-9.1.14.signed" "diminish-0.45/" "../" "org-gnome-readme.txt")
 )
 
 ;; ----- ido-unc-hosts-cache -----
