@@ -24,31 +24,31 @@
 
 ;; ----- ido-work-file-list -----
 (
+ "config.org"
+ "config.el"
+ "init.el"
  "README.org"
  "Readme.org"
- "config.org"
  "reveal.js"
  "pyt.py"
  "python.py"
  "main.css"
  "index.html"
- "init.el"
- "dont-use-terminal-emacs.html"
 )
 
 ;; ----- ido-dir-file-cache -----
 (
+ ("/home/guyfawkes/.emacs.d/" (23441 26684 402953 356000) "auto-save-list/" "ido.last~" "network-security.data" "config.el" "ac-comphist.dat" "matlab-emacs-master/" "./" "matlab-emacs-master.zip" "ox-reveal/" "elpa/" "config.org" "themes/" "ido.last" "eshell/" ".git/" "README.org" "../" "README.org~" "init.el")
+
+ ("/home/guyfawkes/" (23441 26440 6126 151000) "Videos/" ".oh-my-zsh/" ".ICEauthority" "Desktop/" ".moc/" ".gconf/" ".gnupg/" "./" ".zcompdump-zaphkiel-5.4.2" "Pictures/" ".sudo_as_admin_successful" ".mozilla/" ".config/" ".local/" ".electron/" ".dbus/" "config.org" ".zcompdump" ".quokka/" ".wget-hsts" ".zshrc.pre-oh-my-zsh" ".zshrc" "Downloads/" "Documents/" ".npm/" ".gitconfig" "Public/" ".zsh_history" "Templates/" ".pki/" ".gvfs/" "../" ".emacs.d/" ".bash_history" ".cache/" ".vscode/" "Music/" "node_modules/")
+
  ("/home/guyfawkes/Documents/current-work/4br.github.io/" (23441 20829 62493 143000) "assets/" "./" "LICENSE.html" "README.md" "images/" ".git/" "../" "index.html")
 
  ("/home/guyfawkes/.emacs.d/org-reveal/" (23441 20786 447320 422000) "Readme.org" "reveal.js" "./" "ox-reveal.el" "r.js-master/" "images/" ".git/" "../" ".gitignore" "local.css")
 
- ("/home/guyfawkes/.emacs.d/" (23441 21120 753025 967000) "auto-save-list/" "org-reveal/" "ido.last~" "network-security.data" "config.el" "ac-comphist.dat" "matlab-emacs-master/" "./" "config.html~" "config.org~" "matlab-emacs-master.zip" "elpa/" "config.org" "themes/" "ido.last" "init.el~" "config.html" "eshell/" "../" "init.el")
-
  ("/home/guyfawkes/.emacs.d/org-reveal/reveal.js-master/" (23440 220 234161 684000) "LICENSE" "CONTRIBUTING.md" "./" "package.json" "README.md" "#index.html#" "css/" "js/" "demo.html" "bower.json" ".travis.yml" "test/" "../" "Gruntfile.js" "lib/" "index.html" ".gitignore" "node_modules/" "plugin/")
 
  ("/home/guyfawkes/Documents/current-work/4br.github.io/assets/css/" (23440 7786 163902 517000) "./" "noscript.css" "images/" "source-sans-pro.css" "main.css" "../" "font-awesome.min.css")
-
- ("/home/guyfawkes/" (23441 17889 826567 383000) "Videos/" ".oh-my-zsh/" ".ICEauthority" "Desktop/" ".moc/" ".gconf/" ".gnupg/" "./" ".zcompdump-zaphkiel-5.4.2" "Pictures/" ".sudo_as_admin_successful" ".mozilla/" ".config/" ".local/" ".electron/" ".dbus/" ".zcompdump" ".quokka/" ".wget-hsts" ".zshrc.pre-oh-my-zsh" ".zshrc" "Downloads/" "Documents/" ".npm/" "Public/" ".zsh_history" "Templates/" ".pki/" ".gvfs/" "../" ".emacs.d/" ".bash_history" ".cache/" ".vscode/" "Music/" "node_modules/")
 
  ("/home/guyfawkes/Documents/code/" (23441 20170 689616 540000) "Hello.html~" "#test.org#~" "Neocities/" "Hello.html" "./" "#test.html~" "SJC -TESLA-1 (1).pdf" "ubuntu.css" "#python.py#" "Pink Floyd.html" "test.c" "W3 themes/" "pyt.py" "#Pink Floyd.html#" "Power Outage.pdf" "Html5/" "style.css" "#test.c#" "Vega.pptx" "jibin.html" "python.py" "test.cpp" "#test.org#" "../" "a.out" "#test.html" ".#test.c" "pyt.py~" "Pink Floyd.html~")
 

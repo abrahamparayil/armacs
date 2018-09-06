@@ -1,4 +1,4 @@
-* Personal Settings
+Personal Settings
   #+BEGIN_SRC emacs-lisp 
   (setq user-full-name "Abraham Raji")
   (setq user-mail-address "abrahamraji99@gmail.com")
@@ -28,7 +28,6 @@
   (add-hook 'pre-command-hook 'my-menu-bar-open-after))))
   (global-set-key [f10] 'my-menu-bar-open)
   #+END_SRC
-
 * Packages
 ** org
    #+BEGIN_SRC emacs-lisp
@@ -58,7 +57,7 @@
 
 ** ox-reveal
    #+BEGIN_SRC emacs-lisp
-   (add-to-list 'load-path "org-reveal")
+   (add-to-list 'load-path "~/.emacs.d/org-reveal")
    (require 'ox-reveal)
    (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
    (setq org-reveal-mathjax t)
