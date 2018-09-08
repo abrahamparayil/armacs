@@ -1,17 +1,28 @@
-Personal Settings
-  #+BEGIN_SRC emacs-lisp 
+* Personal Settings
+** My Info
+   #+BEGIN_SRC emacs-lisp 
   (setq user-full-name "Abraham Raji")
-  (setq user-mail-address "abrahamraji99@gmail.com")
-  (setq inhibit-startup-message t)
-  ;; ido mode
+  (setq user-mail-address "abrahamraji99@gmail.com") 
+   #+END_SRC 
+** One-line Settings
+   #+BEGIN_SRC emacs-lisp
+(setq inhibit-startup-message t)
+(defalias 'list-buffers 'ibuffer)
+(tool-bar-mode -1)
+(windmove-default-keybindings)
+(global-linum-mode t)
+(allout-mode) ;;outlining
+(global-font-lock-mode 1) ;;syntax highlighting
+   #+END_SRC
+** ido mode
+   #+BEGIN_SRC emacs-lisp
   (setq indo-enable-flex-matching t)
   (setq ido-eveywhere t)
-  (ido-mode 1);;ido end
-  (defalias 'list-buffers 'ibuffer);;ibuffer
-  (tool-bar-mode -1)
-  (windmove-default-keybindings)
-  (global-linum-mode t)
-  ;;Menubar
+  (ido-mode 1)
+   #+END_SRC
+  
+** Menubar
+   #+BEGIN_SRC emacs-lisp
   (menu-bar-mode -1)
   (defun my-menu-bar-open-after ()
   (remove-hook 'pre-command-hook 'my-menu-bar-open-after)
@@ -27,8 +38,56 @@ Personal Settings
   (setq menu-bar-mode 42)
   (add-hook 'pre-command-hook 'my-menu-bar-open-after))))
   (global-set-key [f10] 'my-menu-bar-open)
-  #+END_SRC
+   #+END_SRC
+** Font
+   #+BEGIN_SRC emacs-lisp
+  (add-to-list 'default-frame-alist
+  '(font . "DejaVu Sans Mono-10"))
+   #+END_SRC
+** Babel in org-mode
+   #+BEGIN_SRC 
+   ; And add babel inline code execution
+   ; babel, for executing code in org-mode.
+   (org-babel-do-load-languages
+   'org-babel-load-languages
+   ; load all language marked with (lang . t).
+   '((C . t)
+   (css . t)
+   (emacs-lisp . t)
+   (js . t)
+   (python . t)
+   #+END_SRC
 * Packages
+** auto-complete
+   #+BEGIN_SRC emacs-lisp
+   (ac-config-default)
+   (global-auto-complete-mode t)
+   (add-to-list 'ac-modes 'org-mode)
+   #+END_SRC
+** flycheck
+   #+BEGIN_SRC emacs-lisp
+   (use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
+   #+END_SRC
+** htmlize
+   #+BEGIN_SRC emacs-lisp
+      (use-package htmlize
+   :ensure t)
+   #+END_SRC
+** liso-theme
+   #+BEGIN_SRC emacs-lisp
+   (use-package liso-theme
+   :ensure t
+   :config (load-theme 'liso t))
+   #+END_SRC
+
+** matlab 
+   #+BEGIN_SRC emacs-lisp
+   (add-to-list 'load-path "/home/guyfawkes/.emacs.d/matlab-emacs-master")
+   (load-library "matlab-load")
+   #+END_SRC
 ** org
    #+BEGIN_SRC emacs-lisp
    (unless (file-expand-wildcards (concat package-user-dir "/org-[0-9]*"))
@@ -36,10 +95,20 @@ Personal Settings
    (require 'org)
    #+END_SRC
 
-** matlab 
+** org-mode Bullets
    #+BEGIN_SRC emacs-lisp
-   (add-to-list 'load-path "/home/guyfawkes/.emacs.d/matlab-emacs-master")
-   (load-library "matlab-load")
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))   
+   #+END_SRC
+
+** ox-reveal
+   #+BEGIN_SRC emacs-lisp
+   (add-to-list 'load-path "~/.emacs.d/org-reveal")
+   (require 'ox-reveal)
+   (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+   (setq org-reveal-mathjax t)
    #+END_SRC
 ** try package
    #+BEGIN_SRC emacs-lisp
@@ -54,39 +123,10 @@ Personal Settings
    :config
    (which-key-mode))   
    #+END_SRC
-
-** ox-reveal
+** elpy
    #+BEGIN_SRC emacs-lisp
-   (add-to-list 'load-path "~/.emacs.d/org-reveal")
-   (require 'ox-reveal)
-   (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
-   (setq org-reveal-mathjax t)
-   #+END_SRC
-** htmlize
-   #+BEGIN_SRC emacs-lisp
-      (use-package htmlize
-   :ensure t)
-   #+END_SRC
-
-** auto-complete
-   #+BEGIN_SRC emacs-lisp
-   (require 'package)
-   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-   (package-initialize)  ;load and activate packages, including auto-complete
-   (ac-config-default)
-   (global-auto-complete-mode t)  
- #+END_SRC
-
-** org-mode Bullets
-   #+BEGIN_SRC emacs-lisp
-(use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))   
-   #+END_SRC
-** liso-theme
-   #+BEGIN_SRC emacs-lisp
-   (use-package liso-theme
-   :ensure t
-   :config (load-theme 'liso t))
+(use-package elpy
+:ensure t
+:config 
+(elpy-enable))
    #+END_SRC
