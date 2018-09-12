@@ -1,18 +1,22 @@
 * Personal Settings
 ** My Info
    #+BEGIN_SRC emacs-lisp 
-  (setq user-full-name "Abraham Raji")
-  (setq user-mail-address "abrahamraji99@gmail.com") 
+   (setq user-full-name "Abraham Raji")
+   (setq user-mail-address "abrahamraji99@gmail.com") 
+   ;; Sets the frame title as by http://www.emacswiki.org/emacs/FrameTitle
+   (setq frame-title-format (list "%b   %[- GNU %F " emacs-version) 
+   icon-title-format (list "%b- GNU %F " emacs-version))
    #+END_SRC 
 ** One-line Settings
    #+BEGIN_SRC emacs-lisp
-(setq inhibit-startup-message t)
-(defalias 'list-buffers 'ibuffer)
-(tool-bar-mode -1)
-(windmove-default-keybindings)
-(global-linum-mode t)
-(allout-mode) ;;outlining
-(global-font-lock-mode 1) ;;syntax highlighting
+   (setq inhibit-startup-message t)
+   (defalias 'list-buffers 'ibuffer)
+   (tool-bar-mode -1)
+   (windmove-default-keybindings)
+   (global-linum-mode t)
+   (allout-mode) ;;outlining
+   (global-font-lock-mode 1) ;;syntax highlighting
+   (global-visual-line-mode t)  
    #+END_SRC
 ** ido mode
    #+BEGIN_SRC emacs-lisp
@@ -129,4 +133,8 @@
 :ensure t
 :config 
 (elpy-enable))
+   #+END_SRC
+** ox-md
+   #+BEGIN_SRC emacs-lisp
+   (require 'ox-md)
    #+END_SRC

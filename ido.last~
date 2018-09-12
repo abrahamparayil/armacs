@@ -2,22 +2,24 @@
 
 ;; ----- ido-last-directory-list -----
 (
+ ("/home/guyfawkes/Documents/Resources/" . "PHP/")
  ("/home/guyfawkes/.emacs.d/org-reveal/" . "reveal.js-master/")
  ("/home/guyfawkes/Documents/current-work/4br.github.io/assets/" . "css/")
  ("/home/guyfawkes/Documents/current-work/" . "WB/")
  ("/home/" . "guyfawkes/")
  ("/" . "home/")
- ("/home/guyfawkes/Documents/" . "current-work/")
+ ("/home/guyfawkes/Documents/" . "code/")
  ("/home/guyfawkes/" . ".emacs.d/")
  ("/home/guyfawkes/.emacs.d/" . "org-reveal/")
 )
 
 ;; ----- ido-work-directory-list -----
 (
- "/home/guyfawkes/.emacs.d/"
- "/home/guyfawkes/Documents/current-work/WB/"
- "/home/guyfawkes/Documents/current-work/4br.github.io/"
  "/home/guyfawkes/Documents/code/"
+ "/home/guyfawkes/Documents/current-work/WB/"
+ "/home/guyfawkes/Documents/Resources/PHP/"
+ "/home/guyfawkes/.emacs.d/"
+ "/home/guyfawkes/Documents/current-work/4br.github.io/"
  "/home/guyfawkes/.emacs.d/org-reveal/"
  "/home/guyfawkes/Documents/current-work/4br.github.io/assets/css/"
  "/home/guyfawkes/Documents/Emacs/"
@@ -25,25 +27,31 @@
 
 ;; ----- ido-work-file-list -----
 (
+ "#test.org#~"
+ "loops.py"
+ "Plain Text.py"
+ "PHP Programming.mp4"
+ "sesplan.org"
+ "encrypt.py"
  "config.org"
  "pyth.py"
  "init.el"
  "index.html"
- "pyt.py"
- "#test.org#"
- "config.el"
- "README.org"
- "Readme.org"
- "reveal.js"
 )
 
 ;; ----- ido-dir-file-cache -----
 (
- ("/home/guyfawkes/.emacs.d/" (23444 4396 850523 80000) "auto-save-list/" "org-reveal/" "ido.last~" "network-security.data" "config.el" "ac-comphist.dat" "matlab-emacs-master/" "./" "elpa/" "config.org" "themes/" "ido.last" "init.el~" "eshell/" ".git/" "snippets/" "README.org" "../" "README.org~" "init.el")
+ ("/home/guyfawkes/" (23448 26704 724333 357000) "Videos/" ".oh-my-zsh/" ".ICEauthority" ".gphoto/" "Desktop/" ".moc/" ".gconf/" ".gnupg/" ".python_history" "./" ".zcompdump-zaphkiel-5.4.2" "Pictures/" ".sudo_as_admin_successful" ".mozilla/" ".config/" ".local/" ".weechat/" ".electron/" ".dbus/" "config.org" ".zcompdump" ".quokka/" ".wget-hsts" ".w3m/" ".zshrc.pre-oh-my-zsh" ".zshrc" "Downloads/" "Documents/" ".npm/" ".gitconfig" "Public/" ".zshrc~" ".zsh_history" ".gimp-2.8/" "Templates/" ".pki/" ".gvfs/" ".thumbnails/" "../" ".emacs.d/" ".bash_history" ".cache/" ".vscode/" "Music/" "node_modules/")
 
- ("/home/guyfawkes/" (23444 4703 476996 860000) "Videos/" ".oh-my-zsh/" ".ICEauthority" ".gphoto/" "Desktop/" ".moc/" ".gconf/" ".gnupg/" ".python_history" "./" ".zcompdump-zaphkiel-5.4.2" "Pictures/" ".sudo_as_admin_successful" ".mozilla/" ".config/" ".local/" ".electron/" ".dbus/" "config.org" ".zcompdump" ".quokka/" ".wget-hsts" ".w3m/" ".zshrc.pre-oh-my-zsh" ".zshrc" "Downloads/" "Documents/" ".npm/" ".gitconfig" "Public/" ".zshrc~" ".zsh_history" "Templates/" ".pki/" ".gvfs/" "../" ".emacs.d/" ".bash_history" ".cache/" ".vscode/" "Music/" "node_modules/")
+ ("/home/guyfawkes/Documents/current-work/WB/" (23446 23261 19276 301000) "firefox-logo-300x310.png" "pyth.py" "loops.py" "encrypt.py" "#sess.org#" "./" "Plain Text.txt~" "#sesplan.org#" "sesplan.org" "encrypt.py~" "Plain Text.py" "sesplan.org~" "site.html~" ".#sesplan.org" "pyt.org~" "loops.py~" "../" "site.html" "pyt.org" "pyth.py~")
 
- ("/home/guyfawkes/Documents/current-work/WB/" (23443 62614 812351 145000) "pyth.py" "./" "../" "pyth.py~")
+ ("/home/guyfawkes/Documents/current-work/4br.github.io/" (23444 60088 506165 487000) "assets/" "./" "LICENSE.html" "README.md" "#index.html#" "images/" ".git/" "../" "index.html")
+
+ ("/home/guyfawkes/.emacs.d/" (23445 443 778079 6000) "auto-save-list/" "org-reveal/" "ido.last~" "network-security.data" "config.el" "ac-comphist.dat" "matlab-emacs-master/" "session.10d330355ba384ea49153646935436098500000014690062" "./" "elpa/" "config.org" "themes/" "ido.last" "init.el~" "eshell/" ".git/" "snippets/" "README.org" "../" "README.org~" "init.el")
+
+ ("/home/guyfawkes/Documents/Resources/PHP/" (23445 24788 81275 745000) "PHP in 2018 by the Creator of PHP.mp4" "./" "PHP Programming.mp4" "../")
+
+ ("/home/guyfawkes/Documents/Resources/" (23445 24773 130088 1000) "html-and-css-book-code-0915/" "14 Robert B. Parker_s the Hangman_ - Reed Farrel Coleman.epub" "The C Programming Language - 2nd Edition - Ritchie Kernighan.pdf" "10 A Legacy of Spies - John le CarrÂ.epub" "Relief Data Collection -Kottayam.pdf" "./" "thebestmotherfuckingwebsite.co-master/" "Neonomicon 2010/" "One_Indian_Girl_-_Chetan_Bhagat-Redicals.pdf" "JavaScript-and-JQuery-Interactive-Front-End-Web-Development.pdf.crdownload" "mpe.neocities.local/" "Will Grayson Will Grayson.pdf" "æ²ªæ±è²å¿ç½_J.K._Rowling_-_The_Tales_of_Beedle_the_Bard_20140530113631475_889.pdf" "HTML5 The Missing Manual 2nd Edition V413HAV/" "Lamaara - One Pager - V1.0.pdf" "Abundance Of Katherines.pdf" "56a5fb19b0b93-1305419-sample.pdf" ".#JFLI/" "w3css_tutorial.pdf" "PHP/" "html-and-css-book-code-0915.zip" "Looking for Alaska.pdf" "How to Read a Person Like a Book - Gerard I. Nierenberg.pdf" "abrahamraji99@gmail.com Firefox Recovery Codes.txt" "Linux/" "HTML-and-CSS-Design-and-Build-Websites.pdf" "thebestmotherfuckingwebsite-master/" "The 16 Personality Types by Dr. A.J. Drenth.epub" "Ruby/" "Python/" "One_Indian_Girl_-_Chetan_Bhagat-Redicals.txt" "../" "LAMAARA_TERAFIL FILTER TECHNOLOGY.pdf" "11 Y Is for Yesterday - Sue Grafton.epub" "keyboard-shortcuts-linux.pdf" ".directory" "03 The Girl Who Takes an Eye for an Eye - David Lagercrantz.epub")
 
  ("/home/guyfawkes/Documents/current-work/" (23443 62259 34543 515000) "Irene/" "html5up-identity/" "WB/" "./" "4br.github.io/" "revamp website/" "html5up-photon/" "html5up-stellar/" "../")
 
@@ -54,8 +62,6 @@
  ("/home/guyfawkes/Documents/code/" (23441 30006 803693 685000) "Hello.html~" "#test.org#~" "Neocities/" "Hello.html" "./" "#test.html~" "SJC -TESLA-1 (1).pdf" "ubuntu.css" "#python.py#" "Pink Floyd.html" "test.c" "W3 themes/" "pyt.py" "#Pink Floyd.html#" "Power Outage.pdf" "Html5/" "style.css" "#test.c#" "Vega.pptx" "jibin.html" "python.py" "test.cpp" "#test.org#" "../" "a.out" "#test.html" ".#test.c" "pyt.py~" "Pink Floyd.html~")
 
  ("/home/guyfawkes/Documents/" (23443 8006 52264 254000) "current-work/" "ID Cards/" "org-reveal/" "wordpress/" "Story.doc" "./" "myportfolio-master/" "emacs-26.1.tar.gz" "Itinerary.pdf" "Finding404/" "code/" "blog/" "deb-new-web-static/" "Words.odt" "MVA-Python/" "Viola Â· SlidesCarnival.pptx" "First Year/" "Second Year/" "mpe.neocities/" "feed.xml" "templated-visualize/" "Resources/" "reveal.js-master/" "cloudflare~" "Emacs/" "MagicMirror/" "../" "VPNBook.com-OpenVPN-US1/" "reveal.js-master.zip" "Screenshot_2018-08-05 joshnh Git-Commands.png" "orkney.zip" "cloudflare")
-
- ("/home/guyfawkes/Documents/current-work/4br.github.io/" (23441 29176 859698 193000) "assets/" "./" "LICENSE.html" "README.md" "#index.html#" "images/" ".git/" "../" "index.html")
 
  ("/home/guyfawkes/.emacs.d/org-reveal/reveal.js-master/" (23440 220 234161 684000) "LICENSE" "CONTRIBUTING.md" "./" "package.json" "README.md" "#index.html#" "css/" "js/" "demo.html" "bower.json" ".travis.yml" "test/" "../" "Gruntfile.js" "lib/" "index.html" ".gitignore" "node_modules/" "plugin/")
 

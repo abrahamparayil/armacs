@@ -1,5 +1,8 @@
 (setq user-full-name "Abraham Raji")
-(setq user-mail-address "abrahamraji99@gmail.com")
+(setq user-mail-address "abrahamraji99@gmail.com") 
+;; Sets the frame title as by http://www.emacswiki.org/emacs/FrameTitle
+(setq frame-title-format (list "%b   %[- GNU %F " emacs-version) 
+icon-title-format (list "%b- GNU %F " emacs-version))
 
 (setq inhibit-startup-message t)
 (defalias 'list-buffers 'ibuffer)
@@ -8,6 +11,7 @@
 (global-linum-mode t)
 (allout-mode) ;;outlining
 (global-font-lock-mode 1) ;;syntax highlighting
+(global-visual-line-mode t)
 
 (setq indo-enable-flex-matching t)
 (setq ido-eveywhere t)
@@ -77,3 +81,5 @@
 :ensure t
 :config 
 (elpy-enable))
+
+(require 'ox-md)

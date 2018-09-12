@@ -38,3 +38,9 @@ zsh
 ls
 moc
 exit
+ls
+python3 encrypt.py 
+python3 encrypt.py 
+python3 encrypt.py 
+python3 encrypt.py 
+cat encrypt.py 
