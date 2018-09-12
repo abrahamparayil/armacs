@@ -7,21 +7,28 @@ That being said I hope you find something worthwhile here
 
 * Personal Preferences
   - Name and Email
-  - Matlab Library
+  - Window title
   - Default Start-up message has been disabled
-  - Ido mode enabled by default
-  - ibuffer enabled by default
   - Emacs toolbar disabled by default
+  - ibuffer enabled by default
   - windmove enabled by default
   - linum-mode enabled by default
+  - font-lock-mode and visual-line-mode
+  - Ido mode enabled by default
   - Toggle reveal/hide  menu bar
+  - Font Settings
+  - Babel in org-mode
 
 * Packages I Use
+  - auto-complete
+  - flycheck
+  - htmlize
+  - liso-theme
+  - matlab
   - org
+  - org-mode bullets
+  - ox-reveal
   - try
   - which-key
-  - ox-reveal
-  - htmlize
-  - auto-complete
-  - org-mode bullets
-  - liso-theme
+  - elpy
+  - ox-md

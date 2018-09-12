@@ -15,10 +15,10 @@
 
 ;; ----- ido-work-directory-list -----
 (
+ "/home/guyfawkes/.emacs.d/"
  "/home/guyfawkes/Documents/code/"
  "/home/guyfawkes/Documents/current-work/WB/"
  "/home/guyfawkes/Documents/Resources/PHP/"
- "/home/guyfawkes/.emacs.d/"
  "/home/guyfawkes/Documents/current-work/4br.github.io/"
  "/home/guyfawkes/.emacs.d/org-reveal/"
  "/home/guyfawkes/Documents/current-work/4br.github.io/assets/css/"
@@ -27,13 +27,13 @@
 
 ;; ----- ido-work-file-list -----
 (
+ "config.org"
  "#test.org#~"
  "loops.py"
  "Plain Text.py"
  "PHP Programming.mp4"
  "sesplan.org"
  "encrypt.py"
- "config.org"
  "pyth.py"
  "init.el"
  "index.html"
@@ -41,13 +41,13 @@
 
 ;; ----- ido-dir-file-cache -----
 (
+ ("/home/guyfawkes/.emacs.d/" (23448 33745 682545 795000) "auto-save-list/" "org-reveal/" "ido.last~" "network-security.data" "config.el" "ac-comphist.dat" "matlab-emacs-master/" "session.10d330355ba384ea49153646935436098500000014690062" "./" "elpa/" "config.org" "themes/" "ido.last" "init.el~" "eshell/" ".git/" "snippets/" "README.org" "../" "README.org~" "init.el")
+
  ("/home/guyfawkes/" (23448 26704 724333 357000) "Videos/" ".oh-my-zsh/" ".ICEauthority" ".gphoto/" "Desktop/" ".moc/" ".gconf/" ".gnupg/" ".python_history" "./" ".zcompdump-zaphkiel-5.4.2" "Pictures/" ".sudo_as_admin_successful" ".mozilla/" ".config/" ".local/" ".weechat/" ".electron/" ".dbus/" "config.org" ".zcompdump" ".quokka/" ".wget-hsts" ".w3m/" ".zshrc.pre-oh-my-zsh" ".zshrc" "Downloads/" "Documents/" ".npm/" ".gitconfig" "Public/" ".zshrc~" ".zsh_history" ".gimp-2.8/" "Templates/" ".pki/" ".gvfs/" ".thumbnails/" "../" ".emacs.d/" ".bash_history" ".cache/" ".vscode/" "Music/" "node_modules/")
 
  ("/home/guyfawkes/Documents/current-work/WB/" (23446 23261 19276 301000) "firefox-logo-300x310.png" "pyth.py" "loops.py" "encrypt.py" "#sess.org#" "./" "Plain Text.txt~" "#sesplan.org#" "sesplan.org" "encrypt.py~" "Plain Text.py" "sesplan.org~" "site.html~" ".#sesplan.org" "pyt.org~" "loops.py~" "../" "site.html" "pyt.org" "pyth.py~")
 
  ("/home/guyfawkes/Documents/current-work/4br.github.io/" (23444 60088 506165 487000) "assets/" "./" "LICENSE.html" "README.md" "#index.html#" "images/" ".git/" "../" "index.html")
-
- ("/home/guyfawkes/.emacs.d/" (23445 443 778079 6000) "auto-save-list/" "org-reveal/" "ido.last~" "network-security.data" "config.el" "ac-comphist.dat" "matlab-emacs-master/" "session.10d330355ba384ea49153646935436098500000014690062" "./" "elpa/" "config.org" "themes/" "ido.last" "init.el~" "eshell/" ".git/" "snippets/" "README.org" "../" "README.org~" "init.el")
 
  ("/home/guyfawkes/Documents/Resources/PHP/" (23445 24788 81275 745000) "PHP in 2018 by the Creator of PHP.mp4" "./" "PHP Programming.mp4" "../")
 
