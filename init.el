@@ -24,7 +24,7 @@
  '(custom-enabled-themes (quote (liso)))
  '(custom-safe-themes
    (quote
-    ("13a654e817774e669cc17ee0705a3e1dfc62aedb01005a8abe2f8930a1d16d2e" "f27c3fcfb19bf38892bc6e72d0046af7a1ded81f54435f9d4d09b3bff9c52fc1" default)))
+    ("cd4d1a0656fee24dc062b997f54d6f9b7da8f6dc8053ac858f15820f9a04a679" "13a654e817774e669cc17ee0705a3e1dfc62aedb01005a8abe2f8930a1d16d2e" "f27c3fcfb19bf38892bc6e72d0046af7a1ded81f54435f9d4d09b3bff9c52fc1" default)))
  '(ibuffer-deletion-face (quote diredp-deletion-file-name))
  '(ibuffer-marked-face (quote diredp-flag-mark))
  '(package-selected-packages
