@@ -36,10 +36,6 @@ icon-title-format (list "%b- GNU %F " emacs-version))
 (add-to-list 'default-frame-alist
 '(font . "DejaVu Sans Mono-10"))
 
-(ac-config-default)
-(global-auto-complete-mode t)
-(add-to-list 'ac-modes 'org-mode)
-
 (use-package flycheck
 :ensure t
 :init

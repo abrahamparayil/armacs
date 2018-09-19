@@ -1,0 +1,140 @@
+* Personal Settings
+** My Info
+   #+BEGIN_SRC emacs-lisp 
+   (setq user-full-name "Abraham Raji")
+   (setq user-mail-address "abrahamraji99@gmail.com") 
+   ;; Sets the frame title as by http://www.emacswiki.org/emacs/FrameTitle
+   (setq frame-title-format (list "%b   %[- GNU %F " emacs-version) 
+   icon-title-format (list "%b- GNU %F " emacs-version))
+   #+END_SRC 
+** One-line Settings
+   #+BEGIN_SRC emacs-lisp
+   (setq inhibit-startup-message t)
+   (defalias 'list-buffers 'ibuffer)
+   (tool-bar-mode -1)
+   (windmove-default-keybindings)
+   (global-linum-mode t)
+   (allout-mode) ;;outlining
+   (global-font-lock-mode 1) ;;syntax highlighting
+   (global-visual-line-mode t)  
+   #+END_SRC
+** ido mode
+   #+BEGIN_SRC emacs-lisp
+  (setq indo-enable-flex-matching t)
+  (setq ido-eveywhere t)
+  (ido-mode 1)
+   #+END_SRC
+  
+** Menubar
+   #+BEGIN_SRC emacs-lisp
+  (menu-bar-mode -1)
+  (defun my-menu-bar-open-after ()
+  (remove-hook 'pre-command-hook 'my-menu-bar-open-after)
+  (when (eq menu-bar-mode 42)
+  (menu-bar-mode -1)))
+  (defun my-menu-bar-open (&rest args)
+  (interactive)
+  (let ((open menu-bar-mode))
+  (unless open
+  (menu-bar-mode 1))
+  (funcall 'menu-bar-open args)
+  (unless open
+  (setq menu-bar-mode 42)
+  (add-hook 'pre-command-hook 'my-menu-bar-open-after))))
+  (global-set-key [f10] 'my-menu-bar-open)
+   #+END_SRC
+** Font
+   #+BEGIN_SRC emacs-lisp
+  (add-to-list 'default-frame-alist
+  '(font . "DejaVu Sans Mono-10"))
+   #+END_SRC
+** Babel in org-mode
+   #+BEGIN_SRC 
+   ; And add babel inline code execution
+   ; babel, for executing code in org-mode.
+   (org-babel-do-load-languages
+   'org-babel-load-languages
+   ; load all language marked with (lang . t).
+   '((C . t)
+   (css . t)
+   (emacs-lisp . t)
+   (js . t)
+   (python . t)
+   #+END_SRC
+* Packages
+** auto-complete
+   #+BEGIN_SRC emacs-lisp
+   (ac-config-default)
+   (global-auto-complete-mode t)
+   (add-to-list 'ac-modes 'org-mode)
+   #+END_SRC
+** flycheck
+   #+BEGIN_SRC emacs-lisp
+   (use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
+   #+END_SRC
+** htmlize
+   #+BEGIN_SRC emacs-lisp
+      (use-package htmlize
+   :ensure t)
+   #+END_SRC
+** liso-theme
+   #+BEGIN_SRC emacs-lisp
+   (use-package liso-theme
+   :ensure t
+   :config (load-theme 'liso t))
+   #+END_SRC
+
+** matlab 
+   #+BEGIN_SRC emacs-lisp
+   (add-to-list 'load-path "/home/guyfawkes/.emacs.d/matlab-emacs-master")
+   (load-library "matlab-load")
+   #+END_SRC
+** org
+   #+BEGIN_SRC emacs-lisp
+   (unless (file-expand-wildcards (concat package-user-dir "/org-[0-9]*"))
+   (package-install (elt (cdr (assoc 'org package-archive-contents)) 0)))
+   (require 'org)
+   #+END_SRC
+
+** org-mode Bullets
+   #+BEGIN_SRC emacs-lisp
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))   
+   #+END_SRC
+
+** ox-reveal
+   #+BEGIN_SRC emacs-lisp
+   (add-to-list 'load-path "~/.emacs.d/org-reveal")
+   (require 'ox-reveal)
+   (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+   (setq org-reveal-mathjax t)
+   #+END_SRC
+** try package
+   #+BEGIN_SRC emacs-lisp
+   (use-package try
+   :ensure t)
+   #+END_SRC
+ 
+** which-key package
+   #+BEGIN_SRC  emacs-lisp
+   (use-package which-key
+   :ensure t 
+   :config
+   (which-key-mode))   
+   #+END_SRC
+** elpy
+   #+BEGIN_SRC emacs-lisp
+(use-package elpy
+:ensure t
+:config 
+(elpy-enable))
+   #+END_SRC
+** ox-md
+   #+BEGIN_SRC emacs-lisp
+   (require 'ox-md)
+   #+END_SRC

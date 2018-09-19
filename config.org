@@ -63,11 +63,11 @@
    #+END_SRC
 * Packages
 ** auto-complete
-   #+BEGIN_SRC emacs-lisp
-   (ac-config-default)
-   (global-auto-complete-mode t)
-   (add-to-list 'ac-modes 'org-mode)
-   #+END_SRC
+;;   #+BEGIN_SRC emacs-lisp
+;;   (ac-config-default)
+;;   (global-auto-complete-mode t)
+;;   (add-to-list 'ac-modes 'org-mode)
+;;   #+END_SRC
 ** flycheck
    #+BEGIN_SRC emacs-lisp
    (use-package flycheck
