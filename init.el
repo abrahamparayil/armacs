@@ -11,28 +11,13 @@
 ;;use-package command
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
-(package-install 'use-package))
+  (package-install 'use-package))
+(setq use-package-verbose t)
+(setq use-package-always-ensure t)
+(require 'use-package)
+
+(use-package auto-compile
+  :config (auto-compile-on-load-mode))
+(setq load-prefer-newer t)
 
 (org-babel-load-file (expand-file-name"~/.emacs.d/config.org"))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["black" "red3" "green3" "yellow3" "#FFE203" "magenta3" "cyan3" "gray90"])
- '(custom-enabled-themes (quote (liso)))
- '(custom-safe-themes
-   (quote
-    ("cd4d1a0656fee24dc062b997f54d6f9b7da8f6dc8053ac858f15820f9a04a679" "13a654e817774e669cc17ee0705a3e1dfc62aedb01005a8abe2f8930a1d16d2e" "f27c3fcfb19bf38892bc6e72d0046af7a1ded81f54435f9d4d09b3bff9c52fc1" default)))
- '(ibuffer-deletion-face (quote diredp-deletion-file-name))
- '(ibuffer-marked-face (quote diredp-flag-mark))
- '(package-selected-packages
-   (quote
-    (elpy jedi flycheck which-key use-package try solarized-theme org-bullets org liso-theme htmlize gruvbox-theme auto-complete))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

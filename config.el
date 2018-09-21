@@ -1,5 +1,8 @@
-(setq user-full-name "Abraham Raji")
-(setq user-mail-address "abrahamraji99@gmail.com") 
+(setq user-full-name "Abraham Raji"
+      user-mail-address "abrahamraji99@gmail.com") 
+     ; calendar-latitude 9.738909
+     ; calendar-longitude 76.719904
+     ; calendar-location-name "Pravithanam, Pala KTM "
 ;; Sets the frame title as by http://www.emacswiki.org/emacs/FrameTitle
 (setq frame-title-format (list "%b   %[- GNU %F " emacs-version) 
 icon-title-format (list "%b- GNU %F " emacs-version))
@@ -36,17 +39,52 @@ icon-title-format (list "%b- GNU %F " emacs-version))
 (add-to-list 'default-frame-alist
 '(font . "DejaVu Sans Mono-10"))
 
-(use-package flycheck
+(defun 4br/visit-emacs-config ()
+  (interactive)
+  (find-file "~/.emacs.d/config.org"))
+
+(global-set-key (kbd "C-c e") '4br/visit-emacs-config)
+
+(use-package elpy
 :ensure t
-:init
-(global-flycheck-mode t))
+:config 
+(elpy-enable))
+
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
+  (add-hook 'elpy-mode-hook 'flycheck-mode)
+;This creates a flycheck checker that runs proselint in texty buffers and displays my errors. 
+ (flycheck-define-checker proselint
+  "A linter for prose."
+  :command ("proselint" source-inplace)
+  :error-patterns
+  ((warning line-start (file-name) ":" line ":" column ": "
+  (id (one-or-more (not (any " "))))
+  (message (one-or-more not-newline)
+  (zero-or-more "\n" (any " ") (one-or-more not-newline)))
+  line-end))
+  :modes (text-mode markdown-mode gfm-mode org-mode))
+ ; flycheck in the appropriate buffers
+(add-to-list 'flycheck-checkers 'proselint)
+(add-hook 'markdown-mode-hook #'flycheck-mode)
+(add-hook 'gfm-mode-hook #'flycheck-mode)
+(add-hook 'text-mode-hook #'flycheck-mode)
+(add-hook 'org-mode-hook #'flycheck-mode)
 
 (use-package htmlize
 :ensure t)
+(setq org-html-postamble nil)
 
 (use-package liso-theme
 :ensure t
 :config (load-theme 'liso t))
+(defun transparency (value)
+"Sets the transparency of the frame window. 0=transparent/100=opaque."
+(interactive "nTransparency Value 0 - 100 opaque:")
+(set-frame-parameter (selected-frame) 'alpha value)
+(transparency 90))
 
 (add-to-list 'load-path "/home/guyfawkes/.emacs.d/matlab-emacs-master")
 (load-library "matlab-load")
@@ -73,9 +111,6 @@ icon-title-format (list "%b- GNU %F " emacs-version))
 :config
 (which-key-mode))
 
-(use-package elpy
-:ensure t
-:config 
-(elpy-enable))
-
 (require 'ox-md)
+
+(setq-default dired-listing-switches "-lhvA")
