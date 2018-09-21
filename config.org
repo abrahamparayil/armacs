@@ -58,15 +58,15 @@
   (global-set-key [f10] 'my-menu-bar-open)
    #+END_SRC
 ** Scrolling
--System Scroll bars.
+*** System Scroll bars.
 #+BEGIN_SRC elisp
 (scroll-bar-mode -1)
 #+END_SRC
--Minibuffer Scroll bars.
+*** Minibuffer Scroll bars.
 #+BEGIN_SRC elisp
 (set-window-scroll-bars (minibuffer-window) nil nil)
 #+END_SRC
-- Scroll Conservatively
+*** Scroll Conservatively
    #+BEGIN_SRC elisp
    (setq scroll-conservatively 100)
    #+END_SRC
