@@ -1,0 +1,299 @@
+#+TITLE: Emacs Configuration
+#+AUTHOR: Abraham Raji
+#+EMAIL: abrahamraji99@gmail.com
+
+* Personal Settings
+** My Info
+   #+BEGIN_SRC emacs-lisp 
+   (setq user-full-name "Abraham Raji"
+         user-mail-address "abrahamraji99@gmail.com") 
+	; calendar-latitude 9.738909
+	; calendar-longitude 76.719904
+	; calendar-location-name "Pravithanam, Pala KTM "
+   ;; Sets the frame title as by http://www.emacswiki.org/emacs/FrameTitle
+   (setq frame-title-format (list "%b   %[- GNU %F " emacs-version) 
+   icon-title-format (list "%b- GNU %F " emacs-version))
+   #+END_SRC 
+** org Stuff
+   #+BEGIN_SRC elisp
+   (setq org-ellipsis "⤵")
+   (setq org-src-fontify-natively t);;syntax highlighting in source blocks while editing
+   (add-hook 'org-mode-hook 'flyspell-mode);;spellcheck
+   
+   #+END_SRC
+** One-line Settings
+   #+BEGIN_SRC emacs-lisp
+   (setq inhibit-startup-message t)
+   (defalias 'list-buffers 'ibuffer)
+   (tool-bar-mode -1)
+   (windmove-default-keybindings)
+   (global-linum-mode t)
+   (allout-mode) ;;outlining
+   (global-font-lock-mode 1) ;;syntax highlighting
+   (global-visual-line-mode t)  
+   #+END_SRC
+** ido mode
+   #+BEGIN_SRC emacs-lisp
+  (setq indo-enable-flex-matching t)
+  (setq ido-eveywhere t)
+  (ido-mode 1)
+   #+END_SRC
+  
+** Menubar
+   #+BEGIN_SRC emacs-lisp
+  (menu-bar-mode -1)
+  (defun my-menu-bar-open-after ()
+  (remove-hook 'pre-command-hook 'my-menu-bar-open-after)
+  (when (eq menu-bar-mode 42)
+  (menu-bar-mode -1)))
+  (defun my-menu-bar-open (&rest args)
+  (interactive)
+  (let ((open menu-bar-mode))
+  (unless open
+  (menu-bar-mode 1))
+  (funcall 'menu-bar-open args)
+  (unless open
+  (setq menu-bar-mode 42)
+  (add-hook 'pre-command-hook 'my-menu-bar-open-after))))
+  (global-set-key [f10] 'my-menu-bar-open)
+   #+END_SRC
+** Scrolling
+*** System Scroll bars.
+#+BEGIN_SRC elisp
+(scroll-bar-mode -1)
+#+END_SRC
+*** Minibuffer Scroll bars.
+#+BEGIN_SRC elisp
+(set-window-scroll-bars (minibuffer-window) nil nil)
+#+END_SRC
+*** Scroll Conservatively
+   #+BEGIN_SRC elisp
+   (setq scroll-conservatively 100)
+   #+END_SRC
+** Text
+- Nice Fonts
+   #+BEGIN_SRC emacs-lisp
+   (add-to-list 'default-frame-alist
+   '(font . "DejaVu Sans Mono-10"))
+   #+END_SRC
+- Fancy Lambdas
+   #+BEGIN_SRC elsip
+   (global-prettify-symbols-mode t)
+   #+END_SRC
+- Highlight current line
+   #+BEGIN_SRC elisp
+   (global-hl-line-mode)
+   #+END_SRC
+** Modeline
+#+BEGIN_SRC elisp
+(defmacro diminish-minor-mode (filename mode &optional abbrev)
+  `(eval-after-load (symbol-name ,filename)
+     '(diminish ,mode ,abbrev)))
+
+(defmacro diminish-major-mode (mode-hook abbrev)
+  `(add-hook ,mode-hook
+             (lambda () (setq mode-name ,abbrev))))
+
+(diminish-minor-mode 'abbrev 'abbrev-mode)
+(diminish-minor-mode 'simple 'auto-fill-function)
+(diminish-minor-mode 'company 'company-mode)
+(diminish-minor-mode 'eldoc 'eldoc-mode)
+(diminish-minor-mode 'flycheck 'flycheck-mode)
+(diminish-minor-mode 'flyspell 'flyspell-mode)
+(diminish-minor-mode 'global-whitespace 'global-whitespace-mode)
+(diminish-minor-mode 'projectile 'projectile-mode)
+(diminish-minor-mode 'ruby-end 'ruby-end-mode)
+(diminish-minor-mode 'subword 'subword-mode)
+(diminish-minor-mode 'undo-tree 'undo-tree-mode)
+(diminish-minor-mode 'yard-mode 'yard-mode)
+(diminish-minor-mode 'yasnippet 'yas-minor-mode)
+(diminish-minor-mode 'wrap-region 'wrap-region-mode)
+
+(diminish-minor-mode 'paredit 'paredit-mode " π")
+
+(diminish-major-mode 'emacs-lisp-mode-hook "el")
+(diminish-major-mode 'haskell-mode-hook "λ=")
+(diminish-major-mode 'lisp-interaction-mode-hook "λ")
+(diminish-major-mode 'python-mode-hook "Py")
+#+END_SRC
+** Babel in org-mode
+   #+BEGIN_SRC 
+   ; And add babel inline code execution
+   ; babel, for executing code in org-mode.
+   (org-babel-do-load-languages
+   'org-babel-load-languages
+   ; load all language marked with (lang . t).
+   '((C . t)
+   (css . t)
+   (emacs-lisp . t)
+   (js . t)
+   (python . t)
+   #+END_SRC
+** TEX
+   #+BEGIN_SRC elisp
+   (setq TeX-parse-self t)
+   (setq TeX-PDF-mode t)
+   (add-hook 'LaTeX-mode-hook
+   (lambda ()
+   (LaTeX-math-mode)
+   (setq TeX-master t)))
+   #+END_SRC
+** Quickly visit Emacs configuration
+
+I futz around with my dotfiles a lot. This binds =C-c e= to quickly open my
+Emacs configuration file.
+
+#+BEGIN_SRC emacs-lisp
+  (defun 4br/visit-emacs-config ()
+    (interactive)
+    (find-file "~/.emacs.d/config.org"))
+
+  (global-set-key (kbd "C-c e") '4br/visit-emacs-config)
+#+END_SRC
+* Packages
+** auto-complete
+;   #+BEGIN_SRC emacs-lisp
+;   (ac-config-default)
+;   (global-auto-complete-mode t)
+;   (add-to-list 'ac-modes 'org-mode)
+;   #+END_SRC
+** css-mode
+   #+BEGIN_SRC elisp
+   (use-package css-mode)
+   #+END_SRC
+** elpy
+   #+BEGIN_SRC emacs-lisp
+   (use-package elpy
+   :ensure t
+   :config 
+   (elpy-enable))
+   #+END_SRC
+** flycheck
+   #+BEGIN_SRC emacs-lisp
+   (use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
+  (add-hook 'elpy-mode-hook 'flycheck-mode)
+;This creates a flycheck checker that runs proselint in texty buffers and displays my errors. 
+ (flycheck-define-checker proselint
+  "A linter for prose."
+  :command ("proselint" source-inplace)
+  :error-patterns
+  ((warning line-start (file-name) ":" line ":" column ": "
+  (id (one-or-more (not (any " "))))
+  (message (one-or-more not-newline)
+  (zero-or-more "\n" (any " ") (one-or-more not-newline)))
+  line-end))
+  :modes (text-mode markdown-mode gfm-mode org-mode))
+ ; flycheck in the appropriate buffers
+(add-to-list 'flycheck-checkers 'proselint)
+(add-hook 'markdown-mode-hook #'flycheck-mode)
+(add-hook 'gfm-mode-hook #'flycheck-mode)
+(add-hook 'text-mode-hook #'flycheck-mode)
+(add-hook 'org-mode-hook #'flycheck-mode)
+   #+END_SRC
+** htmlize
+   #+BEGIN_SRC emacs-lisp
+   (use-package htmlize
+   :ensure t)
+   (setq org-html-postamble nil)
+   #+END_SRC
+** liso-theme
+   #+BEGIN_SRC emacs-lisp
+   (use-package liso-theme
+   :ensure t
+   :config (load-theme 'liso t))
+   (defun transparency (value)
+   "Sets the transparency of the frame window. 0=transparent/100=opaque."
+   (interactive "nTransparency Value 0 - 100 opaque:")
+   (set-frame-parameter (selected-frame) 'alpha value)
+   (transparency 90))
+   #+END_SRC
+
+** matlab 
+   #+BEGIN_SRC emacs-lisp
+   (add-to-list 'load-path "/home/guyfawkes/.emacs.d/matlab-emacs-master")
+   (load-library "matlab-load")
+   #+END_SRC
+** org
+   #+BEGIN_SRC emacs-lisp
+   (unless (file-expand-wildcards (concat package-user-dir "/org-[0-9]*"))
+   (package-install (elt (cdr (assoc 'org package-archive-contents)) 0)))
+   (require 'org)
+   #+END_SRC
+
+** org-mode Bullets
+   #+BEGIN_SRC emacs-lisp
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))   
+   #+END_SRC
+
+** ox-reveal
+   #+BEGIN_SRC emacs-lisp
+   (add-to-list 'load-path "~/.emacs.d/org-reveal")
+   (require 'ox-reveal)
+   (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+   (setq org-reveal-mathjax t)
+   #+END_SRC
+** try package
+   #+BEGIN_SRC emacs-lisp
+   (use-package try
+   :ensure t)
+   #+END_SRC
+ 
+** which-key package
+   #+BEGIN_SRC  emacs-lisp
+   (use-package which-key
+   :ensure t 
+   :config
+   (which-key-mode))   
+   #+END_SRC
+** ox-md
+   #+BEGIN_SRC emacs-lisp
+   (require 'ox-md)
+   #+END_SRC
+** ox-beamer
+   #+BEGIN_SRC elisp
+   (require 'ox-beamer)
+   (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+   (ruby . t)
+   (python . t)
+   (c . t)))
+   #+END_SRC
+** Minted
+   #+BEGIN_SRC elisp
+   (add-to-list 'org-latex-packages-alist '("" "minted"))
+   (setq org-latex-listings 'minted)
+   (setq org-latex-pdf-process
+      '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+   #+END_SRC
+
+** Dired
+   #+BEGIN_SRC elisp
+   (use-package dired-details)
+   (use-package dired+)
+   (use-package dired-open
+  :config
+  (setq dired-open-extensions
+        '(("pdf" . "evince")
+          ("mkv" . "vlc")
+          ("mp4" . "vlc")
+          ("avi" . "vlc"))))
+   #+END_SRC
+   These are the switches that get passed to =ls= when =dired= gets a list of
+   files. We're using:
+- =l=: Use the long listing format.
+- =h=: Use human-readable sizes.
+- =v=: Sort numbers naturally.
+- =A=: Almost all. Doesn't include "=.=" or "=..=".
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default dired-listing-switches "-lhvA")
+#+END_SRC
