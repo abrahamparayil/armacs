@@ -1,26 +1,14 @@
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
-
-(org-babel-load-file (expand-file-name"~/.emacs.d/config.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))
+(fset 'yes-or-no-p 'y-or-n-p)
+(global-set-key (kbd "<f5>") 'revert-buffer)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
- '(custom-safe-themes
+ '(package-selected-packages
    (quote
-    ("13a654e817774e669cc17ee0705a3e1dfc62aedb01005a8abe2f8930a1d16d2e" default)))
- '(ibuffer-deletion-face (quote diredp-deletion-file-name))
- '(ibuffer-marked-face (quote diredp-flag-mark))
- '(package-selected-packages (quote (auto-compile use-package))))
+    (dired-open dired+ dired-details use-package try org-bullets org liso-theme htmlize flycheck elpy auto-complete auto-compile))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
