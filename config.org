@@ -3,15 +3,15 @@
 #+EMAIL: abrahamraji99@gmail.com
 
 * Who am I?
+  My name and email.
   #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Abraham Raji"
         user-email "abrahamraji99@gmail.com")
   #+END_SRC
-* Packages Maintinance
+* Packages Maintenance
 -  Sources   
+    This piece of code tells emacs where to find packages from
    #+BEGIN_SRC emacs-lisp
-   (load "package")
-   (package-initialize)
    (load "package")
    (package-initialize)
    (add-to-list 'package-archives
@@ -19,6 +19,7 @@
    (setq package-archive-enable-alist '(("melpa" magit f)))
    #+END_SRC
 -  use-package command
+   Let's you use the use-package thingy
    #+BEGIN_SRC emacs-lisp
    (unless (package-installed-p 'use-package)
    (package-refresh-contents)
@@ -31,6 +32,7 @@
    (setq load-prefer-newer t)
    #+END_SRC
 * auto-complete
+- Lets you use the auto-complete package
    #+BEGIN_SRC emacs-lisp
    (use-package auto-complete
    :ensure t)
@@ -40,6 +42,7 @@
    (ac-config-default)
    #+END_SRC
 * flycheck
+- Checks for spelling and syntax errors
   #+BEGIN_SRC emacs-lisp
    (use-package flycheck
   :ensure t
@@ -65,6 +68,7 @@
 (add-hook 'org-mode-hook #'flycheck-mode)
    #+END_SRC
 * Title frame format
+   This Line will give you this title: [filename]- GNU Emacs 26.1 (I use emacs26.1)
   #+BEGIN_SRC emacs-lisp
   (setq frame-title-format (list "%b  %[- GNU %F " emacs-version)
   icont-title-format(list "%b- GNU %F " emacs-version))
@@ -89,12 +93,14 @@
    (require 'org)
    #+END_SRC
 * ido mode
+  -Makes things more interactive
    #+BEGIN_SRC emacs-lisp
   (setq indo-enable-flex-matching t)
   (setq ido-eveywhere t)
   (ido-mode 1)
    #+END_SRC
 * Menu bar
+  Toggles reveal and hide menubar with the f10 key
    #+BEGIN_SRC emacs-lisp
   (menu-bar-mode -1)
   (defun my-menu-bar-open-after ()
@@ -126,13 +132,14 @@
    (setq scroll-conservatively 100)
    #+END_SRC
 * Text
-  - Fancy Lambdas
+  - Fancy symbols
    #+BEGIN_SRC emacs-lisp
    (global-prettify-symbols-mode t)
    #+END_SRC
   - Highlight current line
    #+BEGIN_SRC emacs-lisp
    (global-hl-line-mode)
+   (set-face-attribute 'hl-line nil :inherit nil :background "#1e2224")
    #+END_SRC
 * Babel
   #+BEGIN_SRC emacs-lisp
@@ -171,6 +178,7 @@
    (global-set-key (kbd "C-c <down>")  'windmove-down)
    #+END_SRC
 * elpy
+  For python development
    #+BEGIN_SRC emacs-lisp
    (use-package elpy
    :ensure t
@@ -178,6 +186,7 @@
    (elpy-enable))
    #+END_SRC
 * htmlize
+  Converts org documents into html files.
    #+BEGIN_SRC emacs-lisp
    (use-package htmlize
    :ensure t)
@@ -189,6 +198,7 @@
    (load-library "matlab-load")
    #+END_SRC
 * org-mode Bullets
+  Pretty bullets instead of * and **
    #+BEGIN_SRC emacs-lisp
 (use-package org-bullets
   :ensure t
@@ -196,6 +206,7 @@
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))   
    #+END_SRC
 * ox-reveal
+  Makes org documents into presentations using js.
    #+BEGIN_SRC emacs-lisp
    (add-to-list 'load-path "~/.emacs.d/org-reveal")
    (require 'ox-reveal)
@@ -203,11 +214,11 @@
    (setq org-reveal-mathjax t)
    #+END_SRC
 * try package
+  lest's you try packages without installing them.
    #+BEGIN_SRC emacs-lisp
    (use-package try
    :ensure t)
    #+END_SRC
-
 * ox-md
    #+BEGIN_SRC emacs-lisp
    (require 'ox-md)
@@ -224,17 +235,18 @@
 
 * Dired
    #+BEGIN_SRC emacs-lisp
-   (use-package dired-details)
-   (use-package dired+)
-   (use-package dired-open
+  ;(use-package dired-details)
+  ;(use-package dired)
+  ;(use-package dired-open
   :config
   (setq dired-open-extensions
         '(("pdf" . "evince")
           ("mkv" . "vlc")
           ("mp4" . "vlc")
-          ("avi" . "vlc"))))
+          ("avi" . "vlc")))
+	  ;)
    #+END_SRC
-* lixso-theme
+* liso-theme
    #+BEGIN_SRC emacs-lisp
    (use-package liso-theme
    :ensure t
@@ -245,27 +257,3 @@
    (set-frame-parameter (selected-frame) 'alpha value)
    (transparency 90))
    #+END_SRC
- Who am I?
- Packages Maintinance
- auto-complete
- flycheck
- Title frame format
- Org Settings
- ido mode
- Menu bar
- Scrolling
- Text
- Babel
- Quickly visit Emacs configuration
- css-mode
- One-line Settings
- elpy
- htmlize
- matlab
- org-mode Bullets
- ox-reveal
- try package
- ox-md
- Minted
- Dired
-24. liso-theme
