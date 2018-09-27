@@ -8,7 +8,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (dired-open dired+ dired-details use-package try org-bullets org liso-theme htmlize flycheck elpy auto-complete auto-compile))))
+    (dmenu dired dired-open dired+ dired-details use-package try org-bullets org liso-theme htmlize flycheck elpy auto-complete auto-compile))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
