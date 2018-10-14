@@ -3,46 +3,51 @@
 #+EMAIL: abrahamraji99@gmail.com
 
 * User Info
-  My name and email.
+     Name and Email.
+     #+BEGIN_SRC emacs-lisp
+     (setq user-full-name "Abraham Raji"
+               user-email "abrahamraji99@gmail.com")
+     #+END_SRC
+* Startup
+-  Start maximized 
+   #+BEGIN_SRC emacs-lisp
+   (setq frame-resize-pixelwise t
+   x-frame-normalize-before-maximize t)
+   (add-to-list 'initial-frame-alist '(fullscreen . fullheight))
+   #+END_SRC
+- Set UTF-8 encoding
   #+BEGIN_SRC emacs-lisp
-  (setq user-full-name "Abraham Raji"
-        user-email "abrahamraji99@gmail.com")
-  #+END_SRC
-* Set UTF-8 encoding
-#+BEGIN_SRC emacs-lisp
   (setq locale-coding-system 'utf-8)
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
   (set-selection-coding-system 'utf-8)
   (prefer-coding-system 'utf-8)
   #+END_SRC
-* Sensible Defaults
-  #+BEGIN_SRC emacs-lisp
-  (load-file "~/.emacs.d/sensible-defaults.el")
-  (sensible-defaults/use-all-settings)
-  (sensible-defaults/use-all-keybindings)
-  #+END_SRC
+- Inhibit startup screen
+  #+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+  #+end_src
 * Package Management
--  Sources
-    This piece of code tells emacs where to find packages from
-   #+BEGIN_SRC emacs-lisp
-   (load "package")
-   (package-initialize)
-   (add-to-list 'package-archives
-                '("melpa-stable" . "https://melpa.org/packages/") t)
-   (setq package-archive-enable-alist '(("melpa" magit f)))
-   #+END_SRC
--  use-package command and its configs.
-   For installing packages
-   #+BEGIN_SRC emacs-lisp
-   (unless (package-installed-p 'use-package)
-   (package-install 'use-package)
-   (setq load-prefer-newer t))
-   (setq use-package-verbose t)
-   (setq use-package-always-ensure t)
-   (require 'use-package)
-   #+END_SRC
-
+      -  Sources
+      This piece of code tells emacs where to find packages from
+      #+BEGIN_SRC emacs-lisp
+      (require 'package)
+      (setq package-archives
+      '(("melpa" . "https://melpa.org/packages/")
+        ("gnu" . "https://elpa.gnu.org/packages/")
+        ("org" . "http://orgmode.org/elpa/")))
+	(package-initialize)
+      #+END_SRC
+      -  use-package command and its configs.
+      For installing packages
+     #+BEGIN_SRC emacs-lisp
+     (unless (package-installed-p 'use-package)
+     (package-install 'use-package)
+     (setq load-prefer-newer t))
+     (setq use-package-verbose t)
+     (setq use-package-always-ensure t)
+     (require 'use-package)
+     #+END_SRC
 * Quickly visit Emacs configuration
    #+BEGIN_SRC emacs-lisp
      (defun 4br/visit-emacs-config ()
@@ -50,14 +55,18 @@
      (find-file "~/.emacs.d/config.org"))
      (global-set-key (kbd "C-c e") '4br/visit-emacs-config)
    #+END_SRC
-
+* Themes
+#+BEGIN_SRC emacs-lisp
+  (use-package liso-theme
+  :ensure t)
+  #+END_SRC
 * Auto Compile
     #+BEGIN_SRC emacs-lisp
     (use-package auto-compile
     :config (auto-compile-on-load-mode))
    #+END_SRC
 * Async
-Lets us use asynchronous processes wherever possible, pretty useful.
+    Lets us use asynchronous processes wherever possible, pretty useful.
     #+BEGIN_SRC emacs-lisp
     (use-package async
     :ensure t
@@ -73,17 +82,17 @@ Lets us use asynchronous processes wherever possible, pretty useful.
    (add-to-list 'ac-modes 'org-mode)
    (ac-config-default)
    #+END_SRC
-
 * flycheck
 - Checks for spelling and syntax errors
   #+BEGIN_SRC emacs-lisp
-       (use-package flycheck
+      (use-package flycheck
       :ensure t
       :init
       (global-flycheck-mode t))
-      (add-hook 'elpy-mode-hook 'flycheck-mode)
-					    ;This creates a flycheck checker that runs proselint in texty buffers and displays my errors.
-     (flycheck-define-checker proselint
+      (add-hook 'elpy-mode-hook 'flycheck-mode);This creates a flycheck 
+                                                                                 ;checker that runs proselint 
+                                                                                 ;in texty buffers and displays my errors.
+      (flycheck-define-checker proselint
       "A linter for prose."
       :command ("proselint" source-inplace)
       :error-patterns
@@ -93,12 +102,12 @@ Lets us use asynchronous processes wherever possible, pretty useful.
       (zero-or-more "\n" (any " ") (one-or-more not-newline)))
       line-end))
       :modes (text-mode markdown-mode gfm-mode org-mode))
-     ; flycheck in the appropriate buffers
-    (add-to-list 'flycheck-checkers 'proselint)
-    (add-hook 'markdown-mode-hook #'flycheck-mode)
-    (add-hook 'gfm-mode-hook #'flycheck-mode)
-    (add-hook 'text-mode-hook #'flycheck-mode)
-    (add-hook 'org-mode-hook #'flycheck-mode)
+      ;flycheck in the appropriate buffers
+     (add-to-list 'flycheck-checkers 'proselint)
+     (add-hook 'markdown-mode-hook #'flycheck-mode)
+     (add-hook 'gfm-mode-hook #'flycheck-mode)
+     (add-hook 'text-mode-hook #'flycheck-mode)
+     (add-hook 'org-mode-hook #'flycheck-mode)
    #+END_SRC
 * Title frame format
    This Line will give you this title: [filename]- GNU Emacs 26.1 (I use emacs26.1)
@@ -120,6 +129,28 @@ Lets us use asynchronous processes wherever possible, pretty useful.
    (global-set-key (kbd "C-c <right>") 'windmove-right)
    (global-set-key (kbd "C-c <up>")    'windmove-up)
    (global-set-key (kbd "C-c <down>")  'windmove-down)
+   ;; Use y/n instead of yes/no
+   (fset 'yes-or-no-p 'y-or-n-p)   
+    ;; make home and end behave
+    (global-set-key (kbd "<home>") 'move-beginning-of-line)
+    (global-set-key (kbd "<end>") 'move-end-of-line)
+    ;; indicate visual-line-mode wrap
+    (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+    (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+    ;; but be gentle
+    (defface visual-line-wrap-face
+      '((t (:foreground "gray")))
+      "Face for visual line indicators.")
+    (set-fringe-bitmap-face 'left-curly-arrow 'visual-line-wrap-face)
+    (set-fringe-bitmap-face 'right-curly-arrow 'visual-line-wrap-face)
+
+    ;; don't require two spaces for sentence end.
+    (setq sentence-end-double-space nil)
+
+    ;; The beeping can be annoying--turn it off
+    (setq visible-bell t
+          ring-bell-function #'ignore)
+
    #+END_SRC
 * Menu bar
   Toggles reveal and hide menubar with the f10 key
@@ -140,21 +171,92 @@ Lets us use asynchronous processes wherever possible, pretty useful.
   (add-hook 'pre-command-hook 'my-menu-bar-open-after))))
   (global-set-key [f10] 'my-menu-bar-open)
    #+END_SRC
-
+* Text
+  - Fancy symbols
+   #+BEGIN_SRC emacs-lisp
+   (global-prettify-symbols-mode t)
+   #+END_SRC
+  - Highlight current line
+   #+BEGIN_SRC emacs-lisp
+    (when window-system (add-hook 'prog-mode-hook 'hl-line-mode))
+   ; (set-face-attribute 'hl-line nil :inherit nil :background "#1e2224")
+   #+END_SRC
 * matlab
    #+BEGIN_SRC emacs-lisp
      (add-to-list 'load-path "/home/guyfawkes/.emacs.d/matlab-emacs-master")
      (load-library "matlab-load")
    #+END_SRC
+* ido mode
+  -Makes things more interactive
+   #+BEGIN_SRC emacs-lisp
+  (setq indo-enable-flex-matching t)
+  (setq ido-eveywhere t)
+  (ido-mode 1)
+   #+END_SRC
+* Scrolling
+  -  System Scroll bars.
+   #+BEGIN_SRC emacs-lisp
+   (scroll-bar-mode -1)
+   #+END_SRC
+  -  Mini-buffer Scroll bars.
+   #+BEGIN_SRC emacs-lisp
+   (set-window-scroll-bars (minibuffer-window) nil nil)
+   #+END_SRC
+  - Scroll Conservatively
+   #+BEGIN_SRC emacs-lisp
+   (setq scroll-conservatively 100)
+   #+END_SRC
+* css-mode
+   #+BEGIN_SRC elisp
+   (use-package css-mode)
+   #+END_SRC
+* elpy
+  For python development
+   #+BEGIN_SRC emacs-lisp
+   (use-package elpy
+   :ensure t
+   :config
+   (elpy-enable))
+   #+END_SRC
+* htmlize
+  Converts org documents into html files.
+   #+BEGIN_SRC emacs-lisp
+   (use-package htmlize
+   :ensure t)
+   (setq org-html-postamble nil)
+   #+END_SRC
+* ox-reveal
+  Makes org documents into presentations using js.
+   #+BEGIN_SRC emacs-lisp
+ ;  (add-to-list 'load-path "~/.emacs.d/ox-reveal")
+  ; (require 'ox-reveal)
+   ;(setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+  ; (setq org-reveal-mathjax t)
+(use-package ox-reveal
+:ensure ox-reveal)
+
+(setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+(setq org-reveal-mathjax t)   
+#+END_SRC
+* Dired
+   #+BEGIN_SRC emacs-lisp
+  ;(use-package dired-details)
+  ;(use-package dired)
+  ;(use-package dired-open
+  :config
+  (setq dired-open-extensions
+        '(("pdf" . "evince")
+          ("mkv" . "vlc")
+          ("mp4" . "vlc")
+          ("avi" . "vlc")))
+	  ;)
+   #+END_SRC
+   
 * Org
 ** Trigger
   #+BEGIN_SRC emacs-lisp
    (global-set-key [kbd "C-c C-o"] 'org-mode)
   #+END_SRC
-
-  #+RESULTS:
-  : org-mode
-
 ** Replacing (...)
   #+BEGIN_SRC emacs-lisp
   (setq org-ellipsis "↴")
@@ -166,32 +268,6 @@ Lets us use asynchronous processes wherever possible, pretty useful.
      (use-package org-bullets
        :init
        (add-hook 'org-mode-hook #'org-bullets-mode))
-   #+END_SRC
-
-   Use syntax highlighting in source blocks while editing.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq org-src-fontify-natively t)
-   #+END_SRC
-
-   Make TAB act as if it were issued in a buffer of the language's major mode.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq org-src-tab-acts-natively t)
-   #+END_SRC
-
-   When editing a code snippet, use the current window rather than popping open a
-   new one (which shows the same information).
-
-   #+BEGIN_SRC emacs-lisp
-     (setq org-src-window-setup 'current-window)
-   #+END_SRC
-
-   Quickly insert a block of elisp:
-
-   #+BEGIN_SRC emacs-lisp
-     (add-to-list 'org-structure-template-alist
-		  '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
    #+END_SRC
 
    Enable spell-checking in Org-mode.
@@ -212,16 +288,6 @@ Lets us use asynchronous processes wherever possible, pretty useful.
      (setq org-refile-use-outline-path t)
      (setq org-outline-path-complete-in-steps nil)
    #+END_SRC
-
-**** Keybindings
-
-     Bind a few handy keys.
-
-     #+BEGIN_SRC emacs-lisp
-       (define-key global-map "\C-cl" 'org-store-link)
-       (define-key global-map "\C-ca" 'org-agenda)
-     #+END_SRC
-
 ** Exporting
 
    Allow export to markdown and beamer (for presentations).
@@ -238,12 +304,6 @@ Lets us use asynchronous processes wherever possible, pretty useful.
       'org-babel-load-languages
       '((emacs-lisp . t)
 	(python . t)))
-   #+END_SRC
-
-   Don't ask before evaluating code blocks.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq org-confirm-babel-evaluate nil)
    #+END_SRC
 
    Translate regular ol' straight quotes to typographically-correct curly quotes
@@ -296,7 +356,7 @@ Lets us use asynchronous processes wherever possible, pretty useful.
      (add-hook 'org-mode-hook
 	       '(lambda ()
 		  (delete '("\\.pdf\\'" . default) org-file-apps)
-		  (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))))
+		  (add-to-list 'org-file-apps '("\\.pdf\\'" . "qpdfview %s"))))
    #+END_SRC
 
    Enable a minor mode for dealing with math (it adds a few useful keybindings),
@@ -309,95 +369,3 @@ Lets us use asynchronous processes wherever possible, pretty useful.
 		 (LaTeX-math-mode)
 		 (setq TeX-master t)))
    #+END_SRC
-
-* ido mode
-  -Makes things more interactive
-   #+BEGIN_SRC emacs-lisp
-  (setq indo-enable-flex-matching t)
-  (setq ido-eveywhere t)
-  (ido-mode 1)
-   #+END_SRC
-
-* Scrolling
-  -  System Scroll bars.
-   #+BEGIN_SRC emacs-lisp
-   (scroll-bar-mode -1)
-   #+END_SRC
-  -  Mini-buffer Scroll bars.
-   #+BEGIN_SRC emacs-lisp
-   (set-window-scroll-bars (minibuffer-window) nil nil)
-   #+END_SRC
-  - Scroll Conservatively
-   #+BEGIN_SRC emacs-lisp
-   (setq scroll-conservatively 100)
-   #+END_SRC
-
-* Text
-  - Fancy symbols
-   #+BEGIN_SRC emacs-lisp
-   (global-prettify-symbols-mode t)
-   #+END_SRC
-  - Highlight current line
-   #+BEGIN_SRC emacs-lisp
-   ;; (when window-system (add-hook 'prog-mode-hook 'hl-line-mode))
-   ;;(set-face-attribute 'hl-line nil :inherit nil :background "#1e2224")
-   #+END_SRC
-
-* css-mode
-   #+BEGIN_SRC elisp
-   (use-package css-mode)
-   #+END_SRC
-
-* elpy
-  For python development
-   #+BEGIN_SRC emacs-lisp
-   (use-package elpy
-   :ensure t
-   :config
-   (elpy-enable))
-   #+END_SRC
-* htmlize
-  Converts org documents into html files.
-   #+BEGIN_SRC emacs-lisp
-   (use-package htmlize
-   :ensure t)
-   (setq org-html-postamble nil)
-   #+END_SRC
-
-* ox-reveal
-  Makes org documents into presentations using js.
-   #+BEGIN_SRC emacs-lisp
-   (add-to-list 'load-path "~/.emacs.d/org-reveal")
-   (require 'ox-reveal)
-   (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
-   (setq org-reveal-mathjax t)
-   #+END_SRC
-
-* Dired
-   #+BEGIN_SRC emacs-lisp
-  ;(use-package dired-details)
-  ;(use-package dired)
-  ;(use-package dired-open
-  :config
-  (setq dired-open-extensions
-        '(("pdf" . "evince")
-          ("mkv" . "vlc")
-          ("mp4" . "vlc")
-          ("avi" . "vlc")))
-	  ;)
-   #+END_SRC
-* Theme
-#+BEGIN_SRC emacs-lisp
-  (load-theme 'deeper-blue t)
-
-#+END_SRC
-
-If this code is being evaluated by =emacs --daemon=, ensure that each subsequent
-frame is themed appropriately.
-
-#+BEGIN_SRC emacs-lisp
-  (if (daemonp)
-      (add-hook 'after-make-frame-functions
-                (lambda (frame)
-                  (with-selected-frame frame ((load-theme 'deeper-blue t))))))
-#+END_SRC
