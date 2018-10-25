@@ -2,159 +2,342 @@
 #+AUTHOR: Abraham Raji
 #+EMAIL: abrahamraji99@gmail.com
 
-* User Info
-     Name and Email.
-     #+BEGIN_SRC emacs-lisp
+* Personal Settings
+** User Info
+  Name and Email.
+  #+BEGIN_SRC emacs-lisp
      (setq user-full-name "Abraham Raji"
                user-email "abrahamraji99@gmail.com")
-     #+END_SRC
-* Startup
--  Start maximized 
-   #+BEGIN_SRC emacs-lisp
-   (setq frame-resize-pixelwise t
-   x-frame-normalize-before-maximize t)
-   (add-to-list 'initial-frame-alist '(fullscreen . fullheight))
-   #+END_SRC
-- Set UTF-8 encoding
-  #+BEGIN_SRC emacs-lisp
-  (setq locale-coding-system 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-selection-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
   #+END_SRC
-- Inhibit startup screen
-  #+begin_src emacs-lisp
-  (setq inhibit-startup-message t)
-  #+end_src
-* Package Management
-      -  Sources
-      This piece of code tells emacs where to find packages from
-      #+BEGIN_SRC emacs-lisp
+** Set UTF-8 encoding
+    #+BEGIN_SRC emacs-lisp
+    (setq locale-coding-system 'utf-8)
+    (set-terminal-coding-system 'utf-8)
+    (set-keyboard-coding-system 'utf-8)
+    (set-selection-coding-system 'utf-8)
+    (prefer-coding-system 'utf-8)
+    #+END_SRC
+** Package Management
+  -  Sources
+    This piece of code tells emacs where to find packages from
+    #+BEGIN_SRC emacs-lisp
       (require 'package)
       (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
         ("gnu" . "https://elpa.gnu.org/packages/")
         ("org" . "http://orgmode.org/elpa/")))
 	(package-initialize)
-      #+END_SRC
-      -  use-package command and its configs.
+    #+END_SRC
+  -  use-package command and its configs.
       For installing packages
-     #+BEGIN_SRC emacs-lisp
+      #+BEGIN_SRC emacs-lisp
      (unless (package-installed-p 'use-package)
      (package-install 'use-package)
      (setq load-prefer-newer t))
      (setq use-package-verbose t)
      (setq use-package-always-ensure t)
      (require 'use-package)
-     #+END_SRC
-* Quickly visit Emacs configuration
-   #+BEGIN_SRC emacs-lisp
+      #+END_SRC
+** Quickly visit Emacs configuration
+  #+BEGIN_SRC emacs-lisp
      (defun 4br/visit-emacs-config ()
      (interactive)
      (find-file "~/.emacs.d/config.org"))
      (global-set-key (kbd "C-c e") '4br/visit-emacs-config)
-   #+END_SRC
-* Themes
-#+BEGIN_SRC emacs-lisp
+  #+END_SRC
+** Themes
+  #+BEGIN_SRC emacs-lisp
   (use-package liso-theme
   :ensure t)
   #+END_SRC
+** eshell stuff
+#+BEGIN_SRC emacs-lisp
+
+  (use-package shell-switcher
+    :ensure t
+    :config 
+    (setq shell-switcher-mode t)
+    :bind (("C-'" . shell-switcher-switch-buffer)
+	   ("C-x 4 '" . shell-switcher-switch-buffer-other-window)
+	   ("C-M-'" . shell-switcher-new-shell)))
+
+
+  ;; Visual commands
+  (setq eshell-visual-commands '("vi" "screen" "top" "less" "more" "lynx"
+				 "ncftp" "pine" "tin" "trn" "elm" "vim"
+				 "nmtui" "alsamixer" "htop" "el" "elinks"
+				 ))
+                                 (setq eshell-visual-subcommands '(("git" "log" "diff" "show")))
+  (setq eshell-list-files-after-cd t)
+  (defun eshell-clear-buffer ()
+    "Clear terminal"
+    (interactive)
+    (let ((inhibit-read-only t))
+      (erase-buffer)
+      (eshell-send-input)))
+  (add-hook 'eshell-mode-hook
+	    '(lambda()
+	       (local-set-key (kbd "C-l") 'eshell-clear-buffer)))
+
+  (defun eshell/magit ()
+    "Function to open magit-status for the current directory"
+    (interactive)
+    (magit-status default-directory)
+    nil)
+
+ ;; smart display stuff
+(require 'eshell)
+(require 'em-smart)
+(setq eshell-where-to-jump 'begin)
+(setq eshell-review-quick-commands nil)
+(setq eshell-smart-space-goes-to-end t)
+
+(add-hook 'eshell-mode-hook
+  (lambda ()
+    (eshell-smart-initialize)))
+;; eshell here
+(defun eshell-here ()
+  "Opens up a new shell in the directory associated with the
+current buffer's file. The eshell is renamed to match that
+directory to make multiple eshell windows easier."
+  (interactive)
+  (let* ((parent (if (buffer-file-name)
+                     (file-name-directory (buffer-file-name))
+                   default-directory))
+         (height (/ (window-total-height) 3))
+         (name   (car (last (split-string parent "/" t)))))
+    (split-window-vertically (- height))
+    (other-window 1)
+    (eshell "new")
+    (rename-buffer (concat "*eshell: " name "*"))
+
+    (insert (concat "ls"))
+    (eshell-send-input)))
+
+(global-set-key (kbd "C-!") 'eshell-here)
+
+#+END_SRC
+
+Eshell prompt
+#+BEGIN_SRC emacs-lisp
+ (defcustom dotemacs-eshell/prompt-git-info
+  t
+  "Turns on additional git information in the prompt."
+  :group 'dotemacs-eshell
+  :type 'boolean)
+
+;; (epe-colorize-with-face "abc" 'font-lock-comment-face)
+(defmacro epe-colorize-with-face (str face)
+  `(propertize ,str 'face ,face))
+
+(defface epe-venv-face
+  '((t (:inherit font-lock-comment-face)))
+  "Face of python virtual environment info in prompt."
+  :group 'epe)
+
+  (setq eshell-prompt-function
+      (lambda ()
+        (concat (propertize (abbreviate-file-name (eshell/pwd)) 'face 'eshell-prompt)
+                (when (and dotemacs-eshell/prompt-git-info
+                           (fboundp #'vc-git-branches))
+                  (let ((branch (car (vc-git-branches))))
+                    (when branch
+                      (concat
+                       (propertize " [" 'face 'font-lock-keyword-face)
+                       (propertize branch 'face 'font-lock-function-name-face)
+                       (let* ((status (shell-command-to-string "git status --porcelain"))
+                              (parts (split-string status "\n" t " "))
+                              (states (mapcar #'string-to-char parts))
+                              (added (count-if (lambda (char) (= char ?A)) states))
+                              (modified (count-if (lambda (char) (= char ?M)) states))
+                              (deleted (count-if (lambda (char) (= char ?D)) states)))
+                         (when (> (+ added modified deleted) 0)
+                           (propertize (format " +%d ~%d -%d" added modified deleted) 'face 'font-lock-comment-face)))
+                       (propertize "]" 'face 'font-lock-keyword-face)))))
+                (when (and (boundp #'venv-current-name) venv-current-name)
+                  (concat 
+                    (epe-colorize-with-face " [" 'epe-venv-face) 
+                    (propertize venv-current-name 'face `(:foreground "#2E8B57" :slant italic))
+                    (epe-colorize-with-face "]" 'epe-venv-face))) 
+                (propertize " $ " 'face 'font-lock-constant-face))))
+#+END_SRC
+#+RESULTS:
+: t
+** Code blocks
+  #+begin_src emacs-lisp
+(defun org-src-color-blocks-light ()
+  "Colors the block headers and footers to make them stand out more for lighter themes"
+  (interactive)
+  (custom-set-faces
+   '(org-block-begin-line
+    ((t (:underline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF"))))
+   '(org-block-background
+     ((t (:background "#FFFFEA"))))
+   '(org-block
+     ((t (:background "#FFFFEA"))))
+   '(org-block-end-line
+     ((t (:overline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF"))))
+
+   '(mode-line-buffer-id ((t (:foreground "#005000" :bold t))))
+   '(which-func ((t (:foreground "#008000"))))))
+
+(defun org-src-color-blocks-dark ()
+  "Colors the block headers and footers to make them stand out more for dark themes"
+  (interactive)
+  (custom-set-faces
+   '(org-block-begin-line
+     ((t (:foreground "#008ED1" :background "#002E41"))))
+   '(org-block-background
+     ((t (:background "#000000"))))
+   '(org-block
+     ((t (:background "#000000"))))
+   '(org-block-end-line
+     ((t (:foreground "#008ED1" :background "#002E41"))))
+
+   '(mode-line-buffer-id ((t (:foreground "black" :bold t))))
+   '(which-func ((t (:foreground "green"))))))
+  #+end_src
+** Backups
+
+  This is one of the things people usually want to change right away. By
+  default, Emacs saves backup files in the current directory. These are
+  the files ending in =~= that are cluttering up your directory lists.
+  The following code stashes them all in =~/.emacs.d/backups=, where I
+  can find them with =C-x C-f= (=find-file=) if I really need to.
+
+  #+begin_src emacs-lisp
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+  #+end_src
+
+  Disk space is cheap. Save lots.
+
+  #+begin_src emacs-lisp
+(setq delete-old-versions -1)
+(setq version-control t)
+(setq vc-make-backup-files t)
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+  #+end_src
 * Auto Compile
-    #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
     (use-package auto-compile
     :config (auto-compile-on-load-mode))
-   #+END_SRC
+  #+END_SRC
 * Async
-    Lets us use asynchronous processes wherever possible, pretty useful.
-    #+BEGIN_SRC emacs-lisp
+  Lets us use asynchronous processes wherever possible, pretty useful.
+  #+BEGIN_SRC emacs-lisp
     (use-package async
     :ensure t
     :init (dired-async-mode 1))
-    #+END_SRC
+  #+END_SRC
 * auto-complete
-- Lets you use the auto-complete package
-   #+BEGIN_SRC emacs-lisp
-   (use-package auto-complete
-   :ensure t)
-   (require 'auto-complete)
-   (global-auto-complete-mode t)
-   (add-to-list 'ac-modes 'org-mode)
-   (ac-config-default)
-   #+END_SRC
+  - Lets you use the auto-complete package
+    #+BEGIN_SRC emacs-lisp
+     (use-package auto-complete
+     :ensure t)
+     (require 'auto-complete)
+     (global-auto-complete-mode t)
+     (add-to-list 'ac-modes 'org-mode)
+     (ac-config-default)
+    #+END_SRC
 * flycheck
-- Checks for spelling and syntax errors
-  #+BEGIN_SRC emacs-lisp
-      (use-package flycheck
-      :ensure t
-      :init
-      (global-flycheck-mode t))
-      (add-hook 'elpy-mode-hook 'flycheck-mode);This creates a flycheck 
-                                                                                 ;checker that runs proselint 
-                                                                                 ;in texty buffers and displays my errors.
-      (flycheck-define-checker proselint
-      "A linter for prose."
-      :command ("proselint" source-inplace)
-      :error-patterns
-      ((warning line-start (file-name) ":" line ":" column ": "
-      (id (one-or-more (not (any " "))))
-      (message (one-or-more not-newline)
-      (zero-or-more "\n" (any " ") (one-or-more not-newline)))
-      line-end))
-      :modes (text-mode markdown-mode gfm-mode org-mode))
-      ;flycheck in the appropriate buffers
-     (add-to-list 'flycheck-checkers 'proselint)
-     (add-hook 'markdown-mode-hook #'flycheck-mode)
-     (add-hook 'gfm-mode-hook #'flycheck-mode)
-     (add-hook 'text-mode-hook #'flycheck-mode)
-     (add-hook 'org-mode-hook #'flycheck-mode)
-   #+END_SRC
+  - Checks for spelling and syntax errors
+    #+BEGIN_SRC emacs-lisp
+	(use-package flycheck
+	:ensure t
+	:init
+	(global-flycheck-mode t))
+	(add-hook 'elpy-mode-hook 'flycheck-mode);This creates a flycheck 
+										   ;checker that runs proselint 
+										   ;in texty buffers and displays my errors.
+	(flycheck-define-checker proselint
+	"A linter for prose."
+	:command ("proselint" source-inplace)
+	:error-patterns
+	((warning line-start (file-name) ":" line ":" column ": "
+	(id (one-or-more (not (any " "))))
+	(message (one-or-more not-newline)
+	(zero-or-more "\n" (any " ") (one-or-more not-newline)))
+	line-end))
+	:modes (text-mode markdown-mode gfm-mode org-mode))
+	;flycheck in the appropriate buffers
+       (add-to-list 'flycheck-checkers 'proselint)
+       (add-hook 'markdown-mode-hook #'flycheck-mode)
+       (add-hook 'gfm-mode-hook #'flycheck-mode)
+       (add-hook 'text-mode-hook #'flycheck-mode)
+       (add-hook 'org-mode-hook #'flycheck-mode)
+    #+END_SRC
 * Title frame format
-   This Line will give you this title: [filename]- GNU Emacs 26.1 (I use emacs26.1)
+  This Line will give you this title: [filename]- GNU Emacs 26.1 (I use emacs26.1)
   #+BEGIN_SRC emacs-lisp
   (setq frame-title-format (list "%b- %F " emacs-version)
   icont-title-format(list "%b- GNU %F " emacs-version))
   #+END_SRC
 * One-line Settings
-   #+BEGIN_SRC emacs-lisp
+- Inhibit Startup Message
+  #+BEGIN_SRC emacs-lisp
    (setq inhibit-startup-message t)
+  #+END_SRC
+- Lists buffers in ibuffer
+  #+BEGIN_SRC emacs-lisp
    (defalias 'list-buffers 'ibuffer)
+  #+END_SRC
+- Disables Toolbar
+   #+BEGIN_SRC emacs-lisp
    (tool-bar-mode -1)
+   #+END_SRC
+- Numbers on lines
+   #+BEGIN_SRC emacs-lisp
    (global-linum-mode t)
-   (allout-mode) ;;outlining
-   (global-font-lock-mode 1) ;;syntax highlighting
-   (global-visual-line-mode t)
-   (windmove-default-keybindings)
-   (global-set-key (kbd "C-c <left>")  'windmove-left)
-   (global-set-key (kbd "C-c <right>") 'windmove-right)
-   (global-set-key (kbd "C-c <up>")    'windmove-up)
-   (global-set-key (kbd "C-c <down>")  'windmove-down)
-   ;; Use y/n instead of yes/no
-   (fset 'yes-or-no-p 'y-or-n-p)   
-    ;; make home and end behave
-    (global-set-key (kbd "<home>") 'move-beginning-of-line)
-    (global-set-key (kbd "<end>") 'move-end-of-line)
-    ;; indicate visual-line-mode wrap
-    (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+   #+END_SRC
+- Outlining
+   #+BEGIN_SRC emacs-lisp
+   (allout-mode)
+   #+END_SRC
+- Syntax Highlighting
+   #+BEGIN_SRC emacs-lisp
+   (global-font-lock-mode 1)
+   #+END_SRC
+- Windmove  
+  #+BEGIN_SRC emacs-lisp
+  (windmove-default-keybindings)
+  (global-set-key (kbd "C-c <left>")  'windmove-left)
+  (global-set-key (kbd "C-c <right>") 'windmove-right)
+  (global-set-key (kbd "C-c <up>")    'windmove-up)
+  (global-set-key (kbd "C-c <down>")  'windmove-down)
+  #+END_SRC
+- Use y/n instead of yes/no
+  #+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)   
+  #+END_SRC
+- make home and end buttons do their job
+  #+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<home>") 'move-beginning-of-line)
+  (global-set-key (kbd "<end>") 'move-end-of-line)
+  #+END_SRC
+-  Indicate visual-line-mode wrap
+  #+BEGIN_SRC emacs-lisp
+  (global-visual-line-mode t)
+  (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
     (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
     ;; but be gentle
     (defface visual-line-wrap-face
-      '((t (:foreground "gray")))
-      "Face for visual line indicators.")
+    '((t (:foreground "gray")))
+    "Face for visual line indicators.")
     (set-fringe-bitmap-face 'left-curly-arrow 'visual-line-wrap-face)
     (set-fringe-bitmap-face 'right-curly-arrow 'visual-line-wrap-face)
-
-    ;; don't require two spaces for sentence end.
-    (setq sentence-end-double-space nil)
-
-    ;; The beeping can be annoying--turn it off
-    (setq visible-bell t
+  #+END_SRC
+-  don't require two spaces for sentence end.
+  #+BEGIN_SRC emacs-lisp
+  (setq sentence-end-double-space nil)
+  #+END_SRC
+-  The beeping can be annoying--turn it off
+  #+BEGIN_SRC emacs-lisp
+  (setq visible-bell t
           ring-bell-function #'ignore)
-
-   #+END_SRC
+  #+END_SRC
 * Menu bar
   Toggles reveal and hide menubar with the f10 key
-   #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
   (menu-bar-mode -1)
   (defun my-menu-bar-open-after ()
   (remove-hook 'pre-command-hook 'my-menu-bar-open-after)
@@ -170,76 +353,91 @@
   (setq menu-bar-mode 42)
   (add-hook 'pre-command-hook 'my-menu-bar-open-after))))
   (global-set-key [f10] 'my-menu-bar-open)
-   #+END_SRC
+  #+END_SRC
 * Text
   - Fancy symbols
-   #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp
    (global-prettify-symbols-mode t)
-   #+END_SRC
+    #+END_SRC
   - Highlight current line
-   #+BEGIN_SRC emacs-lisp
-    (when window-system (add-hook 'prog-mode-hook 'hl-line-mode))
-   ; (set-face-attribute 'hl-line nil :inherit nil :background "#1e2224")
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+    (global-hl-line-mode t)
+    (set-face-attribute 'hl-line nil :inherit nil :background "#1e2224")
+    #+END_SRC
+  - Fancy Font
+      #+BEGIN_SRC emacs-lisp
+      ;; Set default font
+     (set-face-attribute 'default nil
+     :family "Roboto Mono"
+     :height 110
+     :weight 'normal
+     :width 'normal)
+      #+END_SRC
 * matlab
-   #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
      (add-to-list 'load-path "/home/guyfawkes/.emacs.d/matlab-emacs-master")
      (load-library "matlab-load")
-   #+END_SRC
+  #+END_SRC
 * ido mode
   -Makes things more interactive
-   #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
   (setq indo-enable-flex-matching t)
   (setq ido-eveywhere t)
   (ido-mode 1)
-   #+END_SRC
+  #+END_SRC
+* PDF tools
+#+BEGIN_SRC emacs-lisp
+(use-package pdf-tools
+:ensure t)
+(use-package org-pdfview
+:ensure t)
+
+(require 'pdf-tools)
+(require 'org-pdfview)
+
+#+END_SRC
 * Scrolling
   -  System Scroll bars.
-   #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp
    (scroll-bar-mode -1)
-   #+END_SRC
+    #+END_SRC
   -  Mini-buffer Scroll bars.
-   #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp
    (set-window-scroll-bars (minibuffer-window) nil nil)
-   #+END_SRC
+    #+END_SRC
   - Scroll Conservatively
-   #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp
    (setq scroll-conservatively 100)
-   #+END_SRC
+    #+END_SRC
 * css-mode
-   #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp
    (use-package css-mode)
-   #+END_SRC
+  #+END_SRC
 * elpy
   For python development
-   #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
    (use-package elpy
    :ensure t
    :config
    (elpy-enable))
-   #+END_SRC
+  #+END_SRC
 * htmlize
   Converts org documents into html files.
-   #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
    (use-package htmlize
    :ensure t)
    (setq org-html-postamble nil)
-   #+END_SRC
+  #+END_SRC
 * ox-reveal
   Makes org documents into presentations using js.
-   #+BEGIN_SRC emacs-lisp
- ;  (add-to-list 'load-path "~/.emacs.d/ox-reveal")
-  ; (require 'ox-reveal)
-   ;(setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
-  ; (setq org-reveal-mathjax t)
+  #+BEGIN_SRC emacs-lisp
 (use-package ox-reveal
 :ensure ox-reveal)
-
 (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
 (setq org-reveal-mathjax t)   
-#+END_SRC
+  #+END_SRC
 * Dired
-   #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
   ;(use-package dired-details)
   ;(use-package dired)
   ;(use-package dired-open
@@ -250,39 +448,44 @@
           ("mp4" . "vlc")
           ("avi" . "vlc")))
 	  ;)
-   #+END_SRC
+  #+END_SRC
    
 * Org
 ** Trigger
-  #+BEGIN_SRC emacs-lisp
-   (global-set-key [kbd "C-c C-o"] 'org-mode)
-  #+END_SRC
-** Replacing (...)
-  #+BEGIN_SRC emacs-lisp
-  (setq org-ellipsis "↴")
-  #+END_SRC
-** Display preferences
-   I like to see an outline of pretty bullets instead of a list of asterisks.
-
    #+BEGIN_SRC emacs-lisp
-     (use-package org-bullets
-       :init
-       (add-hook 'org-mode-hook #'org-bullets-mode))
+   (global-set-key [kbd "C-c o"] 'org-mode)
+   #+END_SRC
+** Replacing (...)
+   #+BEGIN_SRC emacs-lisp
+  (setq org-ellipsis "↴")
+   #+END_SRC
+** Display preferences
+-  Set firefox as default
+   #+BEGIN_SRC emacs-lisp
+   (setenv "BROWSER" "firefox")
    #+END_SRC
 
-   Enable spell-checking in Org-mode.
+-  I like to see an outline of pretty bullets instead of a list of asterisks.
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package org-bullets
+   :init
+   (add-hook 'org-mode-hook #'org-bullets-mode))
+   #+END_SRC
+
+-  Enable spell-checking in Org-mode.
 
    #+BEGIN_SRC emacs-lisp
      (add-hook 'org-mode-hook 'flyspell-mode)
    #+END_SRC
 
-   Record the time that a todo was archived.
+-  Record the time that a todo was archived.
 
    #+BEGIN_SRC emacs-lisp
      (setq org-log-done 'time)
    #+END_SRC
 
-   When refiling an item, I'd like to use ido for completion.
+-  When refiling an item, I'd like to use ido for completion.
 
    #+BEGIN_SRC emacs-lisp
      (setq org-refile-use-outline-path t)
@@ -313,13 +516,13 @@
      (setq org-export-with-smart-quotes t)
    #+END_SRC
 
-- Exporting to HTML
+   - Exporting to HTML
 
      Don't include a footer with my contact and publishing information at the bottom
      of every exported HTML document.
 
      #+BEGIN_SRC emacs-lisp
-       (setq org-html-postamble nil)
+	  (setq org-html-postamble nil)
      #+END_SRC
 
      Exporting to HTML and opening the results triggers =/usr/bin/sensible-browser=,
@@ -327,10 +530,10 @@
      I'd like to always use Firefox, so:
 
      #+BEGIN_SRC emacs-lisp
-       (setq browse-url-browser-function 'browse-url-generic
-	     browse-url-generic-program "firefox")
+	  (setq browse-url-browser-function 'browse-url-generic
+		browse-url-generic-program "firefox")
 
-       (setenv "BROWSER" "firefox")
+	  (setenv "BROWSER" "firefox")
      #+END_SRC
 ** TeX configuration
 
@@ -355,6 +558,9 @@
    #+BEGIN_SRC emacs-lisp
      (add-hook 'org-mode-hook
 	       '(lambda ()
+	          (auto-mode . emacs) 
+	          ("\\.x?html?\\'" . "/usr/bin/firefox %s")
+		  ("\\.mm\\'" . default)
 		  (delete '("\\.pdf\\'" . default) org-file-apps)
 		  (add-to-list 'org-file-apps '("\\.pdf\\'" . "qpdfview %s"))))
    #+END_SRC
@@ -369,3 +575,219 @@
 		 (LaTeX-math-mode)
 		 (setq TeX-master t)))
    #+END_SRC
+* History
+
+  From http://www.wisdomandwonder.com/wordpress/wp-content/uploads/2014/03/C3F.html
+  #+begin_src emacs-lisp
+(setq savehist-file "~/.emacs.d/savehist")
+(savehist-mode 1)
+(setq history-length t)
+(setq history-delete-duplicates t)
+(setq savehist-save-minibuffer-history 1)
+(setq savehist-additional-variables
+      '(kill-ring
+        search-ring
+        regexp-search-ring))
+  #+end_src
+* Mode line format
+
+  Display a more compact mode line
+
+  #+begin_src emacs-lisp
+(use-package smart-mode-line
+  :init
+  (progn
+  (setq-default
+   mode-line-format
+   '("%e"
+     mode-line-front-space
+     mode-line-mule-info
+     mode-line-client
+     mode-line-modified
+     mode-line-remote
+     mode-line-frame-identification
+     mode-line-buffer-identification
+     "   "
+     mode-line-position
+     (vc-mode vc-mode)
+     "  "
+     mode-line-modes
+     mode-line-misc-info
+     mode-line-end-spaces))))
+  #+end_src
+* Web browsing
+  Browse within emacs.
+  #+begin_src emacs-lisp
+(setq browse-url-browser-function 'eww-browse-url)
+  #+end_src
+* Swiper
+- Swiper gives us a really efficient incremental search with regular expressions
+  #+BEGIN_SRC emacs-lisp
+    (use-package swiper
+  :ensure t
+  :bind (("C-s" . swiper)
+	 ("C-r" . swiper))
+  :config
+  (progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-display-style 'fancy)
+    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+    ))
+  #+END_SRC
+* try
+#+BEGIN_SRC emacs-lisp
+(use-package try
+	:ensure t)
+#+END_SRC
+* Helm - interactive completion
+
+  Helm makes it easy to complete various things. I find it to be easier
+  to configure than ido in order to get completion in as many places as
+  possible, although I prefer ido's way of switching buffers.
+
+  #+begin_src emacs-lisp
+    (use-package helm
+      :init
+      (progn
+        (require 'helm-config)
+        (setq helm-candidate-number-limit 100)
+        ;; From https://gist.github.com/antifuchs/9238468
+        (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
+              helm-input-idle-delay 0.01  ; this actually updates things
+                                            ; reeeelatively quickly.
+              helm-quick-update t
+              helm-M-x-requires-pattern nil
+              helm-ff-skip-boring-files t)
+        (helm-mode 1))
+      :config
+      (progn
+        ;; I don't like the way switch-to-buffer uses history, since
+        ;; that confuses me when it comes to buffers I've already
+        ;; killed. Let's use ido instead.
+        (add-to-list 'helm-completing-read-handlers-alist '(switch-to-buffer . ido)))
+        (global-set-key (kbd "M-x") 'helm-M-x)
+      :bind (("C-c h" . helm-mini)))
+    (ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
+  #+end_src
+
+  #+BEGIN_SRC emacs-lisp
+(use-package helm
+  :ensure t
+  :init
+  (progn
+    (require 'helm-config)
+    ;; limit max number of matches displayed for speed
+    (setq helm-candidate-number-limit 100)
+    ;; ignore boring files like .o and .a
+    (setq helm-ff-skip-boring-files t)
+    ;; replace locate with spotlight on Mac
+    (setq helm-locate-command "mdfind -name %s %s"))
+  :bind (("C-x f" . helm-for-files)))
+  #+END_SRC
+
+  Fix problem with org-capture and helm.
+
+  #+begin_src emacs-lisp
+(setcdr (assoc 'org-capture helm-completing-read-handlers-alist) nil)
+  #+end_src
+* Beacon
+- flashes the cursor's line when you scroll
+  #+BEGIN_SRC emacs-lisp
+   (use-package beacon
+  :ensure t
+  :config
+  (beacon-mode 1)
+  )
+  #+END_SRC
+* Multiple Cursors
+  #+BEGIN_SRC emacs-lisp
+  (use-package multiple-cursors
+  :ensure t)
+  #+END_SRC
+* Web Mode
+  #+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+  (setq web-mode-engines-alist
+  '(("django"    . "\\.html\\'")))
+  (setq web-mode-ac-sources-alist
+  '(("css" . (ac-source-css-property))
+  ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
+  ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+  (setq web-mode-enable-auto-closing t))
+  (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
+  #+END_SRC
+* Magit
+  #+BEGIN_SRC emacs-lisp
+    (use-package magit
+    :ensure t
+    :init
+    (progn
+    (bind-key "C-x g" 'magit-status)
+    ))
+  #+END_SRC
+* Better Shell
+  #+BEGIN_SRC emacs-lisp :tangle no
+  (use-package better-shell
+      :ensure t
+      :bind (("C-\"" . better-shell-shell)
+             ("C-:" . better-shell-remote-open)))
+  #+END_SRC
+* c++
+  #+BEGIN_SRC emacs-lisp
+  (use-package ggtags
+  :ensure t
+  :config 
+  (add-hook 'c-mode-common-hook
+  (lambda ()
+  (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+  (ggtags-mode 1))))
+  )
+#+END_SRC
+* Origami folding
+#+BEGIN_SRC emacs-lisp
+(use-package origami
+:ensure t)
+#+END_SRC
+* Treemacs
+#+BEGIN_SRC emacs-lisp
+  (use-package treemacs
+    :ensure t
+    :defer t
+    :config
+    (progn
+
+      (setq treemacs-follow-after-init          t
+            treemacs-width                      35
+            treemacs-indentation                2
+            treemacs-git-integration            t
+            treemacs-collapse-dirs              3
+            treemacs-silent-refresh             nil
+            treemacs-change-root-without-asking nil
+            treemacs-sorting                    'alphabetic-desc
+            treemacs-show-hidden-files          t
+            treemacs-never-persist              nil
+            treemacs-is-never-other-window      nil
+            treemacs-goto-tag-strategy          'refetch-index)
+
+      (treemacs-follow-mode t)
+      (treemacs-filewatch-mode t))
+    :bind
+    (:map global-map
+          ([f8]        . treemacs-toggle)
+          ([f9]        . treemacs-projectile-toggle)
+          ("<C-M-tab>" . treemacs-toggle)
+          ("M-0"       . treemacs-select-window)
+          ("C-c 1"     . treemacs-delete-other-windows)
+        ))
+  (use-package treemacs-projectile
+    :defer t
+    :ensure t
+    :config
+    (setq treemacs-header-function #'treemacs-projectile-create-header)
+)
+#+END_SRC
