@@ -38,17 +38,55 @@
      (setq use-package-always-ensure t)
      (require 'use-package)
       #+END_SRC
-** Quickly visit Emacs configuration
+** Quickly visit certain files
+- Emacs configuration
   #+BEGIN_SRC emacs-lisp
      (defun 4br/visit-emacs-config ()
      (interactive)
      (find-file "~/.emacs.d/config.org"))
      (global-set-key (kbd "C-c e") '4br/visit-emacs-config)
   #+END_SRC
+- Resources
+  #+BEGIN_SRC emacs-lisp
+     (defun 4br/visit-resources ()
+     (interactive)
+     (find-file "~/Documents/Resources/resources.org"))
+     (global-set-key (kbd "C-c r") '4br/visit-resources)
+  #+END_SRC
+- dotemacs
+  #+BEGIN_SRC emacs-lisp
+     (defun 4br/visit-dotemacs ()
+     (interactive)
+     (find-file "~/Documents/dotemacs/index.org"))
+     (global-set-key (kbd "C-c d") '4br/visit-dotemacs)
+  #+END_SRC
+
 ** Themes
   #+BEGIN_SRC emacs-lisp
-  (use-package liso-theme
+  (use-package doom-themes
   :ensure t)
+  (load-theme 'doom-vibrant t)
+  (require 'doom-themes)
+  (setq sml/no-confirm-load-theme t)
+
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+  doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  
+  ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
+  ;; may have their own settings.
+  (load-theme 'doom-one t)
+  
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  ;;(doom-themes-neotree-config)
+  ;; or for treemacs users
+  ;;(doom-themes-treemacs-config)
+  
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config)
   #+END_SRC
 ** org-bullets
    #+BEGIN_SRC emacs-lisp
@@ -94,6 +132,7 @@
      (use-package auto-complete
      :ensure t)
      (require 'auto-complete)
+     (require 'auto-complete-config)
      (global-auto-complete-mode t)
      (add-to-list 'ac-modes 'org-mode)
      (ac-config-default)
@@ -182,6 +221,10 @@
   (setq visible-bell t
           ring-bell-function #'ignore)
   #+END_SRC
+- Start in fullscreen
+  #+BEGIN_SRC emacs-lisp
+  (toggle-frame-fullscreen)
+  #+END_SRC
 * Menu bar
   Toggles reveal and hide menubar with the f10 key
   #+BEGIN_SRC emacs-lisp
@@ -213,7 +256,7 @@
     #+END_SRC
   - Fancy Font
       #+BEGIN_SRC emacs-lisp
-      ;; Set default font
+      ;; Set default Font
      (set-face-attribute 'default nil
      :family "Roboto Mono"
      :height 160
@@ -424,3 +467,131 @@
   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
   (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
   #+END_SRC
+* Yasnippet
+- Installation and basic config
+  #+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+  :ensure t
+  :init
+  (yas-global-mode 1))
+  (use-package yasnippet-snippets
+      :ensure t)
+  (use-package auto-yasnippet
+      :ensure t)      
+  #+END_SRC
+-I /don’t/ want =ido= to automatically indent the snippets it inserts. Sometimes
+this looks pretty bad (when indenting org-mode, for example, or trying to guess
+at the correct indentation for Python).
+  #+BEGIN_SRC emacs-lisp
+  (setq yas/indent-line nil)
+  #+END_SRC
+
+* Python
+  #+BEGIN_SRC emacs-lisp
+
+        (setq py-python-command "python3")
+        (setq python-shell-interpreter "python3")
+ 
+
+            (use-package elpy
+            :ensure t
+            :config 
+            (elpy-enable))
+  #+END_SRC
+- Format code according to PEP8 on save:
+
+  #+BEGIN_SRC emacs-lisp
+  (use-package py-autopep8
+  :ensure t)
+  (require 'py-autopep8)
+  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+#+END_SRC
+* PDF tools
+#+BEGIN_SRC emacs-lisp
+(use-package pdf-tools
+:ensure t)
+(use-package org-pdfview
+:ensure t)
+
+(require 'pdf-tools)
+(require 'org-pdfview)
+
+#+END_SRC
+
+* Silversearcher
+#+BEGIN_SRC emacs-lisp
+(use-package ag
+:ensure t)
+(use-package wgrep-ag
+:ensure t)
+;;when (executable-find "ag")
+  (require 'ag)
+  (require 'wgrep-ag)
+  (setq-default ag-highlight-search t)
+  (global-set-key (kbd "M-s") 'ag-project)
+#+END_SRC
+* Add a bunch of engines for =engine-mode=
+- Installation
+  #+BEGIN_SRC emacs-lisp
+  (use-package engine-mode
+  :ensure t)
+  #+END_SRC
+- Enable [[https://github.com/hrs/engine-mode][engine-mode]] and define a few useful engines.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'engine-mode)
+
+  (defengine duckduckgo
+    "https://duckduckgo.com/?q=%s"
+    :keybinding "d")
+
+  (defengine github
+    "https://github.com/search?ref=simplesearch&q=%s"
+    :keybinding "g")
+
+  (defengine google
+    "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+    :keybinding "G")
+
+  (defengine stack-overflow
+    "https://stackoverflow.com/search?q=%s"
+    :keybinding "s")
+
+  (defengine wikipedia
+    "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
+    :keybinding "w")
+
+  (defengine wiktionary
+    "https://www.wikipedia.org/search-redirect.php?family=wiktionary&language=en&go=Go&search=%s")
+
+  (defengine youtube
+    "https://www.youtube.com/results?search_query=%s"
+    :keybinding "y")
+
+  (engine-mode t)
+#+END_SRC
+* Modeline
+- Doom-modeline
+#+BEGIN_SRC emacs-lisp
+(use-package doom-modeline
+      :ensure t
+      :defer t
+      :hook (after-init . doom-modeline-init))
+;;(all-the-icons-install-fonts)
+;;uncomment the above line the first time you run this config
+#+END_SRC
+* Icons
+#+BEGIN_SRC emacs-lisp
+(use-package all-the-icons-dired
+      :ensure t)
+(use-package all-the-icons-gnus 
+      :ensure t) 
+(use-package all-the-icons-ivy 
+      :ensure t) 
+(use-package emoji-fontset 
+      :ensure t)
+(use-package fontawesome
+      :ensure t)
+(use-package unicode-input
+      :ensure t)
+#+END_SRC
