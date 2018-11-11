@@ -225,6 +225,15 @@
   #+BEGIN_SRC emacs-lisp
   (toggle-frame-fullscreen)
   #+END_SRC
+- Line wrapping
+#+BEGIN_SRC emacs-lisp
+    (remove-hook 'text-mode-hook 'turn-on-auto-fill)
+    (add-hook 'text-mode-hook 'visual-line-mode t)
+    (add-hook 'prog-mode-hook
+    (lambda()
+    (toggle-truncate-lines t)
+    (outline-minor-mode t)))
+#+END_SRC
 * Menu bar
   Toggles reveal and hide menubar with the f10 key
   #+BEGIN_SRC emacs-lisp
@@ -266,6 +275,14 @@
   - Word Wrap
     #+BEGIN_SRC emacs-lisp
     (visual-line-mode t)
+        (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+    (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+    ;; but be gentle
+    (defface visual-line-wrap-face
+      '((t (:foreground "gray")))
+      "Face for visual line indicators.")
+    (set-fringe-bitmap-face 'left-curly-arrow 'visual-line-wrap-face)
+    (set-fringe-bitmap-face 'right-curly-arrow 'visual-line-wrap-face)
     #+END_SRC
 * matlab
   #+BEGIN_SRC emacs-lisp
@@ -384,7 +401,7 @@
            (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))))
 #+END_SRC
 * Helm - interactive completion
-
+  
   Helm makes it easy to complete various things. I find it to be easier
   to configure than ido in order to get completion in as many places as
   possible, although I prefer ido's way of switching buffers.
@@ -467,45 +484,33 @@
   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
   (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
   #+END_SRC
-* Yasnippet
-- Installation and basic config
-  #+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-  :ensure t
-  :init
-  (yas-global-mode 1))
-  (use-package yasnippet-snippets
-      :ensure t)
-  (use-package auto-yasnippet
-      :ensure t)      
-  #+END_SRC
--I /don’t/ want =ido= to automatically indent the snippets it inserts. Sometimes
-this looks pretty bad (when indenting org-mode, for example, or trying to guess
-at the correct indentation for Python).
-  #+BEGIN_SRC emacs-lisp
-  (setq yas/indent-line nil)
-  #+END_SRC
-
 * Python
-  #+BEGIN_SRC emacs-lisp
-
-        (setq py-python-command "python3")
-        (setq python-shell-interpreter "python3")
- 
-
-            (use-package elpy
-            :ensure t
-            :config 
-            (elpy-enable))
-  #+END_SRC
-- Format code according to PEP8 on save:
-
-  #+BEGIN_SRC emacs-lisp
-  (use-package py-autopep8
-  :ensure t)
-  (require 'py-autopep8)
-  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-#+END_SRC
+  - install ipython
+  - setting up environment
+     #+BEGIN_SRC emacs-lisp
+     (setq py-python-command "python3")
+     (setq python-shell-interpreter "python3")
+     (use-package elpy
+     :ensure t
+     :config 
+     (elpy-enable))
+     ;; use flycheck not flymake with elpy
+     (when (require 'flycheck nil t)
+     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+     (add-hook 'elpy-mode-hook 'flycheck-mode))
+     #+END_SRC
+  - ein
+    #+BEGIN_SRC emacs-lisp
+    (use-package ein
+    :ensure t)
+    #+END_SRC
+  - Format code according to PEP8 on save:
+    #+BEGIN_SRC emacs-lisp
+    (use-package py-autopep8
+    :ensure t)
+    (require 'py-autopep8)
+    (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+    #+END_SRC
 * PDF tools
 #+BEGIN_SRC emacs-lisp
 (use-package pdf-tools
@@ -537,8 +542,7 @@ at the correct indentation for Python).
   :ensure t)
   #+END_SRC
 - Enable [[https://github.com/hrs/engine-mode][engine-mode]] and define a few useful engines.
-
-#+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
   (require 'engine-mode)
 
   (defengine duckduckgo
@@ -570,16 +574,6 @@ at the correct indentation for Python).
 
   (engine-mode t)
 #+END_SRC
-* Modeline
-- Doom-modeline
-#+BEGIN_SRC emacs-lisp
-(use-package doom-modeline
-      :ensure t
-      :defer t
-      :hook (after-init . doom-modeline-init))
-;;(all-the-icons-install-fonts)
-;;uncomment the above line the first time you run this config
-#+END_SRC
 * Icons
 #+BEGIN_SRC emacs-lisp
 (use-package all-the-icons-dired
@@ -595,3 +589,34 @@ at the correct indentation for Python).
 (use-package unicode-input
       :ensure t)
 #+END_SRC
+* c++
+#+BEGIN_SRC emacs-lisp
+(use-package ggtags
+:ensure t
+:config 
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+              (ggtags-mode 1)))))
+#+END_SRC
+- C headers
+  #+BEGIN_SRC emacs-lisp
+  (use-package ac-c-headers
+  :ensure t)
+  #+END_SRC
+* Dired
+- Open media with the appropriate programs.
+  #+BEGIN_SRC emacs-lisp
+  (use-package dired-open
+    :config
+    (setq dired-open-extensions
+          '(("pdf" . "zathura")
+            ("mkv" . "vlc")
+            ("mp4" . "vlc")
+            ("avi" . "vlc"))))
+  #+END_SRC
+* Eshell
+  - Setting keybinding for eshell
+    #+BEGIN_SRC emacs-lisp
+       (global-set-key (kbd "C-x e") 'eshell)
+    #+END_SRC
