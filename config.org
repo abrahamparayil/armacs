@@ -103,7 +103,11 @@
   can find them with =C-x C-f= (=find-file=) if I really need to.
 
   #+begin_src emacs-lisp
-(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+  (setq backup-directory-alist 
+        '(("." . "~/.emacs.d/backups")))
+;; autosave the undo-tree history
+  (setq undo-tree-history-directory-alist
+        `((".*" . ,temporary-file-directory)))
   #+end_src
 
   Disk space is cheap. Save lots.
@@ -114,6 +118,13 @@
 (setq vc-make-backup-files t)
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
   #+end_src
+** Modeine
+   #+BEGIN_SRC emacs-lisp
+   (use-package doom-modeline
+      :ensure t
+      :defer t
+      :hook (after-init . doom-modeline-init))
+   #+END_SRC
 * Auto Compile
   #+BEGIN_SRC emacs-lisp
     (use-package auto-compile
@@ -144,9 +155,8 @@
 	:ensure t
 	:init
 	(global-flycheck-mode t))
-	(add-hook 'elpy-mode-hook 'flycheck-mode);This creates a flycheck 
-										   ;checker that runs proselint 
-										   ;in texty buffers and displays my errors.
+	(add-hook 'elpy-mode-hook 'flycheck-mode)
+	;This creates a flycheck checker that runs proselint in texty buffers and displays my errors.
 	(flycheck-define-checker proselint
 	"A linter for prose."
 	:command ("proselint" source-inplace)
@@ -164,6 +174,45 @@
        (add-hook 'text-mode-hook #'flycheck-mode)
        (add-hook 'org-mode-hook #'flycheck-mode)
     #+END_SRC
+- adding words
+  #+BEGIN_SRC emacs-lisp
+  (eval-when-compile (require 'cl))
+  
+  (defun append-aspell-word (new-word)
+  (let ((header "personal_ws-1.1")
+  (file-name (substitute-in-file-name "$HOME/.aspell.en.pws"))
+  (read-words (lambda (file-name)
+  (let ((all-lines (with-temp-buffer
+  (insert-file-contents file-name)
+  (split-string (buffer-string) "\n" t))))
+  (if (null all-lines)
+  ""
+  (split-string (mapconcat 'identity (cdr all-lines) "\n")
+  nil 
+  t))))))
+  (when (file-readable-p file-name)
+  (let* ((cur-words (eval (list read-words file-name)))
+  (all-words (delq header (cons new-word cur-words)))
+  (words (delq nil (remove-duplicates all-words :test 'string=))))
+  (with-temp-file file-name     
+  (insert (concat header 
+  " en "
+  (number-to-string (length words))
+  "\n"
+  (mapconcat 'identity (sort words #'string<) "\n"))))))
+  (unless (file-readable-p file-name)
+  (with-temp-file file-name
+  (insert (concat header " en 1\n" new-word "\n")))))
+  (ispell-kill-ispell t) ; restart ispell
+  (flyspell-mode)
+  (flyspell-mode))
+  
+  (defun append-aspell-current ()
+  "Add current word to aspell dictionary"
+  (interactive)
+  (append-aspell-word (thing-at-point 'word)))
+  
+  #+END_SRC
 * Title frame format
   This Line will give you this title: [filename]- GNU Emacs 26.1 (I use emacs26.1)
   #+BEGIN_SRC emacs-lisp
@@ -387,13 +436,7 @@
      (setenv "BROWSER" "firefox")
      #+END_SRC
 **** Exporting to PDF 
-- Include the =minted= package in all of my LaTeX exports.
-
- #+BEGIN_SRC emacs-lisp
- (add-to-list 'org-latex-packages-alist '("" "minted"))
- (setq org-latex-listings 'minted)
- #+END_SRC
-- Open compiled PDFs in =zathura= instead of in the editor.
+- Open compiled PDFs in =evince= instead of in the editor.
 #+BEGIN_SRC emacs-lisp
   (add-hook 'org-mode-hook
         '(lambda ()
@@ -620,3 +663,56 @@
     #+BEGIN_SRC emacs-lisp
        (global-set-key (kbd "C-x e") 'eshell)
     #+END_SRC
+* lisp
+#+BEGIN_SRC emacs-lisp
+;(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+(setq inferior-lisp-program "sbcl")
+#+END_SRC
+* Yasnippet
+  #+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+  :ensure t)
+  #+END_SRC
+* Web Dev
+  #+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+  :ensure t)
+  (use-package company-web
+  :ensure t)
+  (use-package emmet-mode
+  :ensure t)
+  ;;Automatically load web-mode when opening web-related files
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+  ;;Set indentations
+  (defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  )
+  (add-hook 'web-mode-hook  'my-web-mode-hook)    
+  (setq tab-width 2)
+  ;;Highlight of columns
+  (setq web-mode-enable-current-column-highlight t)
+  (setq web-mode-enable-current-element-highlight t)
+  ;;Company settings-Set the company completion vocabulary to css and html when in web-mode. This is combined into the indentations setting above.
+  (defun my-web-mode-hook ()
+  (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files))
+  )
+  ;;Turn on Emmet in web-mode.
+  (add-hook 'web-mode-hook  'emmet-mode) 
+  ;;Web-mode is able to switch modes into css (style tags) or js (script tags) in an html file. For Emmet to switch between html and css properly in the same document, this hook is added.
+  (add-hook 'web-mode-before-auto-complete-hooks
+    '(lambda ()
+     (let ((web-mode-cur-language
+  	    (web-mode-language-at-pos)))
+               (if (string= web-mode-cur-language "php")
+    	   (yas-activate-extra-mode 'php-mode)
+      	 (yas-deactivate-extra-mode 'php-mode))
+               (if (string= web-mode-cur-language "css")
+    	   (setq emmet-use-css-transform t)
+      	 (setq emmet-use-css-transform nil)))))
+  #+END_SRC
