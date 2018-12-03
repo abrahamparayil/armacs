@@ -1,22 +1,13 @@
 #+TITLE: Emacs Config
 #+AUTHOR: Abraham Raji
 #+EMAIL: abrahamraji99@gmail.com
+#+STARTUP: overview
+#+CREATOR: 4br
+#+LANGUAGE: en
+#+OPTIONS: num:nil
+#+ATTR_HTML: :style margin-left: auto; margin-right: auto;
 
 * Personal Settings
-** User Info
-  Name and Email.
-  #+BEGIN_SRC emacs-lisp
-     (setq user-full-name "Abraham Raji"
-               user-email "abrahamraji99@gmail.com")
-  #+END_SRC
-** Set UTF-8 encoding
-    #+BEGIN_SRC emacs-lisp
-    (setq locale-coding-system 'utf-8)
-    (set-terminal-coding-system 'utf-8)
-    (set-keyboard-coding-system 'utf-8)
-    (set-selection-coding-system 'utf-8)
-    (prefer-coding-system 'utf-8)
-    #+END_SRC
 ** Package Management
   -  Sources
     This piece of code tells emacs where to find packages from
@@ -38,6 +29,36 @@
      (setq use-package-always-ensure t)
      (require 'use-package)
       #+END_SRC
+
+** Dashboard
+This is your new startup screen, together with projectile it works in unison and
+provides you with a quick look into your latest projects and files.
+Change the welcome message to whatever string you want and
+change the numbers to suit your liking, I find 5 to be enough.
+#+BEGIN_SRC emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :config
+      (dashboard-setup-startup-hook)
+      (setq dashboard-startup-banner "~/.emacs.d/img/dashLogo.png")
+      (setq dashboard-items '((recents  . 5)
+                              (projects . 5)))
+      (setq dashboard-banner-logo-title "Hey, Abraham!"))
+#+END_SRC
+** User Info
+  Name and Email.
+  #+BEGIN_SRC emacs-lisp
+     (setq user-full-name "Abraham Raji"
+               user-email "abrahamraji99@gmail.com")
+  #+END_SRC
+** Set UTF-8 encoding
+    #+BEGIN_SRC emacs-lisp
+    (setq locale-coding-system 'utf-8)
+    (set-terminal-coding-system 'utf-8)
+    (set-keyboard-coding-system 'utf-8)
+    (set-selection-coding-system 'utf-8)
+    (prefer-coding-system 'utf-8)
+    #+END_SRC
 ** Quickly visit certain files
 - Emacs configuration
   #+BEGIN_SRC emacs-lisp
@@ -84,14 +105,113 @@
 (setq vc-make-backup-files t)
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
   #+end_src
-** Modeine
-   #+BEGIN_SRC emacs-lisp
-  ;;uncomment this during installation (all-the-icons-install-fonts)
-   (use-package doom-modeline
-      :ensure t
-      :defer t
-      :hook (after-init . doom-modeline-init))
-   #+END_SRC
+** Modeline
+The modeline is the heart of emacs, it offers information at all times, it's persistent
+and verbose enough to gain a full understanding of modes and states you are in.
+
+
+Due to the fact that we attempt to use emacs as a desktop environment replacement,
+and external bar showing the time, the battery percentage and more system info would be great to have.
+I have however abandoned polybar in favor of a heavily modified modeline, this offers me more space
+on the screen and better integration.
+
+
+One modeline-related setting that is missing and is instead placed at the bottom is =diminish=.
+*** Spaceline!
+I may not use spacemacs, since I do not like evil-mode and find spacemacs incredibly bloated and slow,
+however it would be stupid not to acknowledge the best parts about it, the theme and their modified powerline setup.
+
+This enables spaceline, it looks better and works very well with my theme of choice.
+#+BEGIN_SRC emacs-lisp
+  (use-package spaceline
+    :ensure t
+    :config
+    (require 'spaceline-config)
+      (setq spaceline-buffer-encoding-abbrev-p nil)
+      (setq spaceline-line-column-p nil)
+      (setq spaceline-line-p nil)
+      (setq powerline-default-separator (quote arrow))
+      (spaceline-spacemacs-theme))
+#+END_SRC
+
+*** No separator!
+#+BEGIN_SRC emacs-lisp
+  (setq powerline-default-separator nil)
+#+END_SRC
+
+*** Cursor position
+Show the current line and column for your cursor.
+We are not going to have =relative-linum-mode= in every major mode, so this is useful.
+#+BEGIN_SRC emacs-lisp
+  (setq line-number-mode t)
+  (setq column-number-mode t)
+#+END_SRC
+
+*** Clock
+    If you prefer the 12hr-format, change the variable to =nil= instead of =t=.
+
+*** Time format
+#+BEGIN_SRC emacs-lisp
+  (setq display-time-24hr-format t)
+  (setq display-time-format "%H:%M - %d %B %Y")
+#+END_SRC
+
+*** Enabling the mode
+This turns on the clock globally.
+#+BEGIN_SRC emacs-lisp
+  (display-time-mode 1)
+#+END_SRC
+
+*** Battery indicator
+A package called =fancy-battery= will be used if we are in GUI emacs, otherwise the built in battery-mode will be used.
+Fancy battery has very odd colors if used in the tty, hence us disabling it.
+#+BEGIN_SRC emacs-lisp
+  (use-package fancy-battery
+    :ensure t
+    :config
+      (setq fancy-battery-show-percentage t)
+      (setq battery-update-interval 15)
+      (if window-system
+        (fancy-battery-mode)
+        (display-battery-mode)))
+#+END_SRC
+
+*** System monitor
+A teeny-tiny system monitor that can be enabled or disabled at runtime, useful for checking performance
+with power-hungry processes in ansi-term
+
+symon can be toggled on and off with =Super + h=.
+#+BEGIN_SRC emacs-lisp
+  (use-package symon
+    :ensure t
+    :bind
+    ("s-h" . symon-mode))
+#+END_SRC
+*** Diminishing modes
+Your modeline is sacred, and if you have a lot of modes enabled, as you will if you use this config,
+you might end up with a lot of clutter there, the package =diminish= disables modes on the mode line but keeps
+them running, it just prevents them from showing up and taking up space.
+
+*THIS WILL BE REMOVED SOON AS USE-PACKAGE HAS THE FUNCTIONALITY BUILT IN*
+
+Edit this list as you see fit!
+#+BEGIN_SRC emacs-lisp
+  (use-package diminish
+    :ensure t
+    :init
+    (diminish 'which-key-mode)
+    (diminish 'linum-relative-mode)
+    (diminish 'hungry-delete-mode)
+    (diminish 'visual-line-mode)
+    (diminish 'subword-mode)
+    (diminish 'beacon-mode)
+    (diminish 'irony-mode)
+    (diminish 'page-break-lines-mode)
+    (diminish 'auto-revert-mode)
+    (diminish 'rainbow-delimiters-mode)
+    (diminish 'rainbow-mode))
+#+END_SRC
+
 ** Try
 #+BEGIN_SRC emacs-lisp
 (use-package try
@@ -130,6 +250,15 @@
    :init
    (add-hook 'org-mode-hook #'org-bullets-mode))
    #+END_SRC
+** Pretty symbols
+Changes =lambda= to an actual symbol and a few others as well, only in the GUI version though.
+#+BEGIN_SRC emacs-lisp
+  (when window-system
+        (use-package pretty-mode
+        :ensure t
+        :config
+        (global-pretty-mode t)))
+#+END_SRC
 * Coding
 ** Programming specific interface improvements
 
@@ -184,10 +313,52 @@ Smart dash guesses _ vs - depending on context.
   (setq frame-title-format (list "%b- %F " emacs-version)
   icont-title-format(list "%b- GNU %F " emacs-version))
   #+END_SRC
+* Snippets
+
+Unlike autocomplete which suggests words / symbols, snippets are pre-prepared templates which you fill in.
+
+I'm using a community library (=[[https://github.com/AndreaCrotti/yasnippet-snippets]]=) with *lots* of ready made options, and have my own directory of custom snippets I've added. Not sure if I should unify these by forking =yasnippet-snippets=.
+
+Type the shortcut and press =TAB= to complete, or =M-/= to autosuggest a snippet.
+
+#+BEGIN_SRC emacs-lisp
+(use-package yasnippet
+:ensure t
+:diminish yas-minor-mode
+:config
+(use-package yasnippet-snippets
+:ensure t)
+(yas-reload-all)
+(add-to-list 'yas-snippet-dirs "~/.emacs.d/yasnippet-snippets")
+(add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
+(yas-global-mode)
+(global-set-key (kbd "M-/") 'company-yasnippet))
+#+END_SRC
+]
+* company mode
+I set the delay for company mode to kick in to half a second, I also make sure that
+it starts doing its magic after typing in only 2 characters.
+
+I prefer =C-n= and =C-p= to move around the items, so I remap those accordingly.
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :config
+    (setq company-idle-delay 0)
+    (setq company-minimum-prefix-length 3))
+
+  (with-eval-after-load 'company
+    (define-key company-active-map (kbd "M-n") nil)
+    (define-key company-active-map (kbd "M-p") nil)
+    (define-key company-active-map (kbd "C-n") #'company-select-next)
+    (define-key company-active-map (kbd "C-p") #'company-select-previous)
+    (define-key company-active-map (kbd "SPC") #'company-abort))
+#+END_SRC
+
 * Auto Compile
   #+BEGIN_SRC emacs-lisp
-    (use-package auto-compile
-    :config (auto-compile-on-load-mode))
+  ;(use-package auto-compile
+  ; :config (auto-compile-on-load-mode))
   #+END_SRC
 * Async
   Lets us use asynchronous processes wherever possible, pretty useful.
@@ -346,9 +517,10 @@ Smart dash guesses _ vs - depending on context.
     #+BEGIN_SRC emacs-lisp
    (set-window-scroll-bars (minibuffer-window) nil nil)
     #+END_SRC
-  - Scroll Conservatively
+  - Scroll Smoothly and Conservatively
     #+BEGIN_SRC emacs-lisp
-   (setq scroll-conservatively 100)
+    (setq-default dotspacemacs-smooth-scrolling nil)
+    (setq scroll-conservatively 100)
     #+END_SRC
 * Multiple Cursors
   #+BEGIN_SRC emacs-lisp
@@ -552,6 +724,17 @@ SX is a full stack overflow client within Emacs.
                ("a" . sx-ask)
                ("s" . sx-search)))
 #+END_SRC
+**** Twitter Bootstrap
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-twbs
+    :ensure t)
+#+END_SRC
+** Easy-to-add emacs-lisp template
+Hitting tab after an "<el" in an org-mode file will create a template for elisp insertion.
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'org-structure-template-alist
+	       '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+#+END_SRC
 
 * Web browsing
 
@@ -646,8 +829,7 @@ TimeMachine lets us step through the history of a file as recorded in git.
 #+BEGIN_SRC emacs-lisp
   (use-package git-timemachine)
 #+END_SRC
-
-* c++
+* C/C++
 #+BEGIN_SRC emacs-lisp
 (use-package ggtags
 :ensure t
@@ -662,6 +844,75 @@ TimeMachine lets us step through the history of a file as recorded in git.
   (use-package ac-c-headers
   :ensure t)
   #+END_SRC
+**** yasnippet
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'c++-mode-hook 'yas-minor-mode)
+  (add-hook 'c-mode-hook 'yas-minor-mode)
+#+END_SRC
+
+**** flycheck
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-clang-analyzer
+    :ensure t
+    :config
+    (with-eval-after-load 'flycheck
+      (require 'flycheck-clang-analyzer)
+       (flycheck-clang-analyzer-setup)))
+#+END_SRC
+
+**** company
+Requires libclang to be installed.
+#+BEGIN_SRC emacs-lisp
+  (with-eval-after-load 'company
+    (add-hook 'c++-mode-hook 'company-mode)
+    (add-hook 'c-mode-hook 'company-mode))
+
+  (use-package company-c-headers
+    :ensure t)
+
+  (use-package company-irony
+    :ensure t
+    :config
+    (setq company-backends '((company-c-headers
+                              company-dabbrev-code
+                              company-irony))))
+
+  (use-package irony
+    :ensure t
+    :config
+    (add-hook 'c++-mode-hook 'irony-mode)
+    (add-hook 'c-mode-hook 'irony-mode)
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+#+END_SRC
+
+* emacs-lisp
+**** eldoc
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+#+END_SRC
+
+**** yasnippet
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'emacs-lisp-mode-hook 'yas-minor-mode)
+#+END_SRC
+
+**** company
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'emacs-lisp-mode-hook 'company-mode)
+
+  (use-package slime
+    :ensure t
+    :config
+    (setq inferior-lisp-program "/usr/bin/sbcl")
+    (setq slime-contribs '(slime-fancy)))
+
+  (use-package slime-company
+    :ensure t
+    :init
+      (require 'company)
+      (slime-setup '(slime-fancy slime-company)))
+#+END_SRC
+
 * Dired
 - Open media with the appropriate programs.
   #+BEGIN_SRC emacs-lisp
@@ -820,23 +1071,6 @@ By default Emacs doesn't read from the same environment variables set in your te
     :config
     (exec-path-from-shell-initialize))
 #+END_SRC
-* Snippets
-
-Unlike autocomplete which suggests words / symbols, snippets are pre-prepared templates which you fill in.
-
-I'm using a community library (=[[https://github.com/AndreaCrotti/yasnippet-snippets]]=) with *lots* of ready made options, and have my own directory of custom snippets I've added. Not sure if I should unify these by forking =yasnippet-snippets=.
-
-Type the shortcut and press =TAB= to complete, or =M-/= to autosuggest a snippet.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-      :diminish yas-minor-mode
-      :config
-      (add-to-list 'yas-snippet-dirs "~/.emacs.d/yasnippet-snippets")
-      (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
-      (yas-global-mode)
-      (global-set-key (kbd "M-/") 'company-yasnippet))
-#+END_SRC
 * Python
 
 Emacs handles python quite well, but we can improve things with anaconda mode.
@@ -859,4 +1093,83 @@ Sometimes I use kivy.
 #+BEGIN_SRC emacs-lisp
   (use-package kivy-mode
     :mode ("\\.kv\\'" . kivy-mode))
+#+END_SRC
+**** yasnippet
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'python-mode-hook 'yas-minor-mode)
+#+END_SRC
+
+**** flycheck
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'python-mode-hook 'flycheck-mode)
+#+END_SRC
+**** company
+#+BEGIN_SRC emacs-lisp
+  (with-eval-after-load 'company
+      (add-hook 'python-mode-hook 'company-mode))
+
+  (use-package company-jedi
+    :ensure t
+    :config
+      (require 'company)
+      (add-to-list 'company-backends 'company-jedi))
+
+  (defun python-mode-company-init ()
+    (setq-local company-backends '((company-jedi
+                                    company-etags
+                                    company-dabbrev-code))))
+
+  (use-package company-jedi
+    :ensure t
+    :config
+      (require 'company)
+      (add-hook 'python-mode-hook 'python-mode-company-init))
+#+END_SRC
+
+* Projectile
+Projectile is an awesome project manager, mostly because it recognizes directories
+with a =.git= directory as projects and helps you manage them accordingly.
+
+** Enable projectile globally
+This makes sure that everything can be a project.
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :init
+      (projectile-mode 1))
+#+END_SRC
+
+** Let projectile call make
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<f5>") 'projectile-compile-project)
+#+END_SRC
+* Electric
+
+If you write any code, you may enjoy this.
+Typing the first character in a set of 2, completes the second one after your cursor.
+Opening a bracket? It's closed for you already. Quoting something? It's closed for you already.
+
+You can easily add and remove pairs yourself, have a look.
+#+BEGIN_SRC emacs-lisp
+(setq electric-pair-pairs '(
+                           (?\{ . ?\})
+                           (?\( . ?\))
+                           (?\[ . ?\])
+                           (?\" . ?\")
+                           ))
+#+END_SRC
+
+And now to enable it
+#+BEGIN_SRC emacs-lisp
+(electric-pair-mode t)
+#+END_SRC
+* Rainbow
+Mostly useful if you are into web development or game development.
+Every time emacs encounters a hexadecimal code that resembles a color, it will automatically highlight
+it in the appropriate color. This is a lot cooler than you may think.
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-mode
+    :ensure t
+    :init
+      (add-hook 'prog-mode-hook 'rainbow-mode))
 #+END_SRC
