@@ -118,25 +118,73 @@ on the screen and better integration.
 
 One modeline-related setting that is missing and is instead placed at the bottom is =diminish=.
 *** Spaceline!
-I may not use spacemacs, since I do not like evil-mode and find spacemacs incredibly bloated and slow,
+I may not use spacemacs, since I do find spacemacs incredibly bloated and slow,
 however it would be stupid not to acknowledge the best parts about it, the theme and their modified powerline setup.
-
+I don't use spaceline as of now. Not because it's inferior in any way. So if you wish to use it, uncomment the code below and comment everything in the doom modeline section.
 This enables spaceline, it looks better and works very well with my theme of choice.
 #+BEGIN_SRC emacs-lisp
-  (use-package spaceline
-    :ensure t
-    :config
-    (require 'spaceline-config)
-      (setq spaceline-buffer-encoding-abbrev-p nil)
-      (setq spaceline-line-column-p nil)
-      (setq spaceline-line-p nil)
-      (setq powerline-default-separator (quote arrow))
-      (spaceline-spacemacs-theme))
+ ; (use-package spaceline
+ ;   :ensure t
+ ;   :config
+ ;   (require 'spaceline-config)
+ ;     (setq spaceline-buffer-encoding-abbrev-p nil)
+ ;     (setq spaceline-line-column-p nil)
+ ;     (setq spaceline-line-p nil)
+ ;     (setq powerline-default-separator (quote arrow))
+ ;     (spaceline-spacemacs-theme))
 #+END_SRC
-
+*** Doom modeline 
+    #+BEGIN_SRC emacs-lisp
+    (use-package doom-modeline
+      :ensure t
+      :defer t
+      :hook (after-init . doom-modeline-init))
+    #+END_SRC
+**** Customizations 
+     #+BEGIN_SRC emacs-lisp
+     ;; How tall the mode-line should be (only respected in GUI Emacs).
+     (setq doom-modeline-height 25)
+     
+     ;; How wide the mode-line bar should be (only respected in GUI Emacs).
+     (setq doom-modeline-bar-width 3)
+     
+     ;; Determines the style used by `doom-modeline-buffer-file-name'.
+     ;;
+     ;; Given ~/Projects/FOSS/emacs/lisp/comint.el
+     ;;   truncate-upto-project => ~/P/F/emacs/lisp/comint.el
+     ;;   truncate-from-project => ~/Projects/FOSS/emacs/l/comint.el
+     ;;   truncate-with-project => emacs/l/comint.el
+     ;;   truncate-except-project => ~/P/F/emacs/l/comint.el
+     ;;   truncate-upto-root => ~/P/F/e/lisp/comint.el
+     ;;   truncate-all => ~/P/F/e/l/comint.el
+     ;;   relative-from-project => emacs/lisp/comint.el
+     ;;   relative-to-project => lisp/comint.el
+     ;;   file-name => comint.el
+     ;;   buffer-name => comint.el<2> (uniquify buffer name)
+     ;;
+     ;; If you are expereicing the laggy issue, especially while editing remote files
+     ;; with tramp, please try `file-name' style.
+     ;; Please refer to https://github.com/bbatsov/projectile/issues/657.
+     (setq doom-modeline-buffer-file-name-style 'truncate-upto-project)
+     
+     ;; What executable of Python will be used (if nil nothing will be showed).
+     (setq doom-modeline-python-executable "python")
+     
+     ;; Whether show `all-the-icons' or not (if nil nothing will be showed).
+     ;; The icons may not be showed correctly on Windows. Disable to make it work.
+     (setq doom-modeline-icon t)
+     
+     ;; Whether show the icon for major mode. It should respect `doom-modeline-icon'.
+     (setq doom-modeline-major-mode-icon t)
+     
+     ;; Whether display minor modes or not. Non-nil to display in mode-line.
+     (setq doom-modeline-minor-modes nil)
+     (setq find-file-visit-truename t)
+     #+END_SRC
 *** No separator!
+    if you're using spaceline uncomment this.
 #+BEGIN_SRC emacs-lisp
-  (setq powerline-default-separator nil)
+;  (setq powerline-default-separator 1)
 #+END_SRC
 
 *** Cursor position
@@ -148,14 +196,11 @@ We are not going to have =relative-linum-mode= in every major mode, so this is u
 #+END_SRC
 
 *** Clock
-    If you prefer the 12hr-format, change the variable to =nil= instead of =t=.
-
-*** Time format
-#+BEGIN_SRC emacs-lisp
-  (setq display-time-24hr-format t)
-  (setq display-time-format "%H:%M - %d %B %Y")
-#+END_SRC
-
+    If you prefer the 24hr-format, uncomment the line.
+    #+BEGIN_SRC emacs-lisp
+    ;;(setq display-time-24hr-format t)
+    (setq display-time-format "%H:%M - %d %B %Y")
+    #+END_SRC
 *** Enabling the mode
 This turns on the clock globally.
 #+BEGIN_SRC emacs-lisp
@@ -354,7 +399,6 @@ I prefer =C-n= and =C-p= to move around the items, so I remap those accordingly.
     (define-key company-active-map (kbd "C-p") #'company-select-previous)
     (define-key company-active-map (kbd "SPC") #'company-abort))
 #+END_SRC
-
 * Auto Compile
   #+BEGIN_SRC emacs-lisp
   ;(use-package auto-compile
@@ -503,10 +547,18 @@ I prefer =C-n= and =C-p= to move around the items, so I remap those accordingly.
    #+BEGIN_SRC emacs-lisp
    (use-package emojify)
    #+END_SRC
-* matlab
+* Octave mode
   #+BEGIN_SRC emacs-lisp
-     (add-to-list 'load-path "/home/guyfawkes/.emacs.d/matlab-emacs-src")
-     (load-library "matlab-load")
+  (autoload 'octave-mode "octave-mod" nil t)
+  (setq auto-mode-alist
+        (cons '("\\.m$" . octave-mode) auto-mode-alist))
+  ;; turn on the abbrevs, auto-fill and font-lock features automatically
+  (add-hook 'octave-mode-hook
+          (lambda ()
+            (abbrev-mode 1)
+            (auto-fill-mode 1)
+            (if (eq window-system 'x)
+                (font-lock-mode 1))))
   #+END_SRC
 * Scrolling
   -  System Scroll bars.
@@ -644,7 +696,6 @@ I prefer =C-n= and =C-p= to move around the items, so I remap those accordingly.
    #+BEGIN_SRC emacs-lisp
   (setq org-ellipsis " ▼")
    #+END_SRC
-
 ** Exporting
 
    Allow export to markdown and beamer (for presentations).
@@ -735,7 +786,6 @@ Hitting tab after an "<el" in an org-mode file will create a template for elisp 
   (add-to-list 'org-structure-template-alist
 	       '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
 #+END_SRC
-
 * Web browsing
 
 =w3m= is a terminal based browser. Emacs now has =eww= built in, but I prefer =w3m=. Install it separately, e.g. with =brew install w3m=.
@@ -849,7 +899,6 @@ TimeMachine lets us step through the history of a file as recorded in git.
   (add-hook 'c++-mode-hook 'yas-minor-mode)
   (add-hook 'c-mode-hook 'yas-minor-mode)
 #+END_SRC
-
 **** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-clang-analyzer
@@ -859,7 +908,6 @@ TimeMachine lets us step through the history of a file as recorded in git.
       (require 'flycheck-clang-analyzer)
        (flycheck-clang-analyzer-setup)))
 #+END_SRC
-
 **** company
 Requires libclang to be installed.
 #+BEGIN_SRC emacs-lisp
@@ -884,18 +932,15 @@ Requires libclang to be installed.
     (add-hook 'c-mode-hook 'irony-mode)
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 #+END_SRC
-
 * emacs-lisp
 **** eldoc
 #+BEGIN_SRC emacs-lisp
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 #+END_SRC
-
 **** yasnippet
 #+BEGIN_SRC emacs-lisp
   (add-hook 'emacs-lisp-mode-hook 'yas-minor-mode)
 #+END_SRC
-
 **** company
 #+BEGIN_SRC emacs-lisp
   (add-hook 'emacs-lisp-mode-hook 'company-mode)
@@ -912,7 +957,6 @@ Requires libclang to be installed.
       (require 'company)
       (slime-setup '(slime-fancy slime-company)))
 #+END_SRC
-
 * Dired
 - Open media with the appropriate programs.
   #+BEGIN_SRC emacs-lisp
@@ -967,7 +1011,6 @@ Requires libclang to be installed.
     	   (setq emmet-use-css-transform t)
       	 (setq emmet-use-css-transform nil)))))
   #+END_SRC
-
 * Command completion
 
 =smart M-x= suggests =M-x= commands based on recency and frequency. I don't tend to use it directly but =counsel= uses it to order suggestions.
@@ -1010,7 +1053,6 @@ By default =ivy= starts filters with =^=. I don't normally want that and can eas
 #+BEGIN_SRC emacs-lisp
   (use-package ivy-hydra)
 #+END_SRC
-
 * Suggest next key
 Suggest next keys to me based on currently entered key combination.
 
@@ -1098,7 +1140,6 @@ Sometimes I use kivy.
 #+BEGIN_SRC emacs-lisp
   (add-hook 'python-mode-hook 'yas-minor-mode)
 #+END_SRC
-
 **** flycheck
 #+BEGIN_SRC emacs-lisp
   (add-hook 'python-mode-hook 'flycheck-mode)
@@ -1125,7 +1166,6 @@ Sometimes I use kivy.
       (require 'company)
       (add-hook 'python-mode-hook 'python-mode-company-init))
 #+END_SRC
-
 * Projectile
 Projectile is an awesome project manager, mostly because it recognizes directories
 with a =.git= directory as projects and helps you manage them accordingly.
