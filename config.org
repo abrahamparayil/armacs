@@ -8,33 +8,29 @@
 #+ATTR_HTML: :style margin-left: auto; margin-right: auto;
 
 * Personal Settings
+These are setting that add to my user experience or are my personal preferences. So these are setting that work for me but it may not for you.
 ** Package Management
-  -  Sources
-    This piece of code tells emacs where to find packages from
-    #+BEGIN_SRC emacs-lisp
-      (require 'package)
-      (setq package-archives
-      '(("melpa" . "https://melpa.org/packages/")
-        ("gnu" . "https://elpa.gnu.org/packages/")
-        ("org" . "http://orgmode.org/elpa/")))
-	(package-initialize)
-    #+END_SRC
-  -  use-package command and its configs.
-      For installing packages
-      #+BEGIN_SRC emacs-lisp
-     (unless (package-installed-p 'use-package)
-     (package-install 'use-package)
-     (setq load-prefer-newer t))
-     (setq use-package-verbose t)
-     (setq use-package-always-ensure t)
-     (require 'use-package)
-      #+END_SRC
-
+*Sources*
+This piece of code tells emacs where to find packages from
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+ (setq package-archives
+  '(("melpa" . "https://melpa.org/packages/")
+    ("gnu" . "https://elpa.gnu.org/packages/")
+    ("org" . "http://orgmode.org/elpa/")))
+(package-initialize)
+#+END_SRC
+*use-package command and its configs.*
+ #+BEGIN_SRC emacs-lisp
+(unless (package-installed-p 'use-package)
+(package-install 'use-package)
+(setq load-prefer-newer t))
+(setq use-package-verbose t)
+(setq use-package-always-ensure t)
+(require 'use-package)
+ #+END_SRC
 ** Dashboard
-This is your new startup screen, together with projectile it works in unison and
-provides you with a quick look into your latest projects and files.
-Change the welcome message to whatever string you want and
-change the numbers to suit your liking, I find 5 to be enough.
+This is replacement for the default  startup screen, together with projectile it works in unison and provides a quick look into latest projects and files. The welcome message can be changed to whatever string you want and change the numbers to suit your liking, I find 5 to be enough.
 #+BEGIN_SRC emacs-lisp
   (use-package dashboard
     :ensure t
@@ -51,15 +47,8 @@ change the numbers to suit your liking, I find 5 to be enough.
      (setq user-full-name "Abraham Raji"
                user-email "abrahamraji99@gmail.com")
   #+END_SRC
-** Set UTF-8 encoding
-    #+BEGIN_SRC emacs-lisp
-    (setq locale-coding-system 'utf-8)
-    (set-terminal-coding-system 'utf-8)
-    (set-keyboard-coding-system 'utf-8)
-    (set-selection-coding-system 'utf-8)
-    (prefer-coding-system 'utf-8)
-    #+END_SRC
 ** Quickly visit certain files
+As you keep using emacs or a specific desktop setup, you'll notice that you open certain files/folder more often than others, hence it's only sensible to set up key bindings that will open those specific files and save you the time of navigating through your file system.
 - Emacs configuration
   #+BEGIN_SRC emacs-lisp
      (defun 4br/visit-emacs-config ()
@@ -68,27 +57,30 @@ change the numbers to suit your liking, I find 5 to be enough.
      (global-set-key (kbd "C-c e") '4br/visit-emacs-config)
   #+END_SRC
 - Resources
+This is a habit of mine. Whenever a find some good material on a paricular topic I list it in this org file.A small description on what it is and a link to it. 
   #+BEGIN_SRC emacs-lisp
      (defun 4br/visit-resources ()
-     (interactive)
-     (find-file "~/Documents/Resources/resources.org"))
+      (interactive)
+      (find-file "~/Documents/Resources/resources.org"))
      (global-set-key (kbd "C-c r") '4br/visit-resources)
   #+END_SRC
 - dotemacs
+  I like to hoard good emacs configs. This org file lists them.
   #+BEGIN_SRC emacs-lisp
      (defun 4br/visit-dotemacs ()
      (interactive)
      (find-file "~/Documents/dotemacs/index.org"))
      (global-set-key (kbd "C-c d") '4br/visit-dotemacs)
   #+END_SRC
+- i3 Config file
+  #+BEGIN_SRC emacs-lisp
+     (defun 4br/visit-i3config ()
+     (interactive)
+     (find-file "~/.i3/config"))
+     (global-set-key (kbd "C-c i") '4br/visit-i3config)
+  #+END_SRC
 ** Backups
-
-  This is one of the things people usually want to change right away. By
-  default, Emacs saves backup files in the current directory. These are
-  the files ending in =~= that are cluttering up your directory lists.
-  The following code stashes them all in =~/.emacs.d/backups=, where I
-  can find them with =C-x C-f= (=find-file=) if I really need to.
-
+This is one of the things people usually want to change right away. Bydefault, Emacs saves backup files in the current directory. These are the files ending in =~= that are cluttering up your directory lists. The following code stashes them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= (=find-file=) if I really need to.
   #+begin_src emacs-lisp
   (setq backup-directory-alist 
         '(("." . "~/.emacs.d/backups")))
@@ -96,9 +88,7 @@ change the numbers to suit your liking, I find 5 to be enough.
   (setq undo-tree-history-directory-alist
         `((".*" . ,temporary-file-directory)))
   #+end_src
-
   Disk space is cheap. Save lots.
-
   #+begin_src emacs-lisp
 (setq delete-old-versions -1)
 (setq version-control t)
@@ -106,20 +96,11 @@ change the numbers to suit your liking, I find 5 to be enough.
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
   #+end_src
 ** Modeline
-The modeline is the heart of emacs, it offers information at all times, it's persistent
-and verbose enough to gain a full understanding of modes and states you are in.
-
-
-Due to the fact that we attempt to use emacs as a desktop environment replacement,
-and external bar showing the time, the battery percentage and more system info would be great to have.
-I have however abandoned polybar in favor of a heavily modified modeline, this offers me more space
-on the screen and better integration.
-
-
-One modeline-related setting that is missing and is instead placed at the bottom is =diminish=.
+The modeline is the heart of emacs, it offers information at all times, it's persistent and verbose enough to gain a full understanding of modes and states you are in. Due to the fact that I sometimes use emacs as a desktop environment replacement, an external bar showing the time, a battery percentage and more system info would be great to have. I have however abandoned polybar in favor of a heavily modified modeline, this offers me more space on the screen and better integration.One modeline-related setting that is missing and is instead placed at the bottom is =diminish=.
 *** Spaceline!
 I may not use spacemacs, since I do find spacemacs incredibly bloated and slow,
 however it would be stupid not to acknowledge the best parts about it, the theme and their modified powerline setup.
+*UPDATE:*
 I don't use spaceline as of now. Not because it's inferior in any way. So if you wish to use it, uncomment the code below and comment everything in the doom modeline section.
 This enables spaceline, it looks better and works very well with my theme of choice.
 #+BEGIN_SRC emacs-lisp
@@ -182,11 +163,10 @@ This enables spaceline, it looks better and works very well with my theme of cho
      (setq find-file-visit-truename t)
      #+END_SRC
 *** No separator!
-    if you're using spaceline uncomment this.
+if you're using spaceline uncomment this.
 #+BEGIN_SRC emacs-lisp
 ;  (setq powerline-default-separator 1)
 #+END_SRC
-
 *** Cursor position
 Show the current line and column for your cursor.
 We are not going to have =relative-linum-mode= in every major mode, so this is useful.
@@ -194,7 +174,6 @@ We are not going to have =relative-linum-mode= in every major mode, so this is u
   (setq line-number-mode t)
   (setq column-number-mode t)
 #+END_SRC
-
 *** Clock
     If you prefer the 24hr-format, uncomment the line.
     #+BEGIN_SRC emacs-lisp
@@ -206,7 +185,6 @@ This turns on the clock globally.
 #+BEGIN_SRC emacs-lisp
   (display-time-mode 1)
 #+END_SRC
-
 *** Battery indicator
 A package called =fancy-battery= will be used if we are in GUI emacs, otherwise the built in battery-mode will be used.
 Fancy battery has very odd colors if used in the tty, hence us disabling it.
@@ -220,22 +198,19 @@ Fancy battery has very odd colors if used in the tty, hence us disabling it.
         (fancy-battery-mode)
         (display-battery-mode)))
 #+END_SRC
-
 *** System monitor
 A teeny-tiny system monitor that can be enabled or disabled at runtime, useful for checking performance
 with power-hungry processes in ansi-term
 
 symon can be toggled on and off with =Super + h=.
 #+BEGIN_SRC emacs-lisp
-  (use-package symon
-    :ensure t
-    :bind
-    ("s-h" . symon-mode))
+;;  (use-package symon
+;;    :ensure t
+;;    :bind
+;;    ("s-h" . symon-mode))
 #+END_SRC
 *** Diminishing modes
-Your modeline is sacred, and if you have a lot of modes enabled, as you will if you use this config,
-you might end up with a lot of clutter there, the package =diminish= disables modes on the mode line but keeps
-them running, it just prevents them from showing up and taking up space.
+Your modeline is sacred, and if you have a lot of modes enabled, as you will if you use this config,you might end up with a lot of clutter there, the package =diminish= disables modes on the mode line but keeps them running, it just prevents them from showing up and taking up space.
 
 *THIS WILL BE REMOVED SOON AS USE-PACKAGE HAS THE FUNCTIONALITY BUILT IN*
 
@@ -256,45 +231,46 @@ Edit this list as you see fit!
     (diminish 'rainbow-delimiters-mode)
     (diminish 'rainbow-mode))
 #+END_SRC
-
 ** Try
+Sometimes if I'm not really sure about a package, I find it hard to convince myself to add them to my config just for the sake of trying it or to install them to find that I dont really like it and then uninstall it. This package let's me "try" stuff. It actually installs a package but only temporarely. Any package I install with try will be lost if and when I restart emacs.
 #+BEGIN_SRC emacs-lisp
 (use-package try
 	:ensure t)
 #+END_SRC
 ** Themes
-  #+BEGIN_SRC emacs-lisp
-  (use-package doom-themes
-  :ensure t)
-  (load-theme 'doom-vibrant t)
-  (require 'doom-themes)
-  (setq sml/no-confirm-load-theme t)
+I'm a dark theme person. Another theme I'd suggest is the =liso-theme=.
+#+BEGIN_SRC emacs-lisp
+(use-package doom-themes
+:ensure t)
+(load-theme 'doom-vibrant t)
+(require 'doom-themes)
+(setq sml/no-confirm-load-theme t)
+; Global settings (defaults)
+(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-  doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  
-  ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
-  ;; may have their own settings.
-  (load-theme 'doom-one t)
-  
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  ;;(doom-themes-neotree-config)
-  ;; or for treemacs users
-  ;;(doom-themes-treemacs-config)
-  
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config)
-  #+END_SRC
+;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
+;; may have their own settings.
+(load-theme 'doom-one t)
+
+;; Enable flashing mode-line on errors
+(doom-themes-visual-bell-config)
+
+;; Enable custom neotree theme (all-the-icons must be installed!)
+;;(doom-themes-neotree-config)
+;; or for treemacs users
+;;(doom-themes-treemacs-config)
+
+;; Corrects (and improves) org-mode's native fontification.
+(doom-themes-org-config)
+#+END_SRC
 ** org-bullets
-   #+BEGIN_SRC emacs-lisp
-   (use-package org-bullets
-   :init
-   (add-hook 'org-mode-hook #'org-bullets-mode))
-   #+END_SRC
+Asterisk can be boring to look at.
+#+BEGIN_SRC emacs-lisp
+(use-package org-bullets
+:init
+(add-hook 'org-mode-hook #'org-bullets-mode))
+#+END_SRC
 ** Pretty symbols
 Changes =lambda= to an actual symbol and a few others as well, only in the GUI version though.
 #+BEGIN_SRC emacs-lisp
@@ -304,7 +280,91 @@ Changes =lambda= to an actual symbol and a few others as well, only in the GUI v
         :config
         (global-pretty-mode t)))
 #+END_SRC
+** One-line Settings
+These settings are really short and I
+- Inhibit Startup Message
+  #+BEGIN_SRC emacs-lisp
+   (setq inhibit-startup-message t)
+  #+END_SRC
+- Lists buffers in ibuffer
+  #+BEGIN_SRC emacs-lisp
+   (defalias 'list-buffers 'ibuffer)
+  #+END_SRC
+- Disables Toolbar
+   #+BEGIN_SRC emacs-lisp
+   (tool-bar-mode -1)
+   #+END_SRC
+- Numbers on lines
+   #+BEGIN_SRC emacs-lisp
+   (global-linum-mode t)
+   #+END_SRC
+- Outlining
+   #+BEGIN_SRC emacs-lisp
+   (allout-mode)
+   #+END_SRC
+- Syntax Highlighting
+   #+BEGIN_SRC emacs-lisp
+   (global-font-lock-mode 1)
+   #+END_SRC
+ Use y/n instead of yes/no
+  #+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)   
+  #+END_SRC
+- make home and end buttons do their job
+  #+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<home>\") 'move-beginning-of-line)
+  (global-set-key (kbd "<end>") 'move-end-of-line)
+  #+END_SRC
+-  don't require two spaces for sentence end.
+  #+BEGIN_SRC emacs-lisp
+  (setq sentence-end-double-space nil)
+  #+END_SRC
+-  The beeping can be annoying--turn it off
+  #+BEGIN_SRC emacs-lisp
+  (setq visible-bell t
+          ring-bell-function #'ignore)
+  #+END_SRC
+- Start in fullscreen
+  #+BEGIN_SRC emacs-lisp
+  ;;(toggle-frame-fullscreen)
+  #+END_SRC
+- Kill current buffer
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-w") 'kill-current-buffer)
+#+END_SRC
+** Windmove  
+  #+BEGIN_SRC emacs-lisp
+  (windmove-default-keybindings)
+  (global-set-key (kbd "C-c <left>")  'windmove-left)
+  (global-set-key (kbd "C-c <right>") 'windmove-right)
+  (global-set-key (kbd "C-c <up>")    'windmove-up)
+  (global-set-key (kbd "C-c <down>")  'windmove-down)
+  #+END_SRC
+** Line wrapping
+#+BEGIN_SRC emacs-lisp
+    (remove-hook 'text-mode-hook 'turn-on-auto-fill)
+    (add-hook 'text-mode-hook 'visual-line-mode t)
+    (add-hook 'prog-mode-hook
+    (lambda()
+    (toggle-truncate-lines t)
+    (outline-minor-mode t)))
+
+    (defun leuven-good-old-fill-paragraph ()
+  (interactive)
+  (let ((fill-paragraph-function nil)
+	(adaptive-fill-function nil))
+    (fill-paragraph)))
+    (define-key org-mode-map "M-q" 'leuven-good-old-fill-paragraph)
+#+END_SRC
 * Coding
+** Set UTF-8 encoding
+    #+BEGIN_SRC emacs-lisp
+    (setq locale-coding-system 'utf-8)
+    (set-terminal-coding-system 'utf-8)
+    (set-keyboard-coding-system 'utf-8)
+    (set-selection-coding-system 'utf-8)
+    (prefer-coding-system 'utf-8)
+    #+END_SRC
 ** Programming specific interface improvements
 
 When programming I like my editor to try to help me with keeping parentheses balanced.
@@ -422,77 +482,6 @@ I prefer =C-n= and =C-p= to move around the items, so I remap those accordingly.
      (add-to-list 'ac-modes 'org-mode)
      (ac-config-default)
     #+END_SRC
-* One-line Settings
-- Inhibit Startup Message
-  #+BEGIN_SRC emacs-lisp
-   (setq inhibit-startup-message t)
-  #+END_SRC
-- Lists buffers in ibuffer
-  #+BEGIN_SRC emacs-lisp
-   (defalias 'list-buffers 'ibuffer)
-  #+END_SRC
-- Disables Toolbar
-   #+BEGIN_SRC emacs-lisp
-   (tool-bar-mode -1)
-   #+END_SRC
-- Numbers on lines
-   #+BEGIN_SRC emacs-lisp
-   (global-linum-mode t)
-   #+END_SRC
-- Outlining
-   #+BEGIN_SRC emacs-lisp
-   (allout-mode)
-   #+END_SRC
-- Syntax Highlighting
-   #+BEGIN_SRC emacs-lisp
-   (global-font-lock-mode 1)
-   #+END_SRC
-- Windmove  
-  #+BEGIN_SRC emacs-lisp
-  (windmove-default-keybindings)
-  (global-set-key (kbd "C-c <left>")  'windmove-left)
-  (global-set-key (kbd "C-c <right>") 'windmove-right)
-  (global-set-key (kbd "C-c <up>")    'windmove-up)
-  (global-set-key (kbd "C-c <down>")  'windmove-down)
-  #+END_SRC
-- Use y/n instead of yes/no
-  #+BEGIN_SRC emacs-lisp
-  (fset 'yes-or-no-p 'y-or-n-p)   
-  #+END_SRC
-- make home and end buttons do their job
-  #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "<home>") 'move-beginning-of-line)
-  (global-set-key (kbd "<end>") 'move-end-of-line)
-  #+END_SRC
--  don't require two spaces for sentence end.
-  #+BEGIN_SRC emacs-lisp
-  (setq sentence-end-double-space nil)
-  #+END_SRC
--  The beeping can be annoying--turn it off
-  #+BEGIN_SRC emacs-lisp
-  (setq visible-bell t
-          ring-bell-function #'ignore)
-  #+END_SRC
-- Start in fullscreen
-  #+BEGIN_SRC emacs-lisp
-  ;;(toggle-frame-fullscreen)
-  #+END_SRC
-- Line wrapping
-#+BEGIN_SRC emacs-lisp
-    (remove-hook 'text-mode-hook 'turn-on-auto-fill)
-    (add-hook 'text-mode-hook 'visual-line-mode t)
-    (add-hook 'prog-mode-hook
-    (lambda()
-    (toggle-truncate-lines t)
-    (outline-minor-mode t)))
-
-    (defun leuven-good-old-fill-paragraph ()
-  (interactive)
-  (let ((fill-paragraph-function nil)
-	(adaptive-fill-function nil))
-    (fill-paragraph)))
-    (define-key org-mode-map "M-q" 'leuven-good-old-fill-paragraph)
-#+END_SRC
 * Menu bar
   Toggles reveal and hide menubar with the f10 key
   #+BEGIN_SRC emacs-lisp
