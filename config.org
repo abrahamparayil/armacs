@@ -185,30 +185,6 @@ This turns on the clock globally.
 #+BEGIN_SRC emacs-lisp
   (display-time-mode 1)
 #+END_SRC
-*** Battery indicator
-A package called =fancy-battery= will be used if we are in GUI emacs, otherwise the built in battery-mode will be used.
-Fancy battery has very odd colors if used in the tty, hence us disabling it.
-#+BEGIN_SRC emacs-lisp
-  (use-package fancy-battery
-    :ensure t
-    :config
-      (setq fancy-battery-show-percentage t)
-      (setq battery-update-interval 15)
-      (if window-system
-        (fancy-battery-mode)
-        (display-battery-mode)))
-#+END_SRC
-*** System monitor
-A teeny-tiny system monitor that can be enabled or disabled at runtime, useful for checking performance
-with power-hungry processes in ansi-term
-
-symon can be toggled on and off with =Super + h=.
-#+BEGIN_SRC emacs-lisp
-;;  (use-package symon
-;;    :ensure t
-;;    :bind
-;;    ("s-h" . symon-mode))
-#+END_SRC
 *** Diminishing modes
 Your modeline is sacred, and if you have a lot of modes enabled, as you will if you use this config,you might end up with a lot of clutter there, the package =diminish= disables modes on the mode line but keeps them running, it just prevents them from showing up and taking up space.
 
@@ -236,33 +212,6 @@ Sometimes if I'm not really sure about a package, I find it hard to convince mys
 #+BEGIN_SRC emacs-lisp
 (use-package try
 	:ensure t)
-#+END_SRC
-** Themes
-I'm a dark theme person. Another theme I'd suggest is the =liso-theme=.
-#+BEGIN_SRC emacs-lisp
-(use-package doom-themes
-:ensure t)
-(load-theme 'doom-vibrant t)
-(require 'doom-themes)
-(setq sml/no-confirm-load-theme t)
-; Global settings (defaults)
-(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
-;; may have their own settings.
-(load-theme 'doom-one t)
-
-;; Enable flashing mode-line on errors
-(doom-themes-visual-bell-config)
-
-;; Enable custom neotree theme (all-the-icons must be installed!)
-;;(doom-themes-neotree-config)
-;; or for treemacs users
-;;(doom-themes-treemacs-config)
-
-;; Corrects (and improves) org-mode's native fontification.
-(doom-themes-org-config)
 #+END_SRC
 ** org-bullets
 Asterisk can be boring to look at.
@@ -296,7 +245,9 @@ These settings are really short and I
    #+END_SRC
 - Numbers on lines
    #+BEGIN_SRC emacs-lisp
-   (global-linum-mode t)
+   (use-package nlinum
+   :ensure t)
+   (nlinum-mode 1)
    #+END_SRC
 - Outlining
    #+BEGIN_SRC emacs-lisp
@@ -312,7 +263,7 @@ These settings are really short and I
   #+END_SRC
 - make home and end buttons do their job
   #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "<home>\") 'move-beginning-of-line)
+  (global-set-key (kbd "<home>") 'move-begining-of-line)
   (global-set-key (kbd "<end>") 'move-end-of-line)
   #+END_SRC
 -  don't require two spaces for sentence end.
@@ -322,15 +273,42 @@ These settings are really short and I
 -  The beeping can be annoying--turn it off
   #+BEGIN_SRC emacs-lisp
   (setq visible-bell t
-          ring-bell-function #'ignore)
+          ring-bell-function 'ignore)
   #+END_SRC
 - Start in fullscreen
   #+BEGIN_SRC emacs-lisp
   ;;(toggle-frame-fullscreen)
   #+END_SRC
 - Kill current buffer
+  #+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x w") 'kill-current-buffer)
+  #+END_SRC
+** Themes
+I'm a dark theme person. Another theme I'd suggest is the =liso-theme=.
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x C-w") 'kill-current-buffer)
+(use-package doom-themes
+:ensure t)
+(load-theme 'doom-vibrant t)
+(require 'doom-themes)
+(setq sml/no-confirm-load-theme t)
+; Global settings (defaults)
+(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
+;; may have their own settings.
+(load-theme 'doom-one t)
+
+;; Enable flashing mode-line on errors
+(doom-themes-visual-bell-config)
+
+;; Enable custom neotree theme (all-the-icons must be installed!)
+;;(doom-themes-neotree-config)
+;; or for treemacs users
+;;(doom-themes-treemacs-config)
+
+;; Corrects (and improves) org-mode's native fontification.
+(doom-themes-org-config)
 #+END_SRC
 ** Windmove  
   #+BEGIN_SRC emacs-lisp
@@ -461,8 +439,8 @@ I prefer =C-n= and =C-p= to move around the items, so I remap those accordingly.
 #+END_SRC
 * Auto Compile
   #+BEGIN_SRC emacs-lisp
-  ;(use-package auto-compile
-  ; :config (auto-compile-on-load-mode))
+   (use-package auto-compile
+   :config (auto-compile-on-load-mode))
   #+END_SRC
 * Async
   Lets us use asynchronous processes wherever possible, pretty useful.
@@ -536,6 +514,16 @@ I prefer =C-n= and =C-p= to move around the items, so I remap those accordingly.
    #+BEGIN_SRC emacs-lisp
    (use-package emojify)
    #+END_SRC
+* Multiple Cursors
+  #+BEGIN_SRC emacs-lisp
+  (use-package multiple-cursors
+  :ensure t)
+  (require 'multiple-cursors)
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+  #+END_SRC
 * Octave mode
   #+BEGIN_SRC emacs-lisp
   (autoload 'octave-mode "octave-mod" nil t)
@@ -563,16 +551,6 @@ I prefer =C-n= and =C-p= to move around the items, so I remap those accordingly.
     (setq-default dotspacemacs-smooth-scrolling nil)
     (setq scroll-conservatively 100)
     #+END_SRC
-* Multiple Cursors
-  #+BEGIN_SRC emacs-lisp
-  (use-package multiple-cursors
-  :ensure t)
-  (require 'multiple-cursors)
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-  #+END_SRC
 * Eshell
   - Setting keybinding for eshell
     #+BEGIN_SRC emacs-lisp
