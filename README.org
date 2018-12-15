@@ -4,31 +4,3 @@ Package sources are configued in the init.el file. All of the actual
 configuration is done in the config.org file.  The main purpose of
 this is repo is to setup emacs the way I want it on a fresh install.
 That being said I hope you find something worthwhile here
-
-* Personal Preferences
-  - Name and Email
-  - Window title
-  - Default Start-up message has been disabled
-  - Emacs toolbar disabled by default
-  - ibuffer enabled by default
-  - windmove enabled by default
-  - linum-mode enabled by default
-  - font-lock-mode and visual-line-mode
-  - Ido mode enabled by default
-  - Toggle reveal/hide  menu bar
-  - Font Settings
-  - Babel in org-mode
-
-* Packages I Use
-  - auto-complete
-  - flycheck
-  - htmlize
-  - liso-theme
-  - matlab
-  - org
-  - org-mode bullets
-  - ox-reveal
-  - try
-  - which-key
-  - elpy
-  - ox-md
