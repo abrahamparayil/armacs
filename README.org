@@ -1,6 +1,6 @@
 #+STARTUP: showall
 * Armacs
-  <img src="https://img.shields.io/badge/Made_for-Emacs_25.3+-blueviolet.svg?style=for-the-badge" alt="Made for Emacs 25.3+">
+[[Made for Emacs 25.3+][https://img.shields.io/badge/Made_for-Emacs_25.3+-blueviolet.svg?style=for-the-badge]]
 [[Imgur][https://i.imgur.com/vunwoQ7.png]]
 
 *What is armacs?*
