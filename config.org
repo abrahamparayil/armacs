@@ -63,6 +63,48 @@ As you may have noticed both process are a bit tedious and will only get worse a
 (require 'use-package)
 #+END_SRC 
 And that's about it for package management.
+* Multiplexing emacs and emacsclient
+Opening a new file in the same emacs-session requires the use of emacsclient. emacs command can be itself wrapped to do the smarter job to open the file if the session exists. To start session you need to start-server. This snippet will create server in first session of emacs. Add this to your emacs configuration file
+#+BEGIN_SRC emacs-lisp
+(require 'server)
+(unless (server-running-p)
+  (server-start))
+#+END_SRC
+
+To make this work you need to add this to you .bashrc:
+#+BEGIN_SRC sh
+function emacs {
+    if [[ $# -eq 0 ]]; then
+        /usr/bin/emacs # "emacs" is function, will cause recursion
+        return
+    fi
+    args=($*)
+    for ((i=0; i <= ${#args}; i++)); do
+        local a=${args[i]}
+        # NOTE: -c for creating new frame
+        if [[ ${a:0:1} == '-' && ${a} != '-c' && ${a} != '--' ]]; then
+            /usr/bin/emacs ${args[*]}
+            return
+        fi
+    done
+    setsid emacsclient -n -a /usr/bin/emacs ${args[*]}
+} 
+#+END_SRC
+* Syntax highlighting for systemd Files
+Add Syntax highlighting for your systemd Files.
+#+BEGIN_SRC emacs-lisp
+ (add-to-list 'auto-mode-alist '("\\.service\\'" . conf-unix-mode))
+ (add-to-list 'auto-mode-alist '("\\.timer\\'" . conf-unix-mode))
+ (add-to-list 'auto-mode-alist '("\\.target\\'" . conf-unix-mode))
+ (add-to-list 'auto-mode-alist '("\\.mount\\'" . conf-unix-mode))
+ (add-to-list 'auto-mode-alist '("\\.automount\\'" . conf-unix-mode))
+ (add-to-list 'auto-mode-alist '("\\.slice\\'" . conf-unix-mode))
+ (add-to-list 'auto-mode-alist '("\\.socket\\'" . conf-unix-mode))
+ (add-to-list 'auto-mode-alist '("\\.path\\'" . conf-unix-mode))
+ (add-to-list 'auto-mode-alist '("\\.netdev\\'" . conf-unix-mode))
+ (add-to-list 'auto-mode-alist '("\\.network\\'" . conf-unix-mode))
+ (add-to-list 'auto-mode-alist '("\\.link\\'" . conf-unix-mode))
+#+END_SRC
 * Async
   Lets us use asynchronous processes wherever possible, pretty useful.
   #+BEGIN_SRC emacs-lisp
@@ -755,7 +797,6 @@ Asterisk can be boring to look at.
   (setq org-ellipsis " ▶")
    #+END_SRC
 ** Exporting
-
    Allow export to markdown and beamer (for presentations).
 
    #+BEGIN_SRC emacs-lisp
@@ -773,7 +814,6 @@ Asterisk can be boring to look at.
 	(C . t)))
    #+END_SRC
 **** Exporting to HTML
-     
      Don't include a footer with my contact and publishing information at the bottom
      of every exported HTML document.
      
@@ -804,12 +844,9 @@ Asterisk can be boring to look at.
 #+BEGIN_SRC emacs-lisp
   (use-package ox-twbs)
 #+END_SRC
-
 *** Extras
 **** Writing
-
 =writegood-mode= highlights bad word choices and has functions for calculating readability.
-
 #+BEGIN_SRC emacs-lisp
   (use-package writegood-mode
     :bind ("C-c g" . writegood-mode)
@@ -819,7 +856,6 @@ Asterisk can be boring to look at.
 
 **** Stack Overflow
 SX is a full stack overflow client within Emacs.
-
 #+BEGIN_SRC emacs-lisp
   (use-package sx
     :config
@@ -939,30 +975,29 @@ This turns on the clock globally.
        (flycheck-clang-analyzer-setup)))
 #+END_SRC
 * Python
-
 Emacs handles python quite well, but we can improve things with anaconda mode.
-
+**** Anaconda
 #+BEGIN_SRC emacs-lisp
   (use-package anaconda-mode
     :config
     (add-hook 'python-mode-hook 'anaconda-mode)
     (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 #+END_SRC
-Elpy
+**** Elpy
 #+BEGIN_SRC emacs-lisp
 (use-package elpy
 :ensure t
 :config
 (elpy-enable))
 #+END_SRC
+**** Black 
 Black is an opinionated pyton formatter. Install with =pip install black= so the command line tool is available.
-
 #+BEGIN_SRC emacs-lisp
   (use-package blacken)
 #+END_SRC
 
+**** Kivy
 Sometimes I use kivy.
-
 #+BEGIN_SRC emacs-lisp
   (use-package kivy-mode
     :mode ("\\.kv\\'" . kivy-mode))
