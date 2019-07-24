@@ -21,7 +21,7 @@ You are in luck. I have two great options for you. Check both out and pick what 
 CLone this repo into your home folder if the folder is not named =.emacs.d=, rename the folder to =.emacs.d=.
 1. If you have an existing Emacs configuration, back it up first:
 
-   ```sh
+   ```
    cd ~
    mv .emacs.d .emacs.d.bak
    mv .emacs .emacs.bak
@@ -33,7 +33,7 @@ CLone this repo into your home folder if the folder is not named =.emacs.d=, ren
 
 2. Clone the repository:
 
-   ```sh
+   ```
    git clone https://github.com/avronr/armacs ~/.emacs.d
    ```
 ** Configuration
