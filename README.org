@@ -19,6 +19,23 @@ You are in luck. I have two great options for you. Check both out and pick what 
 - [[https://github.com/hlissner/doom-emacs][Doom Emacs]] : Doom is a configuration for GNU Emacs. It can be used as framework for your own configuration, or as a resource for fellow Emacs enthusiasts who want to learn more about our favorite OS
 ** Installation 
 CLone this repo into your home folder if the folder is not named =.emacs.d=, rename the folder to =.emacs.d=.
+1. If you have an existing Emacs configuration, back it up first:
+
+   ```sh
+   cd ~
+   mv .emacs.d .emacs.d.bak
+   mv .emacs .emacs.bak
+   ```
+
+   Don't forget to backup and *remove* `~/.emacs` file otherwise armacs
+   **WILL NOT** load since that file prevents Emacs from loading the proper
+   initialization file.
+
+2. Clone the repository:
+
+   ```sh
+   git clone https://github.com/avronr/armacs ~/.emacs.d
+   ```
 ** Configuration
 When Emacs is started, it normally tries to load a Lisp program from an “initialization file”, or “init file” for short. This file, if it exists, specifies how to initialize Emacs for you. Emacs looks for your init file using the filenames ‘~/.emacs’, ‘~/.emacs.el’, or ‘~/.emacs.d/init.el’. Here all the init.el file does is point to the config.org file. All of the actual configuration is done in the ~/.emacs.d/config.org file.
 ** Contributing
