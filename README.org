@@ -26,7 +26,7 @@ CLone this repo into your home folder if the folder is not named =.emacs.d=, ren
    mv .emacs .emacs.bak
    #+END_SRC
    Don't forget to backup and *remove* `~/.emacs` file otherwise armacs
-   **WILL NOT** load since that file prevents Emacs from loading the proper
+   *WILL NOT* load since that file prevents Emacs from loading the proper
    initialization file.
 
 2. Clone the repository:
