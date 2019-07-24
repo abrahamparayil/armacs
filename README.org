@@ -1,9 +1,36 @@
 #+STARTUP: showall
-* Emacs Setup
+* Armacs
 
 [[Imgur][https://i.imgur.com/vunwoQ7.png]]
 
-All the init.el file does is point to the config.org file. All of the actual
-configuration is done in the config.org file.  The main purpose of
-this is repo is to setup emacs the way I want it on a fresh install.
-That being said I hope you find something worthwhile here
+*What is armacs?*
+
+Unlike Spacemacs or Doom Emacs, Armacs does not intend to be a drop in replacement for any mainstream text editor. Armacs is designed with a few things in mind:
+- Encourage understanding how emacs works and write their own config files.   
+- Novice users of emacs wouldn't have to setup basic functionalities.
+- The config isn't too complicated so that users will be able to make changes to the config without breaking anything.
+- Armacs put first priority to proper documentaion so that the users know what each package/configuration does.
+
+*I'm not in a position to spent time on config files at the moment. What are my alternatives?*
+
+You are in luck. I have two great options for you. Check both out and pick what works for you:
+- [[http://spacemacs.org/][Spacemacs]] : A community-driven Emacs distribution.
+- [[https://github.com/hlissner/doom-emacs][Doom Emacs]] : Doom is a configuration for GNU Emacs. It can be used as framework for your own configuration, or as a resource for fellow Emacs enthusiasts who want to learn more about our favorite OS
+** Installation 
+CLone this repo into your home folder if the folder is not named =.emacs.d=, rename the folder to =.emacs.d=.
+** Configuration
+When Emacs is started, it normally tries to load a Lisp program from an “initialization file”, or “init file” for short. This file, if it exists, specifies how to initialize Emacs for you. Emacs looks for your init file using the filenames ‘~/.emacs’, ‘~/.emacs.el’, or ‘~/.emacs.d/init.el’. Here all the init.el file does is point to the config.org file. All of the actual configuration is done in the ~/.emacs.d/config.org file.
+** Contributing
+You can fork the repo and make changes. As I said earlier, documentation is important here so whatever you do make sure you explain what you are doing or your change may not be accepted to the main repo.
+** Resources to learn Emacs
+   *Youtube Playlists*
+    - [[https://www.youtube.com/playlist?list=PL9KxKa8NpFxIcNQa9js7dQQIHc81b0-Xg][Using Emacs]] by [[https://cestlaz.github.io/][Mike Zamansky]]
+    - [[https://www.youtube.com/watch?v=6INMXmsCCC8&list=PL8tzorAO7s0he-pp7Y_JDl7-Kz2Qlr_Pj][Emacs Meetups]] by [[https://www.youtube.com/user/ThoughtbotVideo][Thoughtbot]] [US based company]
+    - [[https://www.youtube.com/watch?v=MRYzPWnk2mE&list=PLxj9UAX4Em-IiOfvF2Qs742LxEK4owSkr][Emacs Tutorials]] by [[https://www.youtube.com/user/jekor][jekor]]
+    - [[https://www.youtube.com/playlist?list=PLX2044Ew-UVVv31a0-Qn3dA6Sd_-NyA1n][Emacs Videos]] by  [[https://www.youtube.com/channel/UCDEtZ7AKmwS0_GNJog01D2g][Uncle Dave]]
+   *Single Youtube Video*
+    - [[https://www.youtube.com/watch?v=Iagbv974GlQ&t=226s][Emacs Tutorial]] by [[https://www.youtube.com/user/derekbanas][Derek Banas]]
+   *Blogs*
+    - [[http://emacsblog.org/][The Emacs Blog]]
+    - [[http://ergoemacs.org/emacs/blog.html][Ergoemacs]]
+    - [[https://sachachua.com/blog/emacs/][Sacha Chua's Blog]]
