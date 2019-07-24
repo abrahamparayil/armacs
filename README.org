@@ -1,6 +1,9 @@
 #+STARTUP: showall
 * Emacs Setup
-Init.el file point to the config.org file. All of the actual
+
+[[Imgur][https://i.imgur.com/vunwoQ7.png]]
+
+All the init.el file does is point to the config.org file. All of the actual
 configuration is done in the config.org file.  The main purpose of
 this is repo is to setup emacs the way I want it on a fresh install.
 That being said I hope you find something worthwhile here
