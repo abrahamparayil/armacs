@@ -1,17 +1,4 @@
-#     _    _               _                       ____        _ _  _
-#    / \  | |__  _ __ __ _| |__   __ _ _ __ ___   |  _ \ __ _ (_|_)\_/ ___ 
-#   / _ \ | '_ \| '__/ _` | '_ \ / _` | '_ ` _ \  | |_) / _` || | |  / __|
-#  / ___ \| |_) | | | (_| | | | | (_| | | | | | | |  _ < (_| || | |  \__ \
-# /_/   \_\_.__/|_|  \__,_|_| |_|\__,_|_| |_| |_| |_| \_\__,_|/ |_|  |___/
-#                                                         |__/       
-#  _____                                             __ _       
-# | ____|_ __ ___   __ _  ___ ___    ___ ___  _ __  / _(_) __ _ 
-# |  _| | '_ ` _ \ / _` |/ __/ __|  / __/ _ \| '_ \| |_| |/ _` |
-# | |___| | | | | | (_| | (__\__ \ | (_| (_) | | | |  _| | (_| |
-# |_____|_| |_| |_|\__,_|\___|___/  \___\___/|_| |_|_| |_|\__, |
-#                                                          |___/ 
-
-#+TITLE: Emacs Config
+#+TITLE:Armacs Config
 #+AUTHOR: Abraham Raji
 #+EMAIL: abrahamraji99@gmail.com
 #+STARTUP: overview
@@ -21,12 +8,28 @@
 #+ATTR_HTML: style margin-left: auto; margin-right: auto;
 
 * User Info
-  Name and Email.
+Name and Email.
+=user-full-name= returns the full name of the logged-in user—or the value of the 
+environment variable =NAME=, if that is set. If the Emacs process’s user-id does 
+not correspond to any known user (and provided =NAME= is not set), the result 
+is "unknown". If uid is non-nil, then it should be a number (a user-id) or a 
+string (a login name). Then =user-full-name= returns the full name corresponding 
+to that user-id or login name. If you specify a user-id or login name that isn’t 
+defined, it returns =nil=.
+=user-mail-address= holds the nominal email address of the user who is using 
+Emacs. Emacs normally sets this variable to a default value after reading your 
+init files, but not if you have already set it. So you can set the variable to 
+some other value in your init file if you do not want to use the default value.  
   #+BEGIN_SRC emacs-lisp
      (setq user-full-name "Abraham Raji"
-               user-email "abrahamraji99@gmail.com")
+           user-mail-address "abrahamraji99@gmail.com")
   #+END_SRC
 * Set UTF-8 encoding
+UTF-8 (UCS Transformation Format 8) is the World Wide Web's most common 
+character encoding. Each character is represented by one to four bytes. UTF-8 
+is backward-compatible with ASCII and can represent any standard Unicode 
+character. This is now a universal standard, so it makes sense for us to 
+enable it by default in our text editor.
 #+BEGIN_SRC emacs-lisp
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
@@ -35,7 +38,11 @@
 (prefer-coding-system 'utf-8)
 #+END_SRC
 * Package Management
-This piece of code tells emacs where to find packages from or in more proper they are called 'repositories'. I personally use MELPA, ELPA and the official org-mode repo to get the latest version of orgmode. So keep what you want take out there rest. Oh and asuming you are new to elisp and emacs while editting these lines watch for the '()' and you should be fine.
+This piece of code tells emacs where to find packages from or in more proper 
+they are called 'repositories'. I personally use MELPA, ELPA and the official 
+org-mode repo to get the latest version of orgmode. So keep what you want take 
+out there rest. Oh and asuming you are new to elisp and emacs while editing 
+these lines watch for the '()' and you should be fine.
 #+BEGIN_SRC emacs-lisp
 (require 'package)
  (setq package-archives
@@ -45,15 +52,26 @@ This piece of code tells emacs where to find packages from or in more proper the
 (package-initialize)
 #+END_SRC
 
-Occasionally emacs will tell you it can't find a package in any of your declared repos all you will have to do is refresh your repositories. Unless the package doesn't actually exist in the repos the problem should be fixed. 
+Occasionally emacs will tell you it can't find a package in any of your 
+declared repos all you will have to do is refresh your repositories. Unless 
+the package doesn't actually exist in the repos the problem should be fixed. 
 
 You can install the packages manually by:
 1. first hit [Meta] and x 
 2. then type 'package-install' and hit enter
 3. then type in the name of the package you wish to install and hit enter again.
-If the package exists in the repositories that you have asked emacs to look in, the packages will be installed or you will recieve an error message. If we directly use use package command in our config it will install the packages everytime emacs starts up even if they're already installed so we cannot use it in our configs.
-You could also alternatively download packages as an archive file from the repos like the ones mentioned above and ask emacs to install them from the file. But unless you are developing packages for emacs and wish to test your package before publishing it, I do not recommend this method.
-As you may have noticed both process are a bit tedious and will only get worse as time goes by. A better approach in my opinion would be to use a package manager like use-package which is what I do. You just need i the name of the package you wish to install and it will do the rest including updating the package.
+If the package exists in the repositories that you have asked emacs to look 
+in, the packages will be installed or you will recieve an error message. If we 
+directly use use package command in our config it will install the packages 
+every time emacs starts up even if they're already installed so we cannot use it in our configs.
+You could also alternatively download packages as an archive file from the 
+repos like the ones mentioned above and ask emacs to install them from the 
+file. But unless you are developing packages for emacs and wish to test your 
+package before publishing it, I do not recommend this method.
+As you may have noticed both process are a bit tedious and will only get worse 
+as time goes by. A better approach in my opinion would be to use a package 
+manager like use-package which is what I do. You just need i the name of the 
+package you wish to install and it will do the rest including updating the package.
 #+BEGIN_SRC emacs-lisp
 (unless (package-installed-p 'use-package) ;;lisp equivalent of a while loop 
 (package-install 'use-package);; We're using package install to install use-package
