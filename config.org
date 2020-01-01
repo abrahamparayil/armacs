@@ -82,14 +82,19 @@ package you wish to install and it will do the rest including updating the packa
 #+END_SRC 
 And that's about it for package management.
 * Multiplexing emacs and emacsclient
-Opening a new file in the same emacs-session requires the use of emacsclient. emacs command can be itself wrapped to do the smarter job to open the file if the session exists. To start session you need to start-server. This snippet will create server in first session of emacs. Add this to your emacs configuration file
+Opening a anew file in the same emacs-session requires the use of emacsclient. 
+emacs command can be itself wrapped to do the smarter job to open the file if 
+the session exists. To start session you need to start-server. This snippet 
+will create server in first session of emacs. Add this to your emacs 
+configuration file
 #+BEGIN_SRC emacs-lisp
 (require 'server)
 (unless (server-running-p)
   (server-start))
 #+END_SRC
 
-To make this work you need to add this to you .bashrc:
+To make this work you need to add this to you .bashrc [which can be found in 
+your home folder if you're using a *nix based OS(Linux, Unix, FreeBSD, MacOS)]:
 #+BEGIN_SRC sh
 function emacs {
     if [[ $# -eq 0 ]]; then
@@ -124,14 +129,21 @@ Add Syntax highlighting for your systemd Files.
  (add-to-list 'auto-mode-alist '("\\.link\\'" . conf-unix-mode))
 #+END_SRC
 * Async
-  Lets us use asynchronous processes wherever possible, pretty useful.
+async.el is a module for doing asynchronous processing in Emacs
   #+BEGIN_SRC emacs-lisp
     (use-package async
     :ensure t
-    :init (dired-async-mode 1))
+    :init (dired-async-mode 1)
+    (autoload 'dired-async-mode "dired-async.el" nil t))
   #+END_SRC
+=dired-async-mode= will allow you to run asynchronously the dired commands for 
+copying, renaming and symlinking. If you are a helm user, this will allow you 
+to copy, rename etc... asynchronously from helm. Note that with helm you can 
+disable this by running the copy, rename etc... commands with a prefix argument.
+If you don't want to make dired/helm asynchronous disable it with dired-async-mode.
 * Backups
-This is one of the things people usually want to change right away. Bydefault, Emacs saves backup files in the current directory. These are the files ending in =~= that are cluttering up your directory lists. The following code stashes them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= (=find-file=) if I really need to.
+This is one of the things people usually want to change 
+right away. Bydefault, Emacs saves backup files in the current directory. These are the files ending in =~= that are cluttering up your directory lists. The following code stashes them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= (=find-file=) if I really need to.
 #+begin_src emacs-lisp
 (setq backup-directory-alist 
       '(("." . "~/.emacs.d/backups")))
