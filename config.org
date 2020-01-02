@@ -430,7 +430,13 @@ If you want to quickly understand the concept, see [the video demo](https://www.
   ("<drag-mouse-1>" ignore))
 #+END_SRC
 * lorem Ipsum
-Inserts lorem ipsum text in your emacs buffer. This text has been used since the 16th Century as a dummy text when you are preparing the layout of some presentation but don’t have the final text yet, or want to demonstrate the layout without distracting the reader with actual content. The lorem ipsum text originated from “de Finibus Bonorum et Malorum” (The Extremes of Good and Evil) by Marcus Tullius Cicero, written in 45 BC but it has been so transformed along the years that now, it is relatively meaningless.
+Inserts lorem ipsum text in your emacs buffer. This text has been used since 
+the 16th Century as a dummy text when you are preparing the layout of some 
+presentation but don’t have the final text yet, or want to demonstrate the 
+layout without distracting the reader with actual content. The lorem ipsum 
+text originated from “de Finibus Bonorum et Malorum” (The Extremes of Good and 
+Evil) by Marcus Tullius Cicero, written in 45 BC but it has been so 
+transformed along the years that now, it is relatively meaningless.
 Three functions are available:
 - Lorem-ipsum-insert-paragraphs
 - Lorem-ipsum-insert-sentences
