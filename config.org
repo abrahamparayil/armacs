@@ -160,6 +160,12 @@ If you don't want to make dired/helm asynchronous disable it with dired-async-mo
             (lambda ()
               (add-to-list 'company-backends 'company-elisp)))
   (eval-after-load 'company (company-quickhelp-mode 1)))
+
+  (use-package company-quickhelp
+  :bind (:map company-active-map
+              ("M-h" . company-quickhelp-manual-begin))
+  :custom
+  (company-quickhelp-delay 1))
 #+END_SRC
 * Backups
 This is one of the things people usually want to change right away. By default, 
