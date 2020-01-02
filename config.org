@@ -142,6 +142,25 @@ to copy, rename etc... asynchronously from helm. Note that with helm you can
 disable this by running the copy, rename etc... commands with a prefix argument.
 If you don't want to make dired/helm asynchronous disable it with dired-async-mode.
 =need to add support for auth-source library=
+* Company
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  :delight
+  :init (global-company-mode)
+  :custom
+  (company-idle-delay 0.3)
+  (company-minimum-prefix-length 2)
+  (company-selection-wrap-around t)
+  (company-auto-complete t)
+  (company-tooltip-align-annotations t)
+  (company-dabbrev-downcase nil)
+  (company-auto-complete-chars nil)
+  :config
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda ()
+              (add-to-list 'company-backends 'company-elisp)))
+  (eval-after-load 'company (company-quickhelp-mode 1)))
+#+END_SRC
 * Backups
 This is one of the things people usually want to change right away. By default, 
 Emacs saves backup files in the current directory. These are the files ending 
@@ -213,7 +232,11 @@ As you may have seen when you start-up Emacs you are welcomed with a pretty bori
 #+END_SRC
 
 * Web Development
-I do quite a bit of web-development and have snippets, automatic indentation and autocompletion is a big help . =web-mode.el= is an autonomous emacs major-mode for editing web templates. It also takes care of basic stuff like syntax highlighting, auto pairing tags, removing white spaces etc. Web-mode is feature rich and as extensible as Emacs itself. For more details visit this [[http://web-mode.org/][link]]
+I do quite a bit of web-development and have snippets, automatic indentation 
+and autocompletion is a big help . =web-mode.el= is an autonomous emacs 
+major-mode for editing web templates. It also takes care of basic stuff like 
+syntax highlighting, auto pairing tags, removing white spaces etc. Web-mode is 
+feature rich and as extensible as Emacs itself. For more details visit this [[http://web-mode.org/][link]]
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode
 :ensure t)
