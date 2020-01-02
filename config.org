@@ -212,17 +212,6 @@ As you may have seen when you start-up Emacs you are welcomed with a pretty bori
 
 #+END_SRC
 
-* auto-complete
-  - Lets you use the auto-complete package
-    #+BEGIN_SRC emacs-lisp
-     (use-package auto-complete
-     :ensure t)
-     (require 'auto-complete)
-     (require 'auto-complete-config)
-     (global-auto-complete-mode t)
-     (add-to-list 'ac-modes 'org-mode)
-     (ac-config-default)
-    #+END_SRC
 * Web Development
 I do quite a bit of web-development and have snippets, automatic indentation and autocompletion is a big help . =web-mode.el= is an autonomous emacs major-mode for editing web templates. It also takes care of basic stuff like syntax highlighting, auto pairing tags, removing white spaces etc. Web-mode is feature rich and as extensible as Emacs itself. For more details visit this [[http://web-mode.org/][link]]
 #+BEGIN_SRC emacs-lisp
