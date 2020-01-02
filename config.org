@@ -176,7 +176,18 @@ doom-themes-enable-italic t) ; if nil, italics is universally disabled
 (doom-themes-org-config)
 #+END_SRC
 * Dashboard
-As you may have seen when you start-up Emacs you are welcomed with a pretty boring welcome screen. It's not terrible, infact most of it is either to help you or for other functional purposes but a bit ugly nontheless. Since we're past the novice level or because you're reading this, it's safe to persume that you won't be using any of those so we might as well take it out and put on something good looking. I wouldn't claim that my dashboard is that good looking but it's functionality i believe makes up for it. the dashboard lists the most recent 5 files and projects that you have accessed. It also has a welcome message which you can configure it to say whatever you want, mine just says "Hey Abraham!". You must also notice that a new package is going to be installed for this functionality. If you want to keep things minimal you can skip this section.
+As you may have seen when you start-up Emacs you are welcomed with a pretty 
+boring welcome screen. It's not terrible, infact most of it is either to help 
+you or for other functional purposes but a bit ugly nontheless. Since we're 
+past the novice level or because you're reading this, it's safe to presume 
+that you won't be using any of those so we might as well take it out and put 
+on something good looking. I wouldn't claim that my dashboard is that good 
+looking but it's functionality I believe makes up for it. The dashboard lists 
+the most recent 5 files and projects that you have accessed. It also has a 
+welcome message which you can configure it to say whatever you want, mine just 
+says "Hey [your username]!". You must also notice that a new package is going to be 
+installed for this functionality. If you want to keep things minimal you can 
+skip this section.
 #+BEGIN_SRC emacs-lisp
 (use-package dashboard
 :config
@@ -190,7 +201,7 @@ As you may have seen when you start-up Emacs you are welcomed with a pretty bori
 ;; Set the banner   
       (setq dashboard-startup-banner "~/.emacs.d/img/dashLogo.png")    
 ;; Set the title
-      (setq dashboard-banner-logo-title "Hey, Abraham!")
+      (setq dashboard-banner-logo-title (concat "Hello "(concat (getenv "USER") " ! ")))
 ;; Content is not centered by default. To center, set
       (setq dashboard-center-content t)
 ;; To show navigator below the banner:
@@ -209,7 +220,6 @@ As you may have seen when you start-up Emacs you are welcomed with a pretty bori
          (lambda (&rest _) (browse-url "https://gitlab.com/avronr")))
 
         ("" "Homepage" "Show Homepage" (lambda (&rest _)(browse-url "https://avronr.gitlab.io/")))))))
-
 #+END_SRC
 
 * Web Development
