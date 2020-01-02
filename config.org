@@ -450,7 +450,12 @@ Three functions are available:
 (global-set-key (kbd "C-; l") 'lorem-ipsum-insert-list)
 #+END_SRC
 * Multiple Cursors
-Multiple cursors for Emacs. Multiple cursors is a very nice package that lets you create several cursors that all do the same thing as you type (see the example below). You can add it to emacs using the steps described here Once you have installed it, it is useful to set up a keybinding (a keyboard short-cut) for it. You can do this by adding the following to your emacs config file to set C-c m c as the binding for multiple cursors. 
+Multiple cursors for Emacs. Multiple cursors is a very nice package that lets 
+you create several cursors that all do the same thing as you type (see the 
+example below). You can add it to emacs using the steps described here Once 
+you have installed it, it is useful to set up a keybinding (a keyboard short-
+cut) for it. You can do this by adding the following to your emacs config file 
+to set C-c m c as the binding for multiple cursors. 
 #+BEGIN_SRC emacs-lisp
 (use-package multiple-cursors
 :ensure t)
