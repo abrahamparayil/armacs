@@ -323,7 +323,11 @@ If you write any code, you may enjoy this. Typing the first character in a set o
 (electric-pair-mode t)
 #+END_SRC
 * Semantic Selection
-So what this package does is it select text in way that's sensibe towards the syntax. So for example if I'm in a html tag that is the child of another tag, invoking the keybinding for this package will first select the child then the parent and hierarchichally move upwards. No need to drag the mouse around, this is selection done sensibly.
+So what this package does is it select text in way that's sensibe towards the 
+syntax. So for example if I'm in a html tag that is the child of another tag, 
+invoking the keybinding for this package will first select the child then the 
+parent and hierarchichally move upwards. No need to drag the mouse around, 
+this is selection done sensibly.
 #+BEGIN_SRC emacs-lisp
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
