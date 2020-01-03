@@ -600,7 +600,9 @@ historic version of the file:
 :ensure t)
 #+END_SRC
 * Windmove
-Windmove is a library built into GnuEmacs starting with version 21. It lets you move point from window to window using Shift and the arrow keys. This is easier to type than ‘C-x o’ and, for some users, may be more intuitive. 
+Windmove is a library built into GnuEmacs starting with version 21. It lets 
+you move point from window to window using Shift and the arrow keys. This is 
+easier to type than ‘C-x o’ and, for some users, may be more intuitive. 
 #+BEGIN_SRC emacs-lisp
 (windmove-default-keybindings)
 (global-set-key (kbd "C-c <left>")  'windmove-left)
