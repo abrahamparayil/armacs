@@ -352,13 +352,16 @@ shortcut and press =TAB= to complete, or =M-/= to autosuggest a snippet.
 (add-to-list 'auto-mode-alist '("\\.c\\'" . web-mode))
 #+END_SRC
 * Hydra
-This is a package for GNU Emacs that can be used to tie related commands into a family of short bindings with a common prefix - a Hydra.
-Imagine that you have bound C-c j and C-c k in your config.  You want to call C-c j and C-c k in some (arbitrary) sequence. Hydra allows you to:
-- Bind your functions in a way that pressing C-c jjkk3j5k is equivalent to pressing C-c j C-c j C-c k C-c k M-3 C-c j M-5 C-c k. Any key other than j or k exits this state.
-
-- Assign a custom hint to this group of functions, so that you know immediately after pressing C-c that you can follow up with j or k.
-
-If you want to quickly understand the concept, see [the video demo](https://www.youtube.com/watch?v=_qZliI1BKzI).
+This is a package for GNU Emacs that can be used to tie related commands into 
+a family of short bindings with a common prefix - a Hydra. Imagine that you 
+have bound C-c j and C-c k in your config.  You want to call C-c j and C-c k 
+in some (arbitrary) sequence. Hydra allows you to:
+- Bind your functions in a way that pressing C-c jjkk3j5k is equivalent to 
+pressing C-c j C-c j C-c k C-c k M-3 C-c j M-5 C-c k. Any key other than j or 
+k exits this state.
+- Assign a custom hint to this group of functions, so that you know 
+immediately after pressing C-c that you can follow up with j or k.
+If you want to quickly understand the concept, see [[https://www.youtube.com/watch?v=_qZliI1BKzI][the video demo]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package hydra 
