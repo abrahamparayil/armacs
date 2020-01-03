@@ -333,7 +333,11 @@ this is selection done sensibly.
   :bind ("C-=" . er/expand-region))
 #+END_SRC
 * Snippets
-Unlike autocomplete which suggests words / symbols, snippets are pre-prepared templates which you fill in. I'm using a community library (=[[https://github.com/AndreaCrotti/yasnippet-snippets]]=) with *lots* of ready made options, and have my own directory of custom snippets I've added. Not sure if I should unify these by forking =yasnippet-snippets=. Type the shortcut and press =TAB= to complete, or =M-/= to autosuggest a snippet.
+Unlike autocomplete which suggests words / symbols, snippets are pre-prepared 
+templates which you fill in. I'm using a community [[https://github.com/AndreaCrotti/yasnippet-snippets][library]] with *lots* of 
+ready made options, and have my own directory of custom snippets I've added. 
+Not sure if I should unify these by forking =yasnippet-snippets=. Type the 
+shortcut and press =TAB= to complete, or =M-/= to autosuggest a snippet.
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
 :ensure t
