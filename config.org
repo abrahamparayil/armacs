@@ -352,17 +352,20 @@ If you write any code, you may enjoy this. Typing the first character in a set o
 (electric-pair-mode t)
 #+END_SRC
 * Semantic Selection
-So what this package does is it select text in way that's sensibe towards the syntax. So for example if I'm in a html tag that is the child of another tag, invoking the keybinding for this package will first select the child then the parent and hierarchichally move upwards. No need to drag the mouse around, this is selection done sensibly.
+So what this package does is it select text in way that's sensibe towards the 
+syntax. So for example if I'm in a html tag that is the child of another tag, 
+invoking the keybinding for this package will first select the child then the 
+parent and hierarchichally move upwards. No need to drag the mouse around, 
+this is selection done sensibly.
 #+BEGIN_SRC emacs-lisp
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 #+END_SRC
 * Snippets
 Unlike autocomplete which suggests words / symbols, snippets are pre-prepared 
-templates which you fill in. I'm using a community library 
-(=[[https://github.com/AndreaCrotti/yasnippet-snippets]]=) with *lots* of ready 
-made options, and have my own directory of custom snippets I've added. Not 
-asure if I should unify these by forking =yasnippet-snippets=. Type the 
+templates which you fill in. I'm using a community [[https://github.com/AndreaCrotti/yasnippet-snippets][library]] with *lots* of 
+ready made options, and have my own directory of custom snippets I've added. 
+Not sure if I should unify these by forking =yasnippet-snippets=. Type the 
 shortcut and press =TAB= to complete, or =M-/= to autosuggest a snippet.
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
@@ -378,13 +381,16 @@ shortcut and press =TAB= to complete, or =M-/= to autosuggest a snippet.
 (add-to-list 'auto-mode-alist '("\\.c\\'" . web-mode))
 #+END_SRC
 * Hydra
-This is a package for GNU Emacs that can be used to tie related commands into a family of short bindings with a common prefix - a Hydra.
-Imagine that you have bound C-c j and C-c k in your config.  You want to call C-c j and C-c k in some (arbitrary) sequence. Hydra allows you to:
-- Bind your functions in a way that pressing C-c jjkk3j5k is equivalent to pressing C-c j C-c j C-c k C-c k M-3 C-c j M-5 C-c k. Any key other than j or k exits this state.
-
-- Assign a custom hint to this group of functions, so that you know immediately after pressing C-c that you can follow up with j or k.
-
-If you want to quickly understand the concept, see [the video demo](https://www.youtube.com/watch?v=_qZliI1BKzI).
+This is a package for GNU Emacs that can be used to tie related commands into 
+a family of short bindings with a common prefix - a Hydra. Imagine that you 
+have bound C-c j and C-c k in your config.  You want to call C-c j and C-c k 
+in some (arbitrary) sequence. Hydra allows you to:
+- Bind your functions in a way that pressing C-c jjkk3j5k is equivalent to 
+pressing C-c j C-c j C-c k C-c k M-3 C-c j M-5 C-c k. Any key other than j or 
+k exits this state.
+- Assign a custom hint to this group of functions, so that you know 
+immediately after pressing C-c that you can follow up with j or k.
+If you want to quickly understand the concept, see [[https://www.youtube.com/watch?v=_qZliI1BKzI][the video demo]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package hydra 
@@ -500,9 +506,16 @@ to set C-c m c as the binding for multiple cursors.
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 #+END_SRC
 * Project Management
-*Projectile* is a project interaction library for Emacs. Its goal is to provide a nice set of features operating on a project level without introducing external dependencies (when feasible). For instance - finding project files has a portable implementation written in pure Emacs Lisp without the use of GNU find (but for performance sake an indexing mechanism backed by external commands exists as well).
+*Projectile* is a project interaction library for Emacs. Its goal is to 
+provide a nice set of features operating on a project level without 
+introducing external dependencies (when feasible). For instance - finding 
+project files has a portable implementation written in pure Emacs Lisp without 
+the use of GNU find (but for performance sake an indexing mechanism backed by 
+external commands exists as well).
 
-Projectile tries to be practical - portability is great, but if some external tools could speed up some task substantially and the tools are available, Projectile will leverage them
+Projectile tries to be practical - portability is great, but if some external 
+tools could speed up some task substantially and the tools are available, 
+Projectile will leverage them
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
 :ensure t
@@ -511,9 +524,15 @@ Projectile tries to be practical - portability is great, but if some external to
 #+END_SRC
 * Version Control
 *** Magit
-Magit is an interface to the version control system Git, implemented as an Emacs package. Magit aspires to be a complete Git porcelain. While we cannot (yet) claim that Magit wraps and improves upon each and every Git command, it is complete enough to allow even experienced Git users to perform almost all of their daily version control tasks directly from within Emacs. While many fine Git clients exist, only Magit and Git itself deserve to be called porcelains.
+Magit is an interface to the version control system Git, implemented as an 
+Emacs package. Magit aspires to be a complete Git porcelain. While we cannot 
+(yet) claim that Magit wraps and improves upon each and every Git command, it 
+is complete enough to allow even experienced Git users to perform almost all 
+of their daily version control tasks directly from within Emacs. While many 
+fine Git clients exist, only Magit and Git itself deserve to be called porcelains.
 
-I love it. You could get the same functionality with other text editors too but none so light wieght or polished in my opinion.
+I love it. You could get the same functionality with other text editors too 
+but none so light wieght or polished in my opinion.
 #+BEGIN_SRC emacs-lisp
 (use-package magit
 :ensure t
@@ -591,7 +610,11 @@ and provides some commands like:
          :color blue))
 #+END_SRC
 *** Time machine
-TimeMachine lets us step through the history of a file as recorded in git. Visit a git-controlled file and issue M-x git-timemachine (or bind it to a keybinding of your choice). If you just need to toggle the time machine you can use M-x git-timemachine-toggle. Use the following keys to navigate historic version of the file:
+TimeMachine lets us step through the history of a file as recorded in git. 
+Visit a git-controlled file and issue M-x git-timemachine (or bind it to a 
+keybinding of your choice). If you just need to toggle the time machine you 
+can use M-x git-timemachine-toggle. Use the following keys to navigate 
+historic version of the file:
 - =p= Visit previous historic version
 - =n= Visit next historic version
 - =w= Copy the abbreviated hash of the current historic version
@@ -606,7 +629,9 @@ TimeMachine lets us step through the history of a file as recorded in git. Visit
 :ensure t)
 #+END_SRC
 * Windmove
-Windmove is a library built into GnuEmacs starting with version 21. It lets you move point from window to window using Shift and the arrow keys. This is easier to type than ‘C-x o’ and, for some users, may be more intuitive. 
+Windmove is a library built into GnuEmacs starting with version 21. It lets 
+you move point from window to window using Shift and the arrow keys. This is 
+easier to type than ‘C-x o’ and, for some users, may be more intuitive. 
 #+BEGIN_SRC emacs-lisp
 (windmove-default-keybindings)
 (global-set-key (kbd "C-c <left>")  'windmove-left)
