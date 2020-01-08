@@ -1,4 +1,17 @@
-#+TITLE:Armacs Config
+#     _    _               _                       ____        _ _  _
+#    / \  | |__  _ __ __ _| |__   __ _ _ __ ___   |  _ \ __ _ (_|_)\_/ ___ 
+#   / _ \ | '_ \| '__/ _` | '_ \ / _` | '_ ` _ \  | |_) / _` || | |  / __|
+#  / ___ \| |_) | | | (_| | | | | (_| | | | | | | |  _ < (_| || | |  \__ \
+# /_/   \_\_.__/|_|  \__,_|_| |_|\__,_|_| |_| |_| |_| \_\__,_|/ |_|  |___/
+#                                                         |__/       
+#  _____                                             __ _       
+# | ____|_ __ ___   __ _  ___ ___    ___ ___  _ __  / _(_) __ _ 
+# |  _| | '_ ` _ \ / _` |/ __/ __|  / __/ _ \| '_ \| |_| |/ _` |
+# | |___| | | | | | (_| | (__\__ \ | (_| (_) | | | |  _| | (_| |
+# |_____|_| |_| |_|\__,_|\___|___/  \___\___/|_| |_|_| |_|\__, |
+#                                                          |___/ 
+
+#+TITLE: Emacs Config
 #+AUTHOR: Abraham Raji
 #+EMAIL: abrahamraji99@gmail.com
 #+STARTUP: overview
@@ -8,28 +21,12 @@
 #+ATTR_HTML: style margin-left: auto; margin-right: auto;
 
 * User Info
-Name and Email.
-=user-full-name= returns the full name of the logged-in user—or the value of the 
-environment variable =NAME=, if that is set. If the Emacs process’s user-id does 
-not correspond to any known user (and provided =NAME= is not set), the result 
-is "unknown". If uid is non-nil, then it should be a number (a user-id) or a 
-string (a login name). Then =user-full-name= returns the full name corresponding 
-to that user-id or login name. If you specify a user-id or login name that isn’t 
-defined, it returns =nil=.
-=user-mail-address= holds the nominal email address of the user who is using 
-Emacs. Emacs normally sets this variable to a default value after reading your 
-init files, but not if you have already set it. So you can set the variable to 
-some other value in your init file if you do not want to use the default value.  
+  Name and Email.
   #+BEGIN_SRC emacs-lisp
      (setq user-full-name "Abraham Raji"
-           user-mail-address "abrahamraji99@gmail.com")
+               user-email "abrahamraji99@gmail.com")
   #+END_SRC
 * Set UTF-8 encoding
-UTF-8 (UCS Transformation Format 8) is the World Wide Web's most common 
-character encoding. Each character is represented by one to four bytes. UTF-8 
-is backward-compatible with ASCII and can represent any standard Unicode 
-character. This is now a universal standard, so it makes sense for us to 
-enable it by default in our text editor.
 #+BEGIN_SRC emacs-lisp
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
@@ -38,11 +35,7 @@ enable it by default in our text editor.
 (prefer-coding-system 'utf-8)
 #+END_SRC
 * Package Management
-This piece of code tells emacs where to find packages from or in more proper 
-they are called 'repositories'. I personally use MELPA, ELPA and the official 
-org-mode repo to get the latest version of orgmode. So keep what you want take 
-out there rest. Oh and asuming you are new to elisp and emacs while editing 
-these lines watch for the '()' and you should be fine.
+This piece of code tells emacs where to find packages from or in more proper they are called 'repositories'. I personally use MELPA, ELPA and the official org-mode repo to get the latest version of orgmode. So keep what you want take out there rest. Oh and asuming you are new to elisp and emacs while editting these lines watch for the '()' and you should be fine.
 #+BEGIN_SRC emacs-lisp
 (require 'package)
  (setq package-archives
@@ -52,26 +45,15 @@ these lines watch for the '()' and you should be fine.
 (package-initialize)
 #+END_SRC
 
-Occasionally emacs will tell you it can't find a package in any of your 
-declared repos all you will have to do is refresh your repositories. Unless 
-the package doesn't actually exist in the repos the problem should be fixed. 
+Occasionally emacs will tell you it can't find a package in any of your declared repos all you will have to do is refresh your repositories. Unless the package doesn't actually exist in the repos the problem should be fixed. 
 
 You can install the packages manually by:
 1. first hit [Meta] and x 
 2. then type 'package-install' and hit enter
 3. then type in the name of the package you wish to install and hit enter again.
-If the package exists in the repositories that you have asked emacs to look 
-in, the packages will be installed or you will recieve an error message. If we 
-directly use use package command in our config it will install the packages 
-every time emacs starts up even if they're already installed so we cannot use it in our configs.
-You could also alternatively download packages as an archive file from the 
-repos like the ones mentioned above and ask emacs to install them from the 
-file. But unless you are developing packages for emacs and wish to test your 
-package before publishing it, I do not recommend this method.
-As you may have noticed both process are a bit tedious and will only get worse 
-as time goes by. A better approach in my opinion would be to use a package 
-manager like use-package which is what I do. You just need i the name of the 
-package you wish to install and it will do the rest including updating the package.
+If the package exists in the repositories that you have asked emacs to look in, the packages will be installed or you will recieve an error message. If we directly use use package command in our config it will install the packages everytime emacs starts up even if they're already installed so we cannot use it in our configs.
+You could also alternatively download packages as an archive file from the repos like the ones mentioned above and ask emacs to install them from the file. But unless you are developing packages for emacs and wish to test your package before publishing it, I do not recommend this method.
+As you may have noticed both process are a bit tedious and will only get worse as time goes by. A better approach in my opinion would be to use a package manager like use-package which is what I do. You just need i the name of the package you wish to install and it will do the rest including updating the package.
 #+BEGIN_SRC emacs-lisp
 (unless (package-installed-p 'use-package) ;;lisp equivalent of a while loop 
 (package-install 'use-package);; We're using package install to install use-package
@@ -82,19 +64,14 @@ package you wish to install and it will do the rest including updating the packa
 #+END_SRC 
 And that's about it for package management.
 * Multiplexing emacs and emacsclient
-Opening a anew file in the same emacs-session requires the use of emacsclient. 
-emacs command can be itself wrapped to do the smarter job to open the file if 
-the session exists. To start session you need to start-server. This snippet 
-will create server in first session of emacs. Add this to your emacs 
-configuration file
+Opening a new file in the same emacs-session requires the use of emacsclient. emacs command can be itself wrapped to do the smarter job to open the file if the session exists. To start session you need to start-server. This snippet will create server in first session of emacs. Add this to your emacs configuration file
 #+BEGIN_SRC emacs-lisp
 (require 'server)
 (unless (server-running-p)
   (server-start))
 #+END_SRC
 
-To make this work you need to add this to you .bashrc [which can be found in 
-your home folder if you're using a *nix based OS(Linux, Unix, FreeBSD, MacOS)]:
+To make this work you need to add this to you .bashrc:
 #+BEGIN_SRC sh
 function emacs {
     if [[ $# -eq 0 ]]; then
@@ -129,50 +106,14 @@ Add Syntax highlighting for your systemd Files.
  (add-to-list 'auto-mode-alist '("\\.link\\'" . conf-unix-mode))
 #+END_SRC
 * Async
-async.el is a module for doing asynchronous processing in Emacs
+  Lets us use asynchronous processes wherever possible, pretty useful.
   #+BEGIN_SRC emacs-lisp
     (use-package async
     :ensure t
-    :init (dired-async-mode 1)
-    (autoload 'dired-async-mode "dired-async.el" nil t))
+    :init (dired-async-mode 1))
   #+END_SRC
-=dired-async-mode= will allow you to run asynchronously the dired commands for 
-copying, renaming and symlinking. If you are a helm user, this will allow you 
-to copy, rename etc... asynchronously from helm. Note that with helm you can 
-disable this by running the copy, rename etc... commands with a prefix argument.
-If you don't want to make dired/helm asynchronous disable it with dired-async-mode.
-=need to add support for auth-source library=
-* Company
-#+BEGIN_SRC emacs-lisp
-(use-package company
-  :delight
-  :init (global-company-mode)
-  :custom
-  (company-idle-delay 0.3)
-  (company-minimum-prefix-length 2)
-  (company-selection-wrap-around t)
-  (company-auto-complete t)
-  (company-tooltip-align-annotations t)
-  (company-dabbrev-downcase nil)
-  (company-auto-complete-chars nil)
-  :config
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda ()
-              (add-to-list 'company-backends 'company-elisp)))
-  (eval-after-load 'company (company-quickhelp-mode 1)))
-
-  (use-package company-quickhelp
-  :bind (:map company-active-map
-              ("M-h" . company-quickhelp-manual-begin))
-  :custom
-  (company-quickhelp-delay 1))
-#+END_SRC
 * Backups
-This is one of the things people usually want to change right away. By default, 
-Emacs saves backup files in the current directory. These are the files ending 
-in =~= that are cluttering up your directory lists. The following code stashes 
-them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= 
-(=find-file=) if I really need to.
+This is one of the things people usually want to change right away. Bydefault, Emacs saves backup files in the current directory. These are the files ending in =~= that are cluttering up your directory lists. The following code stashes them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= (=find-file=) if I really need to.
 #+begin_src emacs-lisp
 (setq backup-directory-alist 
       '(("." . "~/.emacs.d/backups")))
@@ -201,18 +142,7 @@ doom-themes-enable-italic t) ; if nil, italics is universally disabled
 (doom-themes-org-config)
 #+END_SRC
 * Dashboard
-As you may have seen when you start-up Emacs you are welcomed with a pretty 
-boring welcome screen. It's not terrible, infact most of it is either to help 
-you or for other functional purposes but a bit ugly nontheless. Since we're 
-past the novice level or because you're reading this, it's safe to presume 
-that you won't be using any of those so we might as well take it out and put 
-on something good looking. I wouldn't claim that my dashboard is that good 
-looking but it's functionality I believe makes up for it. The dashboard lists 
-the most recent 5 files and projects that you have accessed. It also has a 
-welcome message which you can configure it to say whatever you want, mine just 
-says "Hey [your username]!". You must also notice that a new package is going to be 
-installed for this functionality. If you want to keep things minimal you can 
-skip this section.
+As you may have seen when you start-up Emacs you are welcomed with a pretty boring welcome screen. It's not terrible, infact most of it is either to help you or for other functional purposes but a bit ugly nontheless. Since we're past the novice level or because you're reading this, it's safe to persume that you won't be using any of those so we might as well take it out and put on something good looking. I wouldn't claim that my dashboard is that good looking but it's functionality i believe makes up for it. the dashboard lists the most recent 5 files and projects that you have accessed. It also has a welcome message which you can configure it to say whatever you want, mine just says "Hey Abraham!". You must also notice that a new package is going to be installed for this functionality. If you want to keep things minimal you can skip this section.
 #+BEGIN_SRC emacs-lisp
 (use-package dashboard
 :config
@@ -226,7 +156,7 @@ skip this section.
 ;; Set the banner   
       (setq dashboard-startup-banner "~/.emacs.d/img/dashLogo.png")    
 ;; Set the title
-      (setq dashboard-banner-logo-title (concat "Hello "(concat (getenv "USER") " ! ")))
+      (setq dashboard-banner-logo-title "Hey, Abraham!")
 ;; Content is not centered by default. To center, set
       (setq dashboard-center-content t)
 ;; To show navigator below the banner:
@@ -245,14 +175,22 @@ skip this section.
          (lambda (&rest _) (browse-url "https://gitlab.com/avronr")))
 
         ("" "Homepage" "Show Homepage" (lambda (&rest _)(browse-url "https://avronr.gitlab.io/")))))))
+
 #+END_SRC
 
+* auto-complete
+  - Lets you use the auto-complete package
+    #+BEGIN_SRC emacs-lisp
+     (use-package auto-complete
+     :ensure t)
+     (require 'auto-complete)
+     (require 'auto-complete-config)
+     (global-auto-complete-mode t)
+     (add-to-list 'ac-modes 'org-mode)
+     (ac-config-default)
+    #+END_SRC
 * Web Development
-I do quite a bit of web-development and have snippets, automatic indentation 
-and autocompletion is a big help . =web-mode.el= is an autonomous emacs 
-major-mode for editing web templates. It also takes care of basic stuff like 
-syntax highlighting, auto pairing tags, removing white spaces etc. Web-mode is 
-feature rich and as extensible as Emacs itself. For more details visit this [[http://web-mode.org/][link]]
+I do quite a bit of web-development and have snippets, automatic indentation and autocompletion is a big help . =web-mode.el= is an autonomous emacs major-mode for editing web templates. It also takes care of basic stuff like syntax highlighting, auto pairing tags, removing white spaces etc. Web-mode is feature rich and as extensible as Emacs itself. For more details visit this [[http://web-mode.org/][link]]
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode
 :ensure t)
@@ -352,21 +290,13 @@ If you write any code, you may enjoy this. Typing the first character in a set o
 (electric-pair-mode t)
 #+END_SRC
 * Semantic Selection
-So what this package does is it select text in way that's sensibe towards the 
-syntax. So for example if I'm in a html tag that is the child of another tag, 
-invoking the keybinding for this package will first select the child then the 
-parent and hierarchichally move upwards. No need to drag the mouse around, 
-this is selection done sensibly.
+So what this package does is it select text in way that's sensibe towards the syntax. So for example if I'm in a html tag that is the child of another tag, invoking the keybinding for this package will first select the child then the parent and hierarchichally move upwards. No need to drag the mouse around, this is selection done sensibly.
 #+BEGIN_SRC emacs-lisp
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 #+END_SRC
 * Snippets
-Unlike autocomplete which suggests words / symbols, snippets are pre-prepared 
-templates which you fill in. I'm using a community [[https://github.com/AndreaCrotti/yasnippet-snippets][library]] with *lots* of 
-ready made options, and have my own directory of custom snippets I've added. 
-Not sure if I should unify these by forking =yasnippet-snippets=. Type the 
-shortcut and press =TAB= to complete, or =M-/= to autosuggest a snippet.
+Unlike autocomplete which suggests words / symbols, snippets are pre-prepared templates which you fill in. I'm using a community library (=[[https://github.com/AndreaCrotti/yasnippet-snippets]]=) with *lots* of ready made options, and have my own directory of custom snippets I've added. Not sure if I should unify these by forking =yasnippet-snippets=. Type the shortcut and press =TAB= to complete, or =M-/= to autosuggest a snippet.
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
 :ensure t
@@ -381,16 +311,13 @@ shortcut and press =TAB= to complete, or =M-/= to autosuggest a snippet.
 (add-to-list 'auto-mode-alist '("\\.c\\'" . web-mode))
 #+END_SRC
 * Hydra
-This is a package for GNU Emacs that can be used to tie related commands into 
-a family of short bindings with a common prefix - a Hydra. Imagine that you 
-have bound C-c j and C-c k in your config.  You want to call C-c j and C-c k 
-in some (arbitrary) sequence. Hydra allows you to:
-- Bind your functions in a way that pressing C-c jjkk3j5k is equivalent to 
-pressing C-c j C-c j C-c k C-c k M-3 C-c j M-5 C-c k. Any key other than j or 
-k exits this state.
-- Assign a custom hint to this group of functions, so that you know 
-immediately after pressing C-c that you can follow up with j or k.
-If you want to quickly understand the concept, see [[https://www.youtube.com/watch?v=_qZliI1BKzI][the video demo]].
+This is a package for GNU Emacs that can be used to tie related commands into a family of short bindings with a common prefix - a Hydra.
+Imagine that you have bound C-c j and C-c k in your config.  You want to call C-c j and C-c k in some (arbitrary) sequence. Hydra allows you to:
+- Bind your functions in a way that pressing C-c jjkk3j5k is equivalent to pressing C-c j C-c j C-c k C-c k M-3 C-c j M-5 C-c k. Any key other than j or k exits this state.
+
+- Assign a custom hint to this group of functions, so that you know immediately after pressing C-c that you can follow up with j or k.
+
+If you want to quickly understand the concept, see [the video demo](https://www.youtube.com/watch?v=_qZliI1BKzI).
 
 #+BEGIN_SRC emacs-lisp
   (use-package hydra 
@@ -470,13 +397,7 @@ If you want to quickly understand the concept, see [[https://www.youtube.com/wat
   ("<drag-mouse-1>" ignore))
 #+END_SRC
 * lorem Ipsum
-Inserts lorem ipsum text in your emacs buffer. This text has been used since 
-the 16th Century as a dummy text when you are preparing the layout of some 
-presentation but don’t have the final text yet, or want to demonstrate the 
-layout without distracting the reader with actual content. The lorem ipsum 
-text originated from “de Finibus Bonorum et Malorum” (The Extremes of Good and 
-Evil) by Marcus Tullius Cicero, written in 45 BC but it has been so 
-transformed along the years that now, it is relatively meaningless.
+Inserts lorem ipsum text in your emacs buffer. This text has been used since the 16th Century as a dummy text when you are preparing the layout of some presentation but don’t have the final text yet, or want to demonstrate the layout without distracting the reader with actual content. The lorem ipsum text originated from “de Finibus Bonorum et Malorum” (The Extremes of Good and Evil) by Marcus Tullius Cicero, written in 45 BC but it has been so transformed along the years that now, it is relatively meaningless.
 Three functions are available:
 - Lorem-ipsum-insert-paragraphs
 - Lorem-ipsum-insert-sentences
@@ -490,12 +411,7 @@ Three functions are available:
 (global-set-key (kbd "C-; l") 'lorem-ipsum-insert-list)
 #+END_SRC
 * Multiple Cursors
-Multiple cursors for Emacs. Multiple cursors is a very nice package that lets 
-you create several cursors that all do the same thing as you type (see the 
-example below). You can add it to emacs using the steps described here Once 
-you have installed it, it is useful to set up a keybinding (a keyboard short-
-cut) for it. You can do this by adding the following to your emacs config file 
-to set C-c m c as the binding for multiple cursors. 
+Multiple cursors for Emacs. Multiple cursors is a very nice package that lets you create several cursors that all do the same thing as you type (see the example below). You can add it to emacs using the steps described here Once you have installed it, it is useful to set up a keybinding (a keyboard short-cut) for it. You can do this by adding the following to your emacs config file to set C-c m c as the binding for multiple cursors. 
 #+BEGIN_SRC emacs-lisp
 (use-package multiple-cursors
 :ensure t)
@@ -506,16 +422,9 @@ to set C-c m c as the binding for multiple cursors.
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 #+END_SRC
 * Project Management
-*Projectile* is a project interaction library for Emacs. Its goal is to 
-provide a nice set of features operating on a project level without 
-introducing external dependencies (when feasible). For instance - finding 
-project files has a portable implementation written in pure Emacs Lisp without 
-the use of GNU find (but for performance sake an indexing mechanism backed by 
-external commands exists as well).
+*Projectile* is a project interaction library for Emacs. Its goal is to provide a nice set of features operating on a project level without introducing external dependencies (when feasible). For instance - finding project files has a portable implementation written in pure Emacs Lisp without the use of GNU find (but for performance sake an indexing mechanism backed by external commands exists as well).
 
-Projectile tries to be practical - portability is great, but if some external 
-tools could speed up some task substantially and the tools are available, 
-Projectile will leverage them
+Projectile tries to be practical - portability is great, but if some external tools could speed up some task substantially and the tools are available, Projectile will leverage them
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
 :ensure t
@@ -524,15 +433,9 @@ Projectile will leverage them
 #+END_SRC
 * Version Control
 *** Magit
-Magit is an interface to the version control system Git, implemented as an 
-Emacs package. Magit aspires to be a complete Git porcelain. While we cannot 
-(yet) claim that Magit wraps and improves upon each and every Git command, it 
-is complete enough to allow even experienced Git users to perform almost all 
-of their daily version control tasks directly from within Emacs. While many 
-fine Git clients exist, only Magit and Git itself deserve to be called porcelains.
+Magit is an interface to the version control system Git, implemented as an Emacs package. Magit aspires to be a complete Git porcelain. While we cannot (yet) claim that Magit wraps and improves upon each and every Git command, it is complete enough to allow even experienced Git users to perform almost all of their daily version control tasks directly from within Emacs. While many fine Git clients exist, only Magit and Git itself deserve to be called porcelains.
 
-I love it. You could get the same functionality with other text editors too 
-but none so light wieght or polished in my opinion.
+I love it. You could get the same functionality with other text editors too but none so light wieght or polished in my opinion.
 #+BEGIN_SRC emacs-lisp
 (use-package magit
 :ensure t
@@ -610,11 +513,7 @@ and provides some commands like:
          :color blue))
 #+END_SRC
 *** Time machine
-TimeMachine lets us step through the history of a file as recorded in git. 
-Visit a git-controlled file and issue M-x git-timemachine (or bind it to a 
-keybinding of your choice). If you just need to toggle the time machine you 
-can use M-x git-timemachine-toggle. Use the following keys to navigate 
-historic version of the file:
+TimeMachine lets us step through the history of a file as recorded in git. Visit a git-controlled file and issue M-x git-timemachine (or bind it to a keybinding of your choice). If you just need to toggle the time machine you can use M-x git-timemachine-toggle. Use the following keys to navigate historic version of the file:
 - =p= Visit previous historic version
 - =n= Visit next historic version
 - =w= Copy the abbreviated hash of the current historic version
@@ -629,9 +528,7 @@ historic version of the file:
 :ensure t)
 #+END_SRC
 * Windmove
-Windmove is a library built into GnuEmacs starting with version 21. It lets 
-you move point from window to window using Shift and the arrow keys. This is 
-easier to type than ‘C-x o’ and, for some users, may be more intuitive. 
+Windmove is a library built into GnuEmacs starting with version 21. It lets you move point from window to window using Shift and the arrow keys. This is easier to type than ‘C-x o’ and, for some users, may be more intuitive. 
 #+BEGIN_SRC emacs-lisp
 (windmove-default-keybindings)
 (global-set-key (kbd "C-c <left>")  'windmove-left)
@@ -671,31 +568,18 @@ This is a habit of mine. Whenever a find some good material on a paricular topic
      (find-file "~/.config/i3/config"))
      (global-set-key (kbd "C-c i") '4br/visit-i3config)
   #+END_SRC
-* Minor Conveniences
-- First, let’s increase the cache before starting garbage collection:
-  #+BEGIN_SRC elisp
-    (setq gc-cons-threshold 50000000)
-  #+END_SRC
-- Set custom settings to load in own file
-  This stops emacs adding customised settings to init.el. I try to avoid using 
-  customize anyway, preferring programmatic control of variables. Creating it as 
-  a temporary file effectively disables it (i.e. any changes are session local).
-  #+BEGIN_SRC emacs-lisp
-  (setq custom-file (make-temp-file "emacs-custom"))
-  #+END_SRC
-#+END_SRC 
+* Short Settings
 - Inhibit Startup Message
   #+BEGIN_SRC emacs-lisp
    (setq inhibit-startup-message t)
   #+END_SRC
-- Found [[https://github.com/wasamasa/dotemacs/blob/master/init.org#init][here]] how to remove the warnings from the GnuTLS library when using HTTPS
-  increase the minimum prime bits size:
-  #+BEGIN_SRC elisp
-    (setq gnutls-min-prime-bits 4096)
-  #+END_SRC
 - Disables Toolbar
    #+BEGIN_SRC emacs-lisp
    (tool-bar-mode -1)
+   #+END_SRC
+- Numbers on lines
+   #+BEGIN_SRC emacs-lisp
+   (setq linum-mode t)
    #+END_SRC
 - Text wrapping
    #+BEGIN_SRC emacs-lisp
@@ -703,22 +587,22 @@ This is a habit of mine. Whenever a find some good material on a paricular topic
    #+END_SRC
 - Use y/n instead of yes/no
   #+BEGIN_SRC emacs-lisp
-  (fset 'yes-or-no-p 'y-or-n-p)
+  (fset 'yes-or-no-p 'y-or-n-p)   
   #+END_SRC
 - make home and end buttons do their job
   #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "<home>") 'move-begining-of-line)
   (global-set-key (kbd "<end>") 'move-end-of-line)
   #+END_SRC
-- don't require two spaces for sentence end.
- #+BEGIN_SRC emacs-lisp
- (setq sentence-end-double-space nil)
- #+END_SRC
-- The beeping can be annoying--turn it off
- #+BEGIN_SRC emacs-lisp
- (setq visible-bell t
-         ring-bell-function 'ignore)
- #+END_SRC
+-  don't require two spaces for sentence end.
+  #+BEGIN_SRC emacs-lisp
+  (setq sentence-end-double-space nil)
+  #+END_SRC
+-  The beeping can be annoying--turn it off
+  #+BEGIN_SRC emacs-lisp
+  (setq visible-bell t
+          ring-bell-function 'ignore)
+  #+END_SRC
 - Start in fullscreen
   #+BEGIN_SRC emacs-lisp
   ;(toggle-frame-fullscreen)
@@ -728,9 +612,9 @@ This is a habit of mine. Whenever a find some good material on a paricular topic
   (global-set-key (kbd "C-x w") 'kill-current-buffer)
   #+END_SRC
 - Setting keybinding for eshell
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "<M-return>") 'eshell)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+       (global-set-key (kbd "C-c s") 'eshell)
+    #+END_SRC
 * Parentheses
 - When programming I like my editor to try to help me with keeping parentheses balanced.
 #+BEGIN_SRC emacs-lisp
@@ -852,12 +736,14 @@ Open a file with an external program (that is, through =xdg-open=) by hitting
      (setq doom-modeline-minor-modes nil)
      (setq find-file-visit-truename t)
      #+END_SRC
+
 * Try
 Sometimes if I'm not really sure about a package, I find it hard to convince myself to add them to my config just for the sake of trying it or to install them to find that I dont really like it and then uninstall it. This package let's me "try" stuff. It actually installs a package but only temporarely. Any package I install with try will be lost if and when I restart emacs.
 #+BEGIN_SRC emacs-lisp
 (use-package try
 	:ensure t)
 #+END_SRC
+
 * org-bullets
 Asterisk can be boring to look at.
 #+BEGIN_SRC emacs-lisp
@@ -1046,6 +932,7 @@ Flashes the cursor's line when you scroll
   (beacon-mode 1)
   )
   #+END_SRC
+
 * Cursor position
 Show the current line and column for your cursor.
 We are not going to have =relative-linum-mode= in every major mode, so this is useful.
@@ -1126,8 +1013,3 @@ Sometimes I use kivy.
 
 
 
-* Impatient Mode
-#+BEGIN_SRC emacs-lisp
-(use-package impatient-mode
-:ensure t)
-#+END_SRC
