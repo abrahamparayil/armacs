@@ -1129,3 +1129,8 @@ Sometimes I use kivy.
 
 
 
+* Impatient Mode
+#+BEGIN_SRC emacs-lisp
+(use-package impatient-mode
+:ensure t)
+#+END_SRC
