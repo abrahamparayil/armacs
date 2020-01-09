@@ -1099,9 +1099,19 @@ programmers write clear, logical code for small and large-scale projects.
 
 Widely used today for almost every sector of computer science from simple 
 scripting to ML and AI. I use a few tools to make things easier when I use 
-python.
+python. Of course none of these are compulsory. Keep what you need and take 
+out the rest.
 **** Anaconda
-Emacs handles python quite well, but we can improve things with anaconda mode.
+Emacs handles python quite well, but we can improve things with anaconda mode. 
+This gives us a lot of useful features such as: 
+- context-sensitive code completion
+- jump to definitions
+- find references
+- view documentation
+- virtual environment
+- eldoc mode
+- all this stuff inside vagrant, docker and remote hosts
+Pretty cool if you ask me.
 #+BEGIN_SRC emacs-lisp
   (use-package anaconda-mode
     :config
