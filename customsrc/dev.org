@@ -37,3 +37,18 @@ Projectile tries to be practical - portability is great, but if some external to
   :init
   (projectile-mode 1))
 #+END_SRC
+* Parentheses
+- When programming I like my editor to try to help me with keeping parentheses balanced.
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+    :diminish smartparens-mode
+    :config
+    (add-hook 'prog-mode-hook 'smartparens-mode))
+#+END_SRC
+
+- Highlight parens etc. for improved readability.
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :config
+    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+END_SRC
