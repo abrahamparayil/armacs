@@ -280,3 +280,26 @@ increase the minimum prime bits size:
       (when (member "Liberation Mono" (font-family-list))
       (set-face-attribute 'default nil :font "Liberation Mono"))
       #+END_SRC
+* Try
+Sometimes if I'm not really sure about a package, I find it hard to convince myself to add them to my config just for the sake of trying it or to install them to find that I dont really like it and then uninstall it. This package let's me "try" stuff. It actually installs a package but only temporarely. Any package I install with try will be lost if and when I restart emacs.
+#+BEGIN_SRC emacs-lisp
+(use-package try
+	:ensure t)
+#+END_SRC
+* Init File Support
+   Load up a collection of enhancements to Emacs Lisp, including [[https://github.com/magnars/dash.el][dash]],
+   [[https://github.com/magnars/s.el][s]] for string manipulation, and [[https://github.com/rejeep/f.el][f]] for file manipulation.
+   #+BEGIN_SRC elisp
+     (require 'cl)
+
+     (use-package dash
+       :ensure t
+       :config (eval-after-load "dash" '(dash-enable-font-lock)))
+
+     (use-package s
+       :ensure t)
+
+     (use-package f
+       :ensure t)
+    #+END_SRC
+
