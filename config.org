@@ -158,3 +158,35 @@ easier to type than ‘C-x o’ and, for some users, may be more intuitive.
 (global-set-key (kbd "C-c <up>")    'windmove-up)
 (global-set-key (kbd "C-c <down>")  'windmove-down)
 #+END_SRC
+* Quickly visit certain files
+As you keep using emacs or a specific desktop setup, you'll notice that you open certain files/folder more often than others, hence it's only sensible to set up key bindings that will open those specific files and save you the time of navigating through your file system.
+- Emacs configuration
+  #+BEGIN_SRC emacs-lisp
+     (defun 4br/visit-emacs-config ()
+     (interactive)
+     (find-file "~/.emacs.d/config.org"))
+     (global-set-key (kbd "C-c e") '4br/visit-emacs-config)
+  #+END_SRC
+- Resources
+This is a habit of mine. Whenever a find some good material on a paricular topic I list it in this org file.A small description on what it is and a link to it. 
+  #+BEGIN_SRC emacs-lisp
+     (defun 4br/visit-resources ()
+      (interactive)
+      (find-file "~/Documents/Resources/resources.org"))
+     (global-set-key (kbd "C-c r") '4br/visit-resources)
+  #+END_SRC
+- dotemacs
+  I like to hoard good emacs configs. This org file lists them.
+  #+BEGIN_SRC emacs-lisp
+     (defun 4br/visit-dotemacs ()
+     (interactive)
+     (find-file "~/Documents/dotemacs/index.org"))
+     (global-set-key (kbd "C-c d") '4br/visit-dotemacs)
+  #+END_SRC
+- i3 Config file
+  #+BEGIN_SRC emacs-lisp
+     (defun 4br/visit-i3config ()
+     (interactive)
+     (find-file "~/.config/i3/config"))
+     (global-set-key (kbd "C-c i") '4br/visit-i3config)
+  #+END_SRC
