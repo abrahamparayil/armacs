@@ -112,3 +112,17 @@ function emacs {
     setsid emacsclient -n -a /usr/bin/emacs ${args[*]}
 } 
 #+END_SRC
+* Async
+async.el is a module for doing asynchronous processing in Emacs
+#+BEGIN_SRC emacs-lisp
+    (use-package async
+    :ensure t
+    :init (dired-async-mode 1)
+    (autoload 'dired-async-mode "dired-async.el" nil t))
+#+END_SRC
+=dired-async-mode= will allow you to run asynchronously the dired commands for 
+copying, renaming and symlinking. If you are a helm user, this will allow you 
+to copy, rename etc... asynchronously from helm. Note that with helm you can 
+disable this by running the copy, rename etc... commands with a prefix argument.
+If you don't want to make dired/helm asynchronous disable it with dired-async-mode.
+=need to add support for auth-source library=
