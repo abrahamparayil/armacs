@@ -82,4 +82,3 @@ Mostly useful if you are into web development or game development. Every time em
     :init
       (add-hook 'prog-mode-hook 'rainbow-mode))
 #+END_SRC
-
