@@ -6,3 +6,35 @@
 #+LANGUAGE: en
 #+OPTIONS: num:nil
 #+ATTR_HTML: style margin-left: auto; margin-right: auto;
+
+* User Info
+Name and Email.
+=user-full-name= returns the full name of the logged-in user or the value of the 
+environment variable =NAME=, if that is set. If the Emacs process’s user-id does 
+not correspond to any known user (and provided =NAME= is not set), the result 
+is "unknown". If uid is non-nil, then it should be a number (a user-id) or a 
+string (a login name). Then =user-full-name= returns the full name corresponding 
+to that user-id or login name. If you specify a user-id or login name that isn’t 
+defined, it returns =nil=.
+=user-mail-address= holds the nominal email address of the user who is using 
+Emacs. Emacs normally sets this variable to a default value after reading your 
+init files, but not if you have already set it. So you can set the variable to 
+some other value in your init file if you do not want to use the default value.  
+#+BEGIN_SRC emacs-lisp
+   (setq user-full-name "Abraham Raji"
+         user-email "abrahamraji99@gmail.com")
+#+END_SRC
+* Set UTF-8 encoding
+UTF-8 (UCS Transformation Format 8) is the World Wide Web's most common 
+character encoding. Each character is represented by one to four bytes. UTF-8 
+is backward-compatible with ASCII and can represent any standard Unicode 
+character. This is now a universal standard, so it makes sense for us to 
+enable it by default in our text editor.
+#+BEGIN_SRC emacs-lisp
+(setq locale-coding-system 'utf-8)
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+#+END_SRC
