@@ -126,3 +126,23 @@ to copy, rename etc... asynchronously from helm. Note that with helm you can
 disable this by running the copy, rename etc... commands with a prefix argument.
 If you don't want to make dired/helm asynchronous disable it with dired-async-mode.
 =need to add support for auth-source library=
+* Backups
+This is one of the things people usually want to change right away. By default, 
+Emacs saves backup files in the current directory. These are the files ending 
+in =~= that are cluttering up your directory lists. The following code stashes 
+them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= 
+(=find-file=) if I really need to.
+#+begin_src emacs-lisp
+(setq backup-directory-alist 
+      '(("." . "~/.emacs.d/backups")))
+;; autosave the undo-tree history
+(setq undo-tree-history-directory-alist
+      `((".*" . ,temporary-file-directory)))
+#+end_src
+ Disk space is cheap. Save lots.
+ #+begin_src emacs-lisp
+(setq delete-old-versions -1)
+(setq version-control t)
+(setq vc-make-backup-files t)
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+ #+end_src
