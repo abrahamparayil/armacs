@@ -70,3 +70,7 @@ Projectile will leverage them
     :config
     (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+END_SRC
+* Version Control
+#+BEGIN_SRC emacs-lisp
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/versionctrl.org"))
+#+END_SRC
