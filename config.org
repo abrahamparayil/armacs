@@ -302,4 +302,22 @@ Sometimes if I'm not really sure about a package, I find it hard to convince mys
      (use-package f
        :ensure t)
     #+END_SRC
+* Scrolling
+-  System Scroll bars.
+    #+BEGIN_SRC emacs-lisp
+    (when (window-system)
+      (tool-bar-mode 0)
+      (when (fboundp 'horizontal-scroll-bar-mode)
+        (horizontal-scroll-bar-mode -1))
+      (scroll-bar-mode -1))
+    #+END_SRC
+  -  Mini-buffer Scroll bars.
+    #+BEGIN_SRC emacs-lisp
+   (set-window-scroll-bars (minibuffer-window) nil nil)
+    #+END_SRC
+  - Scroll Smoothly and Conservatively
+   #+BEGIN_SRC elisp
+     (setq scroll-conservatively 10000
+           scroll-preserve-screen-position t)
+   #+END_SRC
 
