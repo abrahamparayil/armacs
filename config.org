@@ -1,0 +1,8 @@
+#+TITLE: Emacs Config
+#+AUTHOR: Abraham Raji
+#+EMAIL: abrahamraji99@gmail.com
+#+STARTUP: overview
+#+CREATOR: avronr
+#+LANGUAGE: en
+#+OPTIONS: num:nil
+#+ATTR_HTML: style margin-left: auto; margin-right: auto;
