@@ -1,0 +1,11 @@
+* Brackets using electric
+If you write any code, you may enjoy this. Typing the first character in a set of 2, completes the second one after your cursor. Opening a bracket? It’s closed for you already. Quoting something? It’s closed for you already. You can easily add and remove pairs yourself, have a look.
+#+BEGIN_SRC emacs-lisp
+(setq electric-pair-pairs '(
+                           (?\{ . ?\})
+                           (?\( . ?\))
+                           (?\[ . ?\])
+                           (?\" . ?\")
+                           ))
+(electric-pair-mode t)
+#+END_SRC

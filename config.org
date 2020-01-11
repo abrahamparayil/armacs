@@ -339,3 +339,7 @@ Sometimes if I'm not really sure about a package, I find it hard to convince mys
   (add-hook 'pre-command-hook 'my-menu-bar-open-after))))
   (global-set-key [f10] 'my-menu-bar-open)
   #+END_SRC
+* custom src
+#+BEGIN_SRC emacs-lisp
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/dev.org"))
+#+END_SRC
