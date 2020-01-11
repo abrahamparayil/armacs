@@ -8,7 +8,6 @@
 #+ATTR_HTML: style margin-left: auto; margin-right: auto;
 
 * User Info
-Name and Email.
 =user-full-name= returns the full name of the logged-in user or the value of the 
 environment variable =NAME=, if that is set. If the Emacs process’s user-id does 
 not correspond to any known user (and provided =NAME= is not set), the result 
@@ -26,10 +25,10 @@ some other value in your init file if you do not want to use the default value.
 #+END_SRC
 * Set UTF-8 encoding
 UTF-8 (UCS Transformation Format 8) is the World Wide Web's most common 
-character encoding. Each character is represented by one to four bytes. UTF-8 
-is backward-compatible with ASCII and can represent any standard Unicode 
-character. This is now a universal standard, so it makes sense for us to 
-enable it by default in our text editor.
+character encoding. Each character is represented by one to four bytes. UTF-8 is 
+backward-compatible with ASCII and can represent any standard Unicode character. 
+This is now a universal standard, so it makes sense for us to enable it by 
+default in our text editor.
 #+BEGIN_SRC emacs-lisp
 (setq locale-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)
