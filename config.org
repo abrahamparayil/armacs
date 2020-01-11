@@ -320,4 +320,22 @@ Sometimes if I'm not really sure about a package, I find it hard to convince mys
      (setq scroll-conservatively 10000
            scroll-preserve-screen-position t)
    #+END_SRC
-
+* Menu bar
+  Toggles reveal and hide menubar with the f10 key
+  #+BEGIN_SRC emacs-lisp
+  (menu-bar-mode -1)
+  (defun my-menu-bar-open-after ()
+  (remove-hook 'pre-command-hook 'my-menu-bar-open-after)
+  (when (eq menu-bar-mode 42)
+  (menu-bar-mode -1)))
+  (defun my-menu-bar-open (&rest args)
+  (interactive)
+  (let ((open menu-bar-mode))
+  (unless open
+  (menu-bar-mode 1))
+  (funcall 'menu-bar-open args)
+  (unless open
+  (setq menu-bar-mode 42)
+  (add-hook 'pre-command-hook 'my-menu-bar-open-after))))
+  (global-set-key [f10] 'my-menu-bar-open)
+  #+END_SRC
