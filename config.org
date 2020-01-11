@@ -343,4 +343,5 @@ Sometimes if I'm not really sure about a package, I find it hard to convince mys
 #+BEGIN_SRC emacs-lisp
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/dev.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/webdev.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/ccpp.org"))
 #+END_SRC
