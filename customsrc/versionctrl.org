@@ -10,3 +10,74 @@ I love it. You could get the same functionality with other text editors too but 
 (progn
 (bind-key "C-x g" 'magit-status)))
 #+END_SRC
+
+*** Git-gutter
+Display line changes in gutter based on git history. Enable it everywhere.
+Originally a Sublime Text plug-in to show information about files in a git repository:
+- Gutter Icons indicating inserted, modified or deleted lines
+- Diff Popup with details about modified lines
+- Status Bar Text with information about file and repository
+
+and provides some commands like:
+- Goto Change to navigate between modified lines
+- Copy from Commit to copy the original content from the commit
+- Revert to Commit to revert a modified hunk to the original state in a commit
+
+#+BEGIN_SRC emacs-lisp
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/hydra.org"))
+(use-package git-gutter
+  :config
+  (global-git-gutter-mode 't)
+  :diminish git-gutter-mode)
+
+;; If you would like to use git-gutter.el and linum-mode
+;(git-gutter:linum-setup)
+
+;; If you enable git-gutter-mode for some modes
+(add-hook 'ruby-mode-hook 'git-gutter-mode)
+
+(global-set-key (kbd "C-x C-g") 'git-gutter)
+(global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
+
+;; Jump to next/previous hunk
+(global-set-key (kbd "C-x p") 'git-gutter:previous-hunk)
+(global-set-key (kbd "C-x n") 'git-gutter:next-hunk)
+
+;; Stage current hunk
+(global-set-key (kbd "C-x v s") 'git-gutter:stage-hunk)
+
+;; Revert current hunk
+(global-set-key (kbd "C-x v r") 'git-gutter:revert-hunk)
+
+;; Mark current hunk
+(global-set-key (kbd "C-x v SPC") #'git-gutter:mark-hunk)
+
+(global-set-key (kbd "M-g M-g") 'hydra-git-gutter/body)
+(defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
+                              :hint nil)
+    "
+  Git gutter:
+    _j_: next hunk        _s_tage hunk     _q_uit
+    _k_: previous hunk    _r_evert hunk    _Q_uit and deactivate git-gutter
+    ^ ^                   _p_opup hunk
+    _h_: first hunk
+    _l_: last hunk        set start _R_evision
+  "
+    ("j" git-gutter:next-hunk)
+    ("k" git-gutter:previous-hunk)
+    ("h" (progn (goto-char (point-min))
+                (git-gutter:next-hunk 1)))
+    ("l" (progn (goto-char (point-min))
+                (git-gutter:previous-hunk 1)))
+    ("s" git-gutter:stage-hunk)
+    ("r" git-gutter:revert-hunk)
+    ("p" git-gutter:popup-hunk)
+    ("R" git-gutter:set-start-revision)
+    ("q" nil :color blue)
+    ("Q" (progn (git-gutter-mode -1)
+                ;; git-gutter-fringe doesn't seem to
+                ;; clear the markup right away
+                (sit-for 0.1)
+                (git-gutter:clear))
+         :color blue))
+#+END_SRC
