@@ -146,3 +146,15 @@ them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f=
 (setq vc-make-backup-files t)
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
  #+end_src
+
+* Windmove
+Windmove is a library built into GnuEmacs starting with version 21. It lets 
+you move point from window to window using Shift and the arrow keys. This is 
+easier to type than ‘C-x o’ and, for some users, may be more intuitive. 
+#+BEGIN_SRC emacs-lisp
+(windmove-default-keybindings)
+(global-set-key (kbd "C-c <left>")  'windmove-left)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
+(global-set-key (kbd "C-c <up>")    'windmove-up)
+(global-set-key (kbd "C-c <down>")  'windmove-down)
+#+END_SRC
