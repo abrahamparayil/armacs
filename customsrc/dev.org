@@ -15,3 +15,15 @@ So what this package does is it select text in way that's sensibe towards the sy
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 #+END_SRC
+
+* Multiple Cursors
+Multiple cursors for Emacs. Multiple cursors is a very nice package that lets you create several cursors that all do the same thing as you type (see the example below). You can add it to emacs using the steps described here Once you have installed it, it is useful to set up a keybinding (a keyboard short-cut) for it. You can do this by adding the following to your emacs config file to set C-c m c as the binding for multiple cursors. 
+#+BEGIN_SRC emacs-lisp
+(use-package multiple-cursors
+:ensure t)
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+#+END_SRC
