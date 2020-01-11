@@ -81,3 +81,34 @@ install and it will do the rest including updating the package.
 (require 'use-package)
 #+END_SRC 
 And that's about it for package management.
+* Multiplexing emacs and emacsclient
+Opening a anew file in the same emacs-session requires the use of emacsclient. 
+Emacs command can be itself wrapped to do the smarter job to open the file if 
+the session exists. To start session you need to start-server. This snippet will 
+create server in first session of emacs. Add this to your emacs configuration file
+#+BEGIN_SRC emacs-lisp
+(require 'server)
+(unless (server-running-p)
+  (server-start))
+#+END_SRC
+
+To make this work you need to add this to you .bashrc [which can be found in 
+your home folder if you're using a *nix based OS(Linux, Unix, FreeBSD, MacOS)]:
+#+BEGIN_SRC sh
+function emacs {
+    if [[ $# -eq 0 ]]; then
+        /usr/bin/emacs # "emacs" is function, will cause recursion
+        return
+    fi
+    args=($*)
+    for ((i=0; i <= ${#args}; i++)); do
+        local a=${args[i]}
+        # NOTE: -c for creating new frame
+        if [[ ${a:0:1} == '-' && ${a} != '-c' && ${a} != '--' ]]; then
+            /usr/bin/emacs ${args[*]}
+            return
+        fi
+    done
+    setsid emacsclient -n -a /usr/bin/emacs ${args[*]}
+} 
+#+END_SRC
