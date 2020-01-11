@@ -1,0 +1,43 @@
+* Web Development
+I do quite a bit of web-development and have snippets, automatic indentation and autocompletion is a big help . =web-mode.el= is an autonomous emacs major-mode for editing web templates. It also takes care of basic stuff like syntax highlighting, auto pairing tags, removing white spaces etc. Web-mode is feature rich and as extensible as Emacs itself. For more details visit this [[http://web-mode.org/][link]]
+#+BEGIN_SRC emacs-lisp
+(use-package web-mode
+:ensure t)
+
+;;Automatically load web-mode when opening web-related files
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+
+(setq web-mode-engines-alist
+      '(("php"    . "\\.phtml\\'")
+        ("blade"  . "\\.blade\\.")))
+
+;;Set indentations
+(defun my-web-mode-hook ()
+"Hooks for Web mode."
+(setq web-mode-markup-indent-offset 2)
+(setq web-mode-code-indent-offset 2)
+(setq web-mode-css-indent-offset 2))
+(add-hook 'web-mode-hook  'my-web-mode-hook)    
+(setq tab-width 2)
+
+;;Highlight of columns
+(setq web-mode-enable-current-column-highlight t)
+(setq web-mode-enable-current-element-highlight t)
+
+;;Autoremove final white spaces on save
+(add-hook 'local-write-file-hooks
+            (lambda ()
+               (delete-trailing-whitespace)
+               nil))
+#+END_SRC
