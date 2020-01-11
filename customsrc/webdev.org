@@ -74,3 +74,12 @@ Emmet (formerly *Zen Coding*) is a web-developer’s toolkit that can greatly im
      	 (setq emmet-use-css-transform nil)))))
 
 #+END_SRC
+*** Rainbow
+Mostly useful if you are into web development or game development. Every time emacs encounters a hexadecimal code that resembles a color, it will automatically highlight it in the appropriate color. This is a lot cooler than you may think.
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-mode
+    :ensure t
+    :init
+      (add-hook 'prog-mode-hook 'rainbow-mode))
+#+END_SRC
+
