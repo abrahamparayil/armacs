@@ -37,3 +37,47 @@ default in our text editor.
 (prefer-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 #+END_SRC
+* Package Management
+This piece of code tells emacs where to find packages from or in more proper 
+they are called 'repositories'. I personally use MELPA, ELPA and the official 
+org-mode repo to get the latest version of orgmode. So keep what you want take 
+out there rest. Oh and asuming you are new to elisp and emacs while editing 
+these lines watch for the '()' and you should be fine.
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+ (setq package-archives
+  '(("melpa" . "https://melpa.org/packages/")
+    ("gnu" . "https://elpa.gnu.org/packages/")
+    ("org" . "http://orgmode.org/elpa/")))
+(package-initialize)
+#+END_SRC
+
+Occasionally emacs will tell you it can't find a package in any of your declared 
+repos all you will have to do is refresh your repositories. Unless the package 
+doesn't actually exist in the repos the problem should be fixed. 
+
+You can install the packages manually by:
+1. first hit [Meta] and x 
+2. then type 'package-install' and hit enter
+3. then type in the name of the package you wish to install and hit enter again.
+If the package exists in the repositories that you have asked emacs to look in, 
+the packages will be installed or you will recieve an error message. If we 
+directly use use package command in our config it will install the packages 
+every time emacs starts up even if they're already installed so we cannot use it 
+in our configs.You could also alternatively download packages as an archive file 
+from the repos like the ones mentioned above and ask emacs to install them from 
+the file. But unless you are developing packages for emacs and wish to test your 
+package before publishing it, I do not recommend this method. As you may have 
+noticed both process are a bit tedious and will only get worse as time goes by. 
+A better approach in my opinion would be to use a package manager like use-
+package which is what I do. You just need i the name of the package you wish to 
+install and it will do the rest including updating the package.
+#+BEGIN_SRC emacs-lisp
+(unless (package-installed-p 'use-package) ;;lisp equivalent of a while loop 
+(package-install 'use-package);; We're using package install to install use-package
+(setq load-prefer-newer t));; to install newer version when available
+(setq use-package-verbose t);; This line is just a raincheck
+(setq use-package-always-ensure t);;Always ensure that the package is installed
+(require 'use-package)
+#+END_SRC 
+And that's about it for package management.
