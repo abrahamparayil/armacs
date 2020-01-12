@@ -62,23 +62,13 @@ Emmet (formerly *Zen Coding*) is a web-developer’s toolkit that can greatly im
 (use-package mustache-mode
    :ensure t)
 #+END_SRC
-* Modes
+** Modes
 
   I need these packages installed:
 
   #+BEGIN_SRC emacs-lisp
     (use-package mustache-mode
        :ensure t)
-  #+END_SRC
-
-* CSS
-
-  Dunno why CSS doesn't honor the 2 spacing indent I have globally:
-
-  #+BEGIN_SRC emacs-lisp
-    (use-package css
-       :init
-        (setq css-indent-offset 2))
   #+END_SRC
 
   Need the smart parens:
@@ -88,50 +78,40 @@ Emmet (formerly *Zen Coding*) is a web-developer’s toolkit that can greatly im
       :init (add-hook 'css-mode-hook 'smartparens-mode))
   #+END_SRC
 
-* Surround with Tag
+** Emmet Mode
+Emmet (formerly *Zen Coding*) is a web-developer’s toolkit that can greatly improve your HTML & CSS workflow. With Emmet, you can type CSS-like expressions that can be dynamically parsed, and produce output depending on what you type in the abbreviation. Emmet is developed and optimised for web-developers whose workflow depends on HTML/XML and CSS, but can be used with programming languages too. For example, this abbreviation:
+#+BEGIN_SRC html
+ ul#nav>li.item$*4>a{Item $}
+#+END_SRC
+...can be expanded into:
+#+BEGIN_SRC html
+	<ul id="nav">
+		<li class="item1"><a href="">Item 1</a></li>
+		<li class="item2"><a href="">Item 2</a></li>
+		<li class="item3"><a href="">Item 3</a></li>
+		<li class="item4"><a href="">Item 4</a></li>
+	</ul>
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package emmet-mode
+:ensure t)
+;;Turn on Emmet in web-mode.
+(add-hook 'web-mode-hook  'emmet-mode) 
 
-  Seems that even the SGML mode doesn't care about properly formatted
-  HTML tags. This allows me to select a region and add wrap it in
-  tag...properly.
+;;Web-mode is able to switch modes into css (style tags) or js (script tags) in an html file. For Emmet to switch between html and css properly in the same document, this hook is added.
+ (add-hook 'web-mode-before-auto-complete-hooks
+   '(lambda ()
+    (let ((web-mode-cur-language
+ 	    (web-mode-language-at-pos)))
+              (if (string= web-mode-cur-language "php")
+   	   (yas-activate-extra-mode 'php-mode)
+     	 (yas-deactivate-extra-mode 'php-mode))
+              (if (string= web-mode-cur-language "css")
+   	   (setq emmet-use-css-transform t)
+     	 (setq emmet-use-css-transform nil)))))
 
-  #+BEGIN_SRC emacs-lisp
-    (defun surround-html (start end tag)
-       "Wraps the specified region (or the current 'symbol / word'
-     with a properly formatted HTML tag."
-       (interactive "r\nsTag: " start end tag)
-       (save-excursion
-         (narrow-to-region start end)
-         (goto-char (point-min))
-         (insert (format "<%s>" tag))
-         (goto-char (point-max))
-         (insert (format "</%s>" tag))
-         (widen)))
-  #+END_SRC
-
-  And bind it to the HTML hook:
-
-  #+BEGIN_SRC emacs-lisp
-    (define-key html-mode-map (kbd "C-c C-w") 'surround-html)
-  #+END_SRC
-
-* Emmet Mode
-
-  [[https://github.com/smihica/emmet-mode][Emmet-Mode]] is pretty sweet, but need to hook it up to both
-  SGML (which includes HTML) and CSS:
-
-  #+BEGIN_SRC emacs-lisp
-  (use-package emmet-mode
-    :ensure t
-    :commands emmet-mode
-    :init
-    (setq emmet-indentation 2)
-    (setq emmet-move-cursor-between-quotes t)
-    :config
-    (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-    (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-  #+END_SRC
-
-* Skewer
+#+END_SRC
+** Skewer
 
   Live coding for HTML/CSS/JavaScript with a [[https://github.com/skeeto/skewer-mode][Skewer server]] running in Emacs.
 
