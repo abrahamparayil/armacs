@@ -13,12 +13,12 @@
   (use-package ac-c-headers
   :ensure t)
   #+END_SRC
-**** yasnippet
+** yasnippet
 #+BEGIN_SRC emacs-lisp
   (add-hook 'c++-mode-hook 'yas-minor-mode)
   (add-hook 'c-mode-hook 'yas-minor-mode)
 #+END_SRC
-**** flycheck
+** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-clang-analyzer
     :ensure t
