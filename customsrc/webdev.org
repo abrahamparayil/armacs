@@ -56,29 +56,97 @@ Emmet (formerly *Zen Coding*) is a web-developer’s toolkit that can greatly im
 	</ul>
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
-(use-package emmet-mode
-:ensure t)
-;;Turn on Emmet in web-mode.
-(add-hook 'web-mode-hook  'emmet-mode) 
-
-;;Web-mode is able to switch modes into css (style tags) or js (script tags) in an html file. For Emmet to switch between html and css properly in the same document, this hook is added.
- (add-hook 'web-mode-before-auto-complete-hooks
-   '(lambda ()
-    (let ((web-mode-cur-language
- 	    (web-mode-language-at-pos)))
-              (if (string= web-mode-cur-language "php")
-   	   (yas-activate-extra-mode 'php-mode)
-     	 (yas-deactivate-extra-mode 'php-mode))
-              (if (string= web-mode-cur-language "css")
-   	   (setq emmet-use-css-transform t)
-     	 (setq emmet-use-css-transform nil)))))
 
 #+END_SRC
-*** Rainbow
-Mostly useful if you are into web development or game development. Every time emacs encounters a hexadecimal code that resembles a color, it will automatically highlight it in the appropriate color. This is a lot cooler than you may think.
 #+BEGIN_SRC emacs-lisp
-  (use-package rainbow-mode
-    :ensure t
-    :init
-      (add-hook 'prog-mode-hook 'rainbow-mode))
+(use-package mustache-mode
+   :ensure t)
 #+END_SRC
+* Modes
+
+  I need these packages installed:
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package mustache-mode
+       :ensure t)
+  #+END_SRC
+
+* CSS
+
+  Dunno why CSS doesn't honor the 2 spacing indent I have globally:
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package css
+       :init
+        (setq css-indent-offset 2))
+  #+END_SRC
+
+  Need the smart parens:
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package smartparens
+      :init (add-hook 'css-mode-hook 'smartparens-mode))
+  #+END_SRC
+
+* Surround with Tag
+
+  Seems that even the SGML mode doesn't care about properly formatted
+  HTML tags. This allows me to select a region and add wrap it in
+  tag...properly.
+
+  #+BEGIN_SRC emacs-lisp
+    (defun surround-html (start end tag)
+       "Wraps the specified region (or the current 'symbol / word'
+     with a properly formatted HTML tag."
+       (interactive "r\nsTag: " start end tag)
+       (save-excursion
+         (narrow-to-region start end)
+         (goto-char (point-min))
+         (insert (format "<%s>" tag))
+         (goto-char (point-max))
+         (insert (format "</%s>" tag))
+         (widen)))
+  #+END_SRC
+
+  And bind it to the HTML hook:
+
+  #+BEGIN_SRC emacs-lisp
+    (define-key html-mode-map (kbd "C-c C-w") 'surround-html)
+  #+END_SRC
+
+* Emmet Mode
+
+  [[https://github.com/smihica/emmet-mode][Emmet-Mode]] is pretty sweet, but need to hook it up to both
+  SGML (which includes HTML) and CSS:
+
+  #+BEGIN_SRC emacs-lisp
+  (use-package emmet-mode
+    :ensure t
+    :commands emmet-mode
+    :init
+    (setq emmet-indentation 2)
+    (setq emmet-move-cursor-between-quotes t)
+    :config
+    (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+    (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+  #+END_SRC
+
+* Skewer
+
+  Live coding for HTML/CSS/JavaScript with a [[https://github.com/skeeto/skewer-mode][Skewer server]] running in Emacs.
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package skewer-mode
+      :ensure t
+      :commands skewer-mode run-skewer
+      :config (skewer-setup))
+  #+END_SRC
+
+  Useful key-bindings with the =skewer-setup=:
+
+  - =C-x C-e= :: Evaluate the form before the point and display the result in the
+  - =minibuffer. If given a prefix argument, insert the result into the current
+  - =buffer.
+  - =C-M-x= :: Evaluate the top-level form around the point.
+  - =C-c C-k= :: Load the current buffer.
+  - =C-c C-z= :: Select the REPL buffer.
