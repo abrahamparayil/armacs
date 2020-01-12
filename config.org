@@ -41,7 +41,7 @@ default in our text editor.
 This piece of code tells emacs where to find packages from or in more proper 
 they are called 'repositories'. I personally use MELPA, ELPA and the official 
 org-mode repo to get the latest version of orgmode. So keep what you want take 
-out there rest. Oh and asuming you are new to elisp and emacs while editing 
+out there rest. Oh and asuming you are new to emacs-lisp and emacs while editing 
 these lines watch for the '()' and you should be fine.
 #+BEGIN_SRC emacs-lisp
 (require 'package)
@@ -51,6 +51,8 @@ these lines watch for the '()' and you should be fine.
     ("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
 #+END_SRC
+
+#+RESULTS:
 
 Occasionally emacs will tell you it can't find a package in any of your declared 
 repos all you will have to do is refresh your repositories. Unless the package 
@@ -74,12 +76,22 @@ package which is what I do. You just need i the name of the package you wish to
 install and it will do the rest including updating the package.
 #+BEGIN_SRC emacs-lisp
 (unless (package-installed-p 'use-package) ;;lisp equivalent of a while loop 
+(package-refresh-contents)
 (package-install 'use-package);; We're using package install to install use-package
 (setq load-prefer-newer t));; to install newer version when available
 (setq use-package-verbose t);; This line is just a raincheck
 (setq use-package-always-ensure t);;Always ensure that the package is installed
 (require 'use-package)
 #+END_SRC 
+Trace for obsolete packages 
+#+BEGIN_SRC emacs-lisp
+  (defun debug-on-load-obsolete (filename)
+    (when (equal (car (last (split-string filename "[/\\]") 2))
+                 "obsolete")
+      (debug)))
+  (add-to-list 'after-load-functions #'debug-on-load-obsolete)
+#+END_SRC
+
 And that's about it for package management.
 * Multiplexing emacs and emacsclient
 Opening a anew file in the same emacs-session requires the use of emacsclient. 
@@ -196,7 +208,7 @@ I list it in this org file.A small description on what it is and a link to it.
   #+END_SRC
 * Minor Conveniences
 - First, let’s increase the cache before starting garbage collection:
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
   (setq gc-cons-threshold 50000000)
 #+END_SRC
 - Set custom settings to load in own file
@@ -213,7 +225,7 @@ a temporary file effectively disables it (i.e. any changes are session local).
 #+END_SRC
 - Found [[https://github.com/wasamasa/dotemacs/blob/master/init.org#init][here]] how to remove the warnings from the GnuTLS library when using HTTPS
 increase the minimum prime bits size:
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
 (setq gnutls-min-prime-bits 4096)
 #+END_SRC
 - Disables Toolbar
@@ -289,7 +301,7 @@ Sometimes if I'm not really sure about a package, I find it hard to convince mys
 * Init File Support
    Load up a collection of enhancements to Emacs Lisp, including [[https://github.com/magnars/dash.el][dash]],
    [[https://github.com/magnars/s.el][s]] for string manipulation, and [[https://github.com/rejeep/f.el][f]] for file manipulation.
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC emacs-lisp
      (require 'cl)
 
      (use-package dash
@@ -316,7 +328,7 @@ Sometimes if I'm not really sure about a package, I find it hard to convince mys
    (set-window-scroll-bars (minibuffer-window) nil nil)
     #+END_SRC
   - Scroll Smoothly and Conservatively
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC emacs-lisp
      (setq scroll-conservatively 10000
            scroll-preserve-screen-position t)
    #+END_SRC
@@ -344,4 +356,5 @@ Sometimes if I'm not really sure about a package, I find it hard to convince mys
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/dev.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/webdev.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/ccpp.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/words.org"))
 #+END_SRC
