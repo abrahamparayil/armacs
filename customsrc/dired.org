@@ -1,0 +1,8 @@
+* dired
+Hide dotfiles by default, but toggle their visibility with ..
+#+BEGIN_SRC emacs-lisp
+(use-package dired-hide-dotfiles
+  :config
+  (dired-hide-dotfiles-mode)
+  (define-key dired-mode-map "." 'dired-hide-dotfiles-mode))
+#+END_SRC
