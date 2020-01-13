@@ -6,3 +6,15 @@ Hide dotfiles by default, but toggle their visibility with ..
   (dired-hide-dotfiles-mode)
   (define-key dired-mode-map "." 'dired-hide-dotfiles-mode))
 #+END_SRC
+Open media with the appropriate programs.
+#+BEGIN_SRC emacs-lisp
+(use-package dired-open
+  :config
+  (setq dired-open-extensions
+        '(("pdf" . "zathura")
+          ("mkv" . "mpv")
+          ("mp3" . "mpv")
+          ("mp4" . "mpv")
+          ("webm" . "mpv")
+          ("avi" . "mpv"))))
+#+END_SRC
