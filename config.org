@@ -351,10 +351,16 @@ Sometimes if I'm not really sure about a package, I find it hard to convince mys
   (add-hook 'pre-command-hook 'my-menu-bar-open-after))))
   (global-set-key [f10] 'my-menu-bar-open)
   #+END_SRC
+* Enabling the clock
+This turns on the clock globally.
+#+BEGIN_SRC emacs-lisp
+(display-time-mode 1)
+#+END_SRC
 * custom src
 #+BEGIN_SRC emacs-lisp
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/dev.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/webdev.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/ccpp.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/words.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/orgmode.org"))
 #+END_SRC
