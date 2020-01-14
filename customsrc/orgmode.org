@@ -10,3 +10,7 @@ Asterisk can be boring to look at.
    #+BEGIN_SRC emacs-lisp
      (add-hook 'org-mode-hook 'flyspell-mode)
    #+END_SRC
+** Replacing (...)
+   #+BEGIN_SRC emacs-lisp
+  (setq org-ellipsis " ▶")
+   #+END_SRC
