@@ -50,3 +50,12 @@ Asterisk can be boring to look at.
      
      (setenv "BROWSER" "firefox")
      #+END_SRC
+*** Exporting to PDF 
+- Open compiled PDFs in =zathura= instead of in the editor.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook
+        '(lambda ()
+           (delete '("\\.pdf\\'" . default) org-file-apps)
+           (add-to-list 'org-file-apps '("\\.pdf\\'" . "zathura %s"))))
+#+END_SRC
