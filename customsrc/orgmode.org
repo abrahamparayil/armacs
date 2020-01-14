@@ -1,0 +1,8 @@
+* Org-mode
+** org-bullets
+Asterisk can be boring to look at.
+#+BEGIN_SRC emacs-lisp
+(use-package org-bullets
+:init
+(add-hook 'org-mode-hook #'org-bullets-mode))
+#+END_SRC
