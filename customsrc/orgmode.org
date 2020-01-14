@@ -14,3 +14,20 @@ Asterisk can be boring to look at.
    #+BEGIN_SRC emacs-lisp
   (setq org-ellipsis " ▶")
    #+END_SRC
+** Exporting
+   Allow export to markdown and beamer (for presentations).
+
+   #+BEGIN_SRC emacs-lisp
+     (require 'ox-md)
+     (require 'ox-beamer)
+   #+END_SRC
+
+   Allow =babel= to evaluate Emacs lisp, Ruby, dot, or Gnuplot code.
+
+   #+BEGIN_SRC emacs-lisp
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((emacs-lisp . t)
+	(python . t)
+	(C . t)))
+   #+END_SRC
