@@ -63,3 +63,19 @@ Asterisk can be boring to look at.
 #+BEGIN_SRC emacs-lisp
   (use-package ox-twbs)
 #+END_SRC
+*** ox-reveal
+**** htmlize
+  This package converts the buffer text and the associated decorations to HTML. To use it, just switch to the buffer you want HTML-ized and type M-x htmlize-buffer. You will be switched to a new buffer that contains the resulting HTML code. You can edit and inspect this buffer, or you can just save it with C-x C-w. M-x htmlize-file will find a file, fontify it, and save the HTML version in FILE.html, without any additional intervention. M-x htmlize-many-files allows you to htmlize any number of files in the same manner. M-x htmlize-many-files-dired does the same for files marked in a dired buffer.
+  #+BEGIN_SRC emacs-lisp
+   (use-package htmlize
+   :ensure t)
+   (setq org-html-postamble nil)
+  #+END_SRC
+
+  Makes org documents into presentations using js.
+  #+BEGIN_SRC emacs-lisp
+(use-package ox-reveal
+:ensure ox-reveal)
+(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+(setq org-reveal-mathjax t)   
+  #+END_SRC
