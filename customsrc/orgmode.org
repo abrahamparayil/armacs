@@ -6,3 +6,7 @@ Asterisk can be boring to look at.
 :init
 (add-hook 'org-mode-hook #'org-bullets-mode))
 #+END_SRC
+** Enable spell-checking in Org-mode.
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'org-mode-hook 'flyspell-mode)
+   #+END_SRC
