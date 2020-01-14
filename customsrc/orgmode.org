@@ -96,3 +96,15 @@ Asterisk can be boring to look at.
 (define-key org-mode-map (kbd "<f8>") 'org-tree-slide-mode)
 (define-key org-mode-map (kbd "c-<f8>") 'org-tree-slide-skip-done-toggle)
    #+END_SRC
+** Easy-to-add emacs-lisp template
+Hitting tab after an "<el" in an org-mode file will create a template for emacs-lisp insertion.
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'org-structure-template-alist
+	       '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+  (add-to-list 'org-structure-template-alist
+	       '("cp" "#+BEGIN_SRC c\n?\n#+END_SRC"))
+  (add-to-list 'org-structure-template-alist
+	       '("py" "#+BEGIN_SRC python\n?\n#+END_SRC"))
+  (add-to-list 'org-structure-template-alist
+	       '("base" "#+TITLE:\n#+AUTHOR: Abraham Raji\n#+EMAIL: abrahamraji99@gmail.com\n#+STARTUP: overview\n#+CREATOR: avronr\n#+LANGUAGE: en\n#+OPTIONS: num:nil\n"))
+#+END_SRC
