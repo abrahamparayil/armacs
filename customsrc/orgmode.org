@@ -31,3 +31,22 @@ Asterisk can be boring to look at.
 	(python . t)
 	(C . t)))
    #+END_SRC
+
+*** Exporting to HTML
+     Don't include a footer with my contact and publishing information at the bottom
+     of every exported HTML document.
+     
+     #+BEGIN_SRC emacs-lisp
+     (setq org-html-postamble nil)
+     #+END_SRC
+     
+     Exporting to HTML and opening the results triggers =/usr/bin/sensible-browser=,
+     which checks the =$BROWSER= environment variable to choose the right browser.
+     I'd like to always use Firefox, so:
+     
+     #+BEGIN_SRC emacs-lisp
+     (setq browse-url-browser-function 'browse-url-generic
+     browse-url-generic-program "firefox")
+     
+     (setenv "BROWSER" "firefox")
+     #+END_SRC
