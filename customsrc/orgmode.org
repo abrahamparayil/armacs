@@ -59,3 +59,7 @@ Asterisk can be boring to look at.
            (delete '("\\.pdf\\'" . default) org-file-apps)
            (add-to-list 'org-file-apps '("\\.pdf\\'" . "zathura %s"))))
 #+END_SRC
+*** Add bootstrap styled export.
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-twbs)
+#+END_SRC
