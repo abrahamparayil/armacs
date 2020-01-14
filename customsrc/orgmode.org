@@ -79,3 +79,20 @@ Asterisk can be boring to look at.
 (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
 (setq org-reveal-mathjax t)   
   #+END_SRC
+*** Tree Slide
+
+   A quick way to display an org-mode file is using [[https://github.com/takaxp/org-tree-slide][org-tree-slide]].
+
+   * org-tree-slide-move-next-tree (C->)
+   * org-tree-slide-move-previous-tree (C-<)
+   * org-tree-slide-content (C-x s c)
+
+   #+BEGIN_SRC elisp
+     (use-package org-tree-slide
+        :ensure t
+        :init
+        (setq org-tree-slide-skip-outline-level 4)
+        (org-tree-slide-simple-profile))
+(define-key org-mode-map (kbd "<f8>") 'org-tree-slide-mode)
+(define-key org-mode-map (kbd "c-<f8>") 'org-tree-slide-skip-done-toggle)
+   #+END_SRC
