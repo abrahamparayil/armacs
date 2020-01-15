@@ -19,3 +19,9 @@ Black is an opinionated pyton formatter. Install with =pip install black= so the
 #+BEGIN_SRC emacs-lisp
   (use-package blacken)
 #+END_SRC
+**** Kivy
+Sometimes I use kivy.
+#+BEGIN_SRC emacs-lisp
+  (use-package kivy-mode
+    :mode ("\\.kv\\'" . kivy-mode))
+#+END_SRC
