@@ -14,3 +14,8 @@
 :config
 (elpy-enable))
 #+END_SRC
+**** Black 
+Black is an opinionated pyton formatter. Install with =pip install black= so the command line tool is available.
+#+BEGIN_SRC emacs-lisp
+  (use-package blacken)
+#+END_SRC
