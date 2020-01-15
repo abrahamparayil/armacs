@@ -54,7 +54,7 @@ Scrolling through the output and searching for results that can be copied to the
    implementations.
 ** Visual Executables
   Eshell would get somewhat confused if I ran the following commands directly through
- the normal Emacs-Lisp library, as these need the better handling of ansiterm:
+  the normal Emacs-Lisp library, as these need the better handling of ansiterm:
   #+BEGIN_SRC emacs-lisp
     (use-package eshell
       :init
@@ -63,4 +63,23 @@ Scrolling through the output and searching for results that can be copied to the
                   (add-to-list 'eshell-visual-commands "ssh")
                   (add-to-list 'eshell-visual-commands "tail")
                   (add-to-list 'eshell-visual-commands "top"))))
+  #+END_SRC
+** Aliases
+  Gotta have some [[http://www.emacswiki.org/emacs/EshellAlias][shell aliases]], right?
+  #+BEGIN_SRC emacs-lisp
+      (add-hook 'eshell-mode-hook (lambda ()
+          (eshell/alias "e" "find-file $1")
+          (eshell/alias "ff" "find-file $1")
+          (eshell/alias "emacs" "find-file $1")
+          (eshell/alias "ee" "find-file-other-window $1")
+
+          (eshell/alias "gd" "magit-diff-unstaged")
+          (eshell/alias "gds" "magit-diff-staged")
+          (eshell/alias "d" "dired $1")
+
+          ;; The 'ls' executable requires the Gnu version on the Mac
+          (let ((ls (if (file-exists-p "/usr/local/bin/gls")
+                        "/usr/local/bin/gls"
+                      "/bin/ls")))
+            (eshell/alias "ll" (concat ls " -AlohG --color=always")))))
   #+END_SRC
