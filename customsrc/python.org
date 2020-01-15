@@ -25,3 +25,7 @@ Sometimes I use kivy.
   (use-package kivy-mode
     :mode ("\\.kv\\'" . kivy-mode))
 #+END_SRC
+**** yasnippet
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'python-mode-hook 'yas-minor-mode)
+#+END_SRC
