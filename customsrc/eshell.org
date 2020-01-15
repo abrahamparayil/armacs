@@ -34,3 +34,17 @@
    - ~C-c C-o~ will delete the output from the last command.
    - ~C-c C-f~ will move forward a complete shell argument.
    - ~C-c C-b~ will move backward a complete shell argument.
+** Configuration
+Scrolling through the output and searching for results that can be copied to the kill ring is a great feature of Eshell. However, instead of running =end-of-buffer= key-binding, the following setting means any other key will jump back to the prompt:
+  #+BEGIN_SRC emacs-lisp
+    (use-package eshell
+      :init
+      (setq ;; eshell-buffer-shorthand t ...  Can't see Bug#19391
+            eshell-scroll-to-bottom-on-input 'all
+            eshell-error-if-no-glob t
+            eshell-hist-ignoredups t
+            eshell-save-history-on-exit t
+            eshell-prefer-lisp-functions nil
+            eshell-destroy-buffer-when-process-dies t))
+  #+END_SRC
+   I can never seem to remember that =find= and =chmod= behave differently from Emacs than their Unix counterparts, so the last setting will prefer the native implementations.
