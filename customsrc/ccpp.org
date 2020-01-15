@@ -22,6 +22,11 @@
       (require 'flycheck-clang-analyzer)
        (flycheck-clang-analyzer-setup)))
 #+END_SRC
+* Company
+#+BEGIN_SRC emacs-lisp
+(use-package company-ctags
+:ensure t)
+#+END_SRC
 * Convenient packages
 Insert and delete C++ header files automatically
 #+BEGIN_SRC emacs-lisp
@@ -36,10 +41,5 @@ Completion-at-point backend for c/c++ using clang.
 Easy realtime C++ syntax check and IntelliSense with CMake.
 #+BEGIN_SRC emacs-lisp
 (use-package cpputils-cmake
-:ensure t)
-#+END_SRC
-* Company
-#+BEGIN_SRC emacs-lisp
-(use-package company-ctags
 :ensure t)
 #+END_SRC
