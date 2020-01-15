@@ -140,3 +140,14 @@ Scrolling through the output and searching for results that can be copied to the
        (let ((cmd (concat "find " (string-join args))))
          (shell-command-to-string cmd)))
    #+END_SRC
+** Clear
+   While deleting and recreating =eshell= may be just as fast, I always
+   forget and type =clear=, so let's implement it:
+
+   #+BEGIN_SRC emacs-lisp
+     (defun eshell/clear ()
+       "Clear the eshell buffer."
+       (let ((inhibit-read-only t))
+         (erase-buffer)
+         (eshell-send-input)))
+   #+END_SRC
