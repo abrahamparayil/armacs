@@ -35,7 +35,9 @@
    - ~C-c C-f~ will move forward a complete shell argument.
    - ~C-c C-b~ will move backward a complete shell argument.
 ** Configuration
-Scrolling through the output and searching for results that can be copied to the kill ring is a great feature of Eshell. However, instead of running =end-of-buffer= key-binding, the following setting means any other key will jump back to the prompt:
+Scrolling through the output and searching for results that can be copied to the
+ kill ring is a great feature of Eshell. However, instead of running =end-of-buffer
+= key-binding, the following setting means any other key will jump back to the prompt:
   #+BEGIN_SRC emacs-lisp
     (use-package eshell
       :init
