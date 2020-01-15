@@ -151,3 +151,44 @@ Scrolling through the output and searching for results that can be copied to the
          (erase-buffer)
          (eshell-send-input)))
    #+END_SRC
+** Predicate Filters and Modifiers
+  The =T= predicate filter allows me to limit file results that have have internal
+  =org-mode= tags. For instance, files that have a =#+TAGS:= header with a =mac=
+  label will be given to the =grep= function:
+  #+BEGIN_SRC sh
+     $ grep brew *.org(T'mac')
+  #+END_SRC
+  To extend Eshell, we need a two-part function.
+  1. Parse the Eshell buffer to look for the parameter (and move the point past the parameter).
+  2. A predicate function that takes a file as a parameter.
+
+  For the first step, we have our function /called/ as it helps parse the text at
+  this time. Based on what it sees, it returns the predicate function used to filter
+  the files:
+  #+BEGIN_SRC emacs-lisp
+    (defun eshell-org-file-tags ()
+      "Helps the eshell parse the text the point is currently on,
+    looking for parameters surrounded in single quotes. Returns a
+    function that takes a FILE and returns nil if the file given to
+    it doesn't contain the org-mode #+TAGS: entry specified."
+
+      (if (looking-at "'\\([^)']+\\)'")
+          (let* ((tag (match-string 1))
+                 (reg (concat "^#\\+TAGS:.* " tag "\\b")))
+            (goto-char (match-end 0))
+
+            `(lambda (file)
+               (with-temp-buffer
+                 (insert-file-contents file)
+                 (re-search-forward ,reg nil t 1))))
+        (error "The `T' predicate takes an org-mode tag value in single quotes.")))
+  #+END_SRC
+
+  Add it to the =eshell-predicate-alist= as the =T= tag:
+  #+BEGIN_SRC emacs-lisp
+    (add-hook 'eshell-pred-load-hook (lambda ()
+      (add-to-list 'eshell-predicate-alist '(?T . (eshell-org-file-tags)))))
+  #+END_SRC
+  *Note:* We can’t add it to the list until after we start our first
+  eshell session, so we just add it to the =eshell-pred-load-hook=
+  which is sufficient.
