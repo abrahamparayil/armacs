@@ -370,3 +370,44 @@ Scrolling through the output and searching for results that can be copied to the
   #+BEGIN_SRC emacs-lisp
     (setq tramp-default-method "ssh")
   #+END_SRC
+** Better Command Line History
+
+  On [[http://www.reddit.com/r/emacs/comments/1zkj2d/advanced_usage_of_eshell/][this discussion]] a little gem for using IDO to search back through
+  the history, instead of =M-R= to display the history in a selectable
+  buffer.
+
+  Also, while =M-p= cycles through the history, =M-P= actually moves
+  up the history in the buffer (easier than =C-c p= and =C-c n=?):
+
+  Since eshell's history often gets confused with blank lines in the
+  output, we can fix that with a better replacement functions pegged
+  to the =eshell-prompt-regexp= string:
+
+  #+BEGIN_SRC emacs-lisp
+      (defun eshell-next-prompt (n)
+        "Move to end of Nth next prompt in the buffer. See `eshell-prompt-regexp'."
+        (interactive "p")
+        (re-search-forward eshell-prompt-regexp nil t n)
+        (when eshell-highlight-prompt
+          (while (not (get-text-property (line-beginning-position) 'read-only) )
+            (re-search-forward eshell-prompt-regexp nil t n)))
+        (eshell-skip-prompt))
+
+      (defun eshell-previous-prompt (n)
+        "Move to end of Nth previous prompt in the buffer. See `eshell-prompt-regexp'."
+        (interactive "p")
+        (backward-char)
+        (eshell-next-prompt (- n)))
+
+      (defun eshell-insert-history ()
+        "Displays the eshell history to select and insert back into your eshell."
+        (interactive)
+        (insert (ido-completing-read "Eshell history: "
+                                     (delete-dups
+                                      (ring-elements eshell-history-ring)))))
+
+      (add-hook 'eshell-mode-hook (lambda ()
+          (define-key eshell-mode-map (kbd "M-S-P") 'eshell-previous-prompt)
+          (define-key eshell-mode-map (kbd "M-S-N") 'eshell-next-prompt)
+          (define-key eshell-mode-map (kbd "M-r") 'eshell-insert-history)))
+  #+END_SRC
