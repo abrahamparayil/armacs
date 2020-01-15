@@ -347,3 +347,26 @@ Scrolling through the output and searching for results that can be copied to the
 
   Here is the result:
   [[http://imgur.com/nkpwII0.png]]
+** Tramp
+
+  The ability to edit files on remote systems is a wonderful win,
+  since it means I don't need to have my Emacs environment running on
+  remote machines (still a possibility, just not a requirement).
+
+  According to [[http://www.gnu.org/software/emacs/manual/html_node/tramp/Filename-Syntax.html][the manual]], I can access a file over SSH, via:
+
+  #+BEGIN_EXAMPLE
+  /ssh:10.52.224.67:blah
+  #+END_EXAMPLE
+
+  However, if I set the default method to SSH, I can do this:
+
+  #+BEGIN_EXAMPLE
+  /10.52.224.67:blah
+  #+END_EXAMPLE
+
+  So, let's do it...
+
+  #+BEGIN_SRC emacs-lisp
+    (setq tramp-default-method "ssh")
+  #+END_SRC
