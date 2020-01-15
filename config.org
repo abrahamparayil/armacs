@@ -363,4 +363,5 @@ This turns on the clock globally.
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/ccpp.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/words.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/orgmode.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/eshell.org"))
 #+END_SRC
