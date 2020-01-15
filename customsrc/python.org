@@ -1,0 +1,7 @@
+#+TITLE: Python
+#+AUTHOR: Abraham Raji
+#+EMAIL: abrahamraji99@gmail.com
+#+STARTUP: overview
+#+CREATOR: avronr
+#+LANGUAGE: en
+#+OPTIONS: num:nil
