@@ -83,3 +83,11 @@ Scrolling through the output and searching for results that can be copied to the
                       "/bin/ls")))
             (eshell/alias "ll" (concat ls " -AlohG --color=always")))))
   #+END_SRC
+** Git
+   My =gst= command is just an alias to =magit-status=, but using the =alias= doesn't
+   pull in the current working directory, so I make it a function, instead:
+   #+BEGIN_SRC emacs-lisp
+     (defun eshell/gst (&rest args)
+         (magit-status (pop args) nil)
+         (eshell/echo))   ;; The echo command suppresses output
+   #+END_SRC
