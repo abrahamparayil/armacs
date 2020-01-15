@@ -49,4 +49,6 @@ Scrolling through the output and searching for results that can be copied to the
             eshell-prefer-lisp-functions nil
             eshell-destroy-buffer-when-process-dies t))
   #+END_SRC
-   I can never seem to remember that =find= and =chmod= behave differently from Emacs than their Unix counterparts, so the last setting will prefer the native implementations.
+   I can never seem to remember that =find= and =chmod= behave differently from
+   Emacs than their Unix counterparts, so the last setting will prefer the native
+   implementations.
