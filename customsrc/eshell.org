@@ -52,3 +52,15 @@ Scrolling through the output and searching for results that can be copied to the
    I can never seem to remember that =find= and =chmod= behave differently from
    Emacs than their Unix counterparts, so the last setting will prefer the native
    implementations.
+** Visual Executables
+  Eshell would get somewhat confused if I ran the following commands directly through
+ the normal Emacs-Lisp library, as these need the better handling of ansiterm:
+  #+BEGIN_SRC emacs-lisp
+    (use-package eshell
+      :init
+      (add-hook 'eshell-mode-hook
+                (lambda ()
+                  (add-to-list 'eshell-visual-commands "ssh")
+                  (add-to-list 'eshell-visual-commands "tail")
+                  (add-to-list 'eshell-visual-commands "top"))))
+  #+END_SRC
