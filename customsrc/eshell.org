@@ -6,4 +6,27 @@
 #+LANGUAGE: en
 #+OPTIONS: num:nil
 
+* Eshell
+** Basics
+*** Set up the Correct Path
+   Need the correct PATH even if we start Emacs from the GUI:
+   #+BEGIN_SRC emacs-lisp
+     (setenv "PATH"
+             (concat
+              "/usr/local/bin:/usr/local/sbin:"
+              (getenv "PATH")))
+   #+END_SRC
+*** Pager Setup
+   If any program wants to pause the output through the =$PAGER= variable, well, we don't really need that:
+   #+BEGIN_SRC emacs-lisp
+     (setenv "PAGER" "cat")
+   #+END_SRC
+*** Navigation and Keys
 
+   Eshell comes with some interesting features:
+   - ~M-RET~ can be used to accumulate further commands while a command is currently running.  Since all input is passed to the subprocess being executed, there is no automatic input queueing as there is with other shells.
+   - ~C-c C-t~ can be used to truncate the buffer if it grows too large.
+   - ~C-c C-r~ will move point to the beginning of the output of the last command.  With a prefix argument, it will narrow to view only that output.
+   - ~C-c C-o~ will delete the output from the last command.
+   - ~C-c C-f~ will move forward a complete shell argument.
+   - ~C-c C-b~ will move backward a complete shell argument.
