@@ -158,7 +158,6 @@ them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f=
 (setq vc-make-backup-files t)
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
  #+end_src
-
 * Windmove
 Windmove is a library built into GnuEmacs starting with version 21. It lets 
 you move point from window to window using Shift and the arrow keys. This is 
