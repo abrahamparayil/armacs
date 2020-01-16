@@ -274,7 +274,6 @@ increase the minimum prime bits size:
     (add-hook 'prog-mode-hook 'linum-relative-mode))
 (linum-relative-global-mode 1)
 #+END_SRC
-
 * Text
   - Fancy symbols
     #+BEGIN_SRC emacs-lisp
