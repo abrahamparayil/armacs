@@ -291,7 +291,11 @@ increase the minimum prime bits size:
       (set-face-attribute 'default nil :font "Liberation Mono"))
       #+END_SRC
 * Try
-Sometimes if I'm not really sure about a package, I find it hard to convince myself to add them to my config just for the sake of trying it or to install them to find that I dont really like it and then uninstall it. This package let's me "try" stuff. It actually installs a package but only temporarely. Any package I install with try will be lost if and when I restart emacs.
+Sometimes if I'm not really sure about a package, I find it hard to convince myself
+to add them to my config just for the sake of trying it or to install them to find
+that I dont really like it and then uninstall it. This package let's me "try" stuff
+It actually installs a package but only temporarely. Any package I install with try
+will be lost if and when I restart emacs.
 #+BEGIN_SRC emacs-lisp
 (use-package try
 	:ensure t)
