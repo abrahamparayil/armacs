@@ -92,7 +92,6 @@
    #+END_SRC
 
    This also requires [[https://github.com/pitkali/pos-tip/blob/master/pos-tip.el][pos-tip]].
-
 ** Yasnippets
 
    The [[https://github.com/capitaomorte/yasnippet][yasnippet project]] allows me to create snippets of code that
