@@ -75,10 +75,6 @@ Emmet (formerly *Zen Coding*) is a web-developer’s toolkit that can greatly im
    	   (setq emmet-use-css-transform t)
      	 (setq emmet-use-css-transform nil)))))
 #+END_SRC
-#+BEGIN_SRC emacs-lisp
-(use-package mustache-mode
-   :ensure t)
-#+END_SRC
 ** Modes
 
   I need these packages installed:
@@ -94,40 +90,6 @@ Emmet (formerly *Zen Coding*) is a web-developer’s toolkit that can greatly im
     (use-package smartparens
       :init (add-hook 'css-mode-hook 'smartparens-mode))
   #+END_SRC
-
-** Emmet Mode
-Emmet (formerly *Zen Coding*) is a web-developer’s toolkit that can greatly improve your HTML & CSS workflow. With Emmet, you can type CSS-like expressions that can be dynamically parsed, and produce output depending on what you type in the abbreviation. Emmet is developed and optimised for web-developers whose workflow depends on HTML/XML and CSS, but can be used with programming languages too. For example, this abbreviation:
-#+BEGIN_SRC html
- ul#nav>li.item$*4>a{Item $}
-#+END_SRC
-...can be expanded into:
-#+BEGIN_SRC html
-	<ul id="nav">
-		<li class="item1"><a href="">Item 1</a></li>
-		<li class="item2"><a href="">Item 2</a></li>
-		<li class="item3"><a href="">Item 3</a></li>
-		<li class="item4"><a href="">Item 4</a></li>
-	</ul>
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
-(use-package emmet-mode
-:ensure t)
-;;Turn on Emmet in web-mode.
-(add-hook 'web-mode-hook  'emmet-mode) 
-
-;;Web-mode is able to switch modes into css (style tags) or js (script tags) in an html file. For Emmet to switch between html and css properly in the same document, this hook is added.
- (add-hook 'web-mode-before-auto-complete-hooks
-   '(lambda ()
-    (let ((web-mode-cur-language
- 	    (web-mode-language-at-pos)))
-              (if (string= web-mode-cur-language "php")
-   	   (yas-activate-extra-mode 'php-mode)
-     	 (yas-deactivate-extra-mode 'php-mode))
-              (if (string= web-mode-cur-language "css")
-   	   (setq emmet-use-css-transform t)
-     	 (setq emmet-use-css-transform nil)))))
-
-#+END_SRC
 ** Skewer
 
   Live coding for HTML/CSS/JavaScript with a [[https://github.com/skeeto/skewer-mode][Skewer server]] running in Emacs.
@@ -147,3 +109,29 @@ Emmet (formerly *Zen Coding*) is a web-developer’s toolkit that can greatly im
   - =C-M-x= :: Evaluate the top-level form around the point.
   - =C-c C-k= :: Load the current buffer.
   - =C-c C-z= :: Select the REPL buffer.
+** Impatient Mode
+When you are editting html files, it is kind of a pain to switch between 
+windows and refresh them everytime you want to see if your code works or not. 
+It is for this reason we have Impatient mode. This mode let's us see the 
+effect of our code as we type.
+Using ~impatient-mode~
+
+Enable the web server provided by ~simple-httpd~:
+
+=M-x httpd-start=
+
+Publish buffers by enabling the minor mode `impatient-mode`.
+
+=M-x impatient-mode=
+
+And then point your browser to http://localhost:8080/imp/, select a
+buffer, and watch your changes appear as you type!
+
+If you are editing HTML that references resources in other files (like
+CSS) you can enable impatient-mode on those buffers as well. This will
+cause your browser to live refresh the page when you edit a referenced
+resource.
+#+BEGIN_SRC emacs-lisp
+(use-package impatient-mode
+:ensure t)
+#+END_SRC
