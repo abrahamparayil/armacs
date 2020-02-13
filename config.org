@@ -1,411 +1,1 @@
-#+TITLE: Emacs Config
-#+AUTHOR: Abraham Raji
-#+EMAIL: abrahamraji99@gmail.com
-#+STARTUP: overview
-#+CREATOR: avronr
-#+LANGUAGE: en
-#+OPTIONS: num:nil
-#+ATTR_HTML: style margin-left: auto; margin-right: auto;
-
-* User Info
-=user-full-name= returns the full name of the logged-in user or the value of the 
-environment variable =NAME=, if that is set. If the Emacs process’s user-id does 
-not correspond to any known user (and provided =NAME= is not set), the result 
-is "unknown". If uid is non-nil, then it should be a number (a user-id) or a 
-string (a login name). Then =user-full-name= returns the full name corresponding 
-to that user-id or login name. If you specify a user-id or login name that isn’t 
-defined, it returns =nil=.
-=user-mail-address= holds the nominal email address of the user who is using 
-Emacs. Emacs normally sets this variable to a default value after reading your 
-init files, but not if you have already set it. So you can set the variable to 
-some other value in your init file if you do not want to use the default value.  
-#+BEGIN_SRC emacs-lisp
-   (setq user-full-name "Abraham Raji"
-         user-email "abrahamraji99@gmail.com")
-#+END_SRC
-* Set UTF-8 encoding
-UTF-8 (UCS Transformation Format 8) is the World Wide Web's most common 
-character encoding. Each character is represented by one to four bytes. UTF-8 is 
-backward-compatible with ASCII and can represent any standard Unicode character. 
-This is now a universal standard, so it makes sense for us to enable it by 
-default in our text editor.
-#+BEGIN_SRC emacs-lisp
-(setq locale-coding-system 'utf-8)
-(setq locale-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-#+END_SRC
-* Package Management
-This piece of code tells emacs where to find packages from or in more proper 
-they are called 'repositories'. I personally use MELPA, ELPA and the official 
-org-mode repo to get the latest version of orgmode. So keep what you want take 
-out there rest. Oh and asuming you are new to emacs-lisp and emacs while editing 
-these lines watch for the '()' and you should be fine.
-#+BEGIN_SRC emacs-lisp
-(require 'package)
- (setq package-archives
-  '(("melpa" . "https://melpa.org/packages/")
-    ("gnu" . "https://elpa.gnu.org/packages/")
-    ("org" . "http://orgmode.org/elpa/")))
-(package-initialize)
-#+END_SRC
-
-#+RESULTS:
-
-Occasionally emacs will tell you it can't find a package in any of your declared 
-repos all you will have to do is refresh your repositories. Unless the package 
-doesn't actually exist in the repos the problem should be fixed. 
-
-You can install the packages manually by:
-1. first hit [Meta] and x 
-2. then type 'package-install' and hit enter
-3. then type in the name of the package you wish to install and hit enter again.
-If the package exists in the repositories that you have asked emacs to look in, 
-the packages will be installed or you will recieve an error message. If we 
-directly use use package command in our config it will install the packages 
-every time emacs starts up even if they're already installed so we cannot use it 
-in our configs.You could also alternatively download packages as an archive file 
-from the repos like the ones mentioned above and ask emacs to install them from 
-the file. But unless you are developing packages for emacs and wish to test your 
-package before publishing it, I do not recommend this method. As you may have 
-noticed both process are a bit tedious and will only get worse as time goes by. 
-A better approach in my opinion would be to use a package manager like use-
-package which is what I do. You just need i the name of the package you wish to 
-install and it will do the rest including updating the package.
-#+BEGIN_SRC emacs-lisp
-(unless (package-installed-p 'use-package) ;;lisp equivalent of a while loop 
-(package-refresh-contents)
-(package-install 'use-package);; We're using package install to install use-package
-(setq load-prefer-newer t));; to install newer version when available
-(setq use-package-verbose t);; This line is just a raincheck
-(setq use-package-always-ensure t);;Always ensure that the package is installed
-(require 'use-package)
-#+END_SRC 
-Trace for obsolete packages 
-#+BEGIN_SRC emacs-lisp
-  (defun debug-on-load-obsolete (filename)
-    (when (equal (car (last (split-string filename "[/\\]") 2))
-                 "obsolete")
-      (debug)))
-  (add-to-list 'after-load-functions #'debug-on-load-obsolete)
-#+END_SRC
-
-And that's about it for package management.
-* Multiplexing emacs and emacsclient
-Opening a anew file in the same emacs-session requires the use of emacsclient. 
-Emacs command can be itself wrapped to do the smarter job to open the file if 
-the session exists. To start session you need to start-server. This snippet will 
-create server in first session of emacs. Add this to your emacs configuration file
-#+BEGIN_SRC emacs-lisp
-(require 'server)
-(unless (server-running-p)
-  (server-start))
-#+END_SRC
-
-To make this work you need to add this to you .bashrc [which can be found in 
-your home folder if you're using a *nix based OS(Linux, Unix, FreeBSD, MacOS)]:
-#+BEGIN_SRC sh
-function emacs {
-    if [[ $# -eq 0 ]]; then
-        /usr/bin/emacs # "emacs" is function, will cause recursion
-        return
-    fi
-    args=($*)
-    for ((i=0; i <= ${#args}; i++)); do
-        local a=${args[i]}
-        # NOTE: -c for creating new frame
-        if [[ ${a:0:1} == '-' && ${a} != '-c' && ${a} != '--' ]]; then
-            /usr/bin/emacs ${args[*]}
-            return
-        fi
-    done
-    setsid emacsclient -n -a /usr/bin/emacs ${args[*]}
-} 
-#+END_SRC
-* Async
-async.el is a module for doing asynchronous processing in Emacs
-#+BEGIN_SRC emacs-lisp
-    (use-package async
-    :ensure t
-    :init (dired-async-mode 1)
-    (autoload 'dired-async-mode "dired-async.el" nil t))
-#+END_SRC
-=dired-async-mode= will allow you to run asynchronously the dired commands for 
-copying, renaming and symlinking. If you are a helm user, this will allow you 
-to copy, rename etc... asynchronously from helm. Note that with helm you can 
-disable this by running the copy, rename etc... commands with a prefix argument.
-If you don't want to make dired/helm asynchronous disable it with dired-async-mode.
-=need to add support for auth-source library=
-* Backups
-This is one of the things people usually want to change right away. By default, 
-Emacs saves backup files in the current directory. These are the files ending 
-in =~= that are cluttering up your directory lists. The following code stashes 
-them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= 
-(=find-file=) if I really need to.
-#+begin_src emacs-lisp
-(setq backup-directory-alist 
-      '(("." . "~/.emacs.d/backups")))
-;; autosave the undo-tree history
-(setq undo-tree-history-directory-alist
-      `((".*" . ,temporary-file-directory)))
-#+end_src
- Disk space is cheap. Save lots.
- #+begin_src emacs-lisp
-(setq delete-old-versions -1)
-(setq version-control t)
-(setq vc-make-backup-files t)
-(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
- #+end_src
-* Themes
-   I'm a dark theme person. Another theme I'd suggest is the =liso-theme=.
-#+BEGIN_SRC emacs-lisp
-(use-package doom-themes
-:ensure t)
-(load-theme ' doom-gruvbox t)
-(setq sml/no-confirm-load-theme t)
-; Global settings (defaults)
-(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-doom-themes-enable-italic t) ; if nil, italics is universally disabled
-;; Corrects (and improves) org-mode's native fontification.
-(doom-themes-org-config)
-#+END_SRC
-* Windmove
-Windmove is a library built into GnuEmacs starting with version 21. It lets 
-you move point from window to window using Shift and the arrow keys. This is 
-easier to type than ‘C-x o’ and, for some users, may be more intuitive. 
-#+BEGIN_SRC emacs-lisp
-(windmove-default-keybindings)
-(global-set-key (kbd "C-c <left>")  'windmove-left)
-(global-set-key (kbd "C-c <right>") 'windmove-right)
-(global-set-key (kbd "C-c <up>")    'windmove-up)
-(global-set-key (kbd "C-c <down>")  'windmove-down)
-#+END_SRC
-* Quickly visit certain files
-As you keep using emacs or a specific desktop setup, you'll notice that you open 
-certain files/folder more often than others, hence it's only sensible to set up 
-key bindings that will open those specific files and save you the time of 
-navigating through your file system.
-- Emacs configuration
-  #+BEGIN_SRC emacs-lisp
-     (defun 4br/visit-emacs-config ()
-     (interactive)
-     (find-file "~/.emacs.d/config.org"))
-     (global-set-key (kbd "C-c e") '4br/visit-emacs-config)
-  #+END_SRC
-- Resources
-This is a habit of mine. Whenever a find some good material on a paricular topic 
-I list it in this org file.A small description on what it is and a link to it. 
-  #+BEGIN_SRC emacs-lisp
-     (defun 4br/visit-resources ()
-      (interactive)
-      (find-file "~/Documents/Resources/resources.org"))
-     (global-set-key (kbd "C-c r") '4br/visit-resources)
-  #+END_SRC
-- dotemacs
-  I like to hoard good emacs configs. This org file lists them.
-  #+BEGIN_SRC emacs-lisp
-     (defun 4br/visit-dotemacs ()
-     (interactive)
-     (find-file "~/Documents/dotemacs/index.org"))
-     (global-set-key (kbd "C-c d") '4br/visit-dotemacs)
-  #+END_SRC
-- i3 Config file
-  #+BEGIN_SRC emacs-lisp
-     (defun 4br/visit-i3config ()
-     (interactive)
-     (find-file "~/.config/i3/config"))
-     (global-set-key (kbd "C-c i") '4br/visit-i3config)
-  #+END_SRC
-* Minor Conveniences
-- First, let’s increase the cache before starting garbage collection:
-#+BEGIN_SRC emacs-lisp
-  (setq gc-cons-threshold 50000000)
-#+END_SRC
-- Set custom settings to load in own file
-This stops emacs adding customised settings to init.el. I try to avoid using 
-customize anyway, preferring programmatic control of variables. Creating it as 
-a temporary file effectively disables it (i.e. any changes are session local).
-#+BEGIN_SRC emacs-lisp
-(setq custom-file (make-temp-file "emacs-custom"))
-#+END_SRC
-#+END_SRC 
-- Inhibit Startup Message
-#+BEGIN_SRC emacs-lisp
-(setq inhibit-startup-message t)
-#+END_SRC
-- Found [[https://github.com/wasamasa/dotemacs/blob/master/init.org#init][here]] how to remove the warnings from the GnuTLS library when using HTTPS
-increase the minimum prime bits size:
-#+BEGIN_SRC emacs-lisp
-(setq gnutls-min-prime-bits 4096)
-#+END_SRC
-- Disables Toolbar
-#+BEGIN_SRC emacs-lisp
-(tool-bar-mode -1)
-#+END_SRC
-- Text wrapping
-#+BEGIN_SRC emacs-lisp
-(setq visual-line-mode t)
-#+END_SRC
-- Use y/n instead of yes/no
-#+BEGIN_SRC emacs-lisp
-(fset 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
-- make home and end buttons do their job
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "<home>") 'move-begining-of-line)
-(global-set-key (kbd "<end>") 'move-end-of-line)
-#+END_SRC
-- don't require two spaces for sentence end.
-#+BEGIN_SRC emacs-lisp
-(setq sentence-end-double-space nil)
-#+END_SRC
-- The beeping can be annoying--turn it off
-#+BEGIN_SRC emacs-lisp
-(setq visible-bell t
-        ring-bell-function 'ignore)
-#+END_SRC
-- Start in fullscreen
-#+BEGIN_SRC emacs-lisp
-;(toggle-frame-fullscreen)
-#+END_SRC
-- Kill current buffer
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x w") 'kill-current-buffer)
-#+END_SRC
-- Setting keybinding for eshell
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "<M-return>") 'eshell)
-#+END_SRC
-* Relative Line numbers
-#+BEGIN_SRC emacs-lisp
-(use-package linum-relative
-  :ensure t
-  :config
-    (setq linum-relative-current-symbol "")
-    (add-hook 'prog-mode-hook 'linum-relative-mode))
-(linum-relative-global-mode 1)
-#+END_SRC
-* Text
-  - Fancy symbols
-    #+BEGIN_SRC emacs-lisp
-   (global-prettify-symbols-mode t)
-    #+END_SRC
-  - Highlight current line
-    #+BEGIN_SRC emacs-lisp
-    (global-hl-line-mode t)
-    ;    (set-face-attribute 'hl-line nil :inherit nil :background "#1e2224")
-    #+END_SRC
-  - Fancy Font
-      #+BEGIN_SRC emacs-lisp
-      ;; set a default font
-      (when (member "Liberation Mono" (font-family-list))
-      (set-face-attribute 'default nil :font "Liberation Mono"))
-      #+END_SRC
-* Try
-Sometimes if I'm not really sure about a package, I find it hard to convince myself
-to add them to my config just for the sake of trying it or to install them to find
-that I dont really like it and then uninstall it. This package let's me "try" stuff
-It actually installs a package but only temporarely. Any package I install with try
-will be lost if and when I restart emacs.
-#+BEGIN_SRC emacs-lisp
-(use-package try
-	:ensure t)
-#+END_SRC
-* Init File Support
-   Load up a collection of enhancements to Emacs Lisp, including [[https://github.com/magnars/dash.el][dash]],
-   [[https://github.com/magnars/s.el][s]] for string manipulation, and [[https://github.com/rejeep/f.el][f]] for file manipulation.
-   #+BEGIN_SRC emacs-lisp
-     (require 'cl)
-
-     (use-package dash
-       :ensure t
-       :config (eval-after-load "dash" '(dash-enable-font-lock)))
-
-     (use-package s
-       :ensure t)
-
-     (use-package f
-       :ensure t)
-    #+END_SRC
-* Scrolling
--  System Scroll bars.
-    #+BEGIN_SRC emacs-lisp
-    (when (window-system)
-      (tool-bar-mode 0)
-      (when (fboundp 'horizontal-scroll-bar-mode)
-        (horizontal-scroll-bar-mode -1))
-      (scroll-bar-mode -1))
-    #+END_SRC
-  -  Mini-buffer Scroll bars.
-    #+BEGIN_SRC emacs-lisp
-   (set-window-scroll-bars (minibuffer-window) nil nil)
-    #+END_SRC
-  - Scroll Smoothly and Conservatively
-   #+BEGIN_SRC emacs-lisp
-     (setq scroll-conservatively 10000
-           scroll-preserve-screen-position t)
-   #+END_SRC
-* Menu bar
-  Toggles reveal and hide menubar with the f10 key
-  #+BEGIN_SRC emacs-lisp
-  (menu-bar-mode -1)
-  (defun my-menu-bar-open-after ()
-  (remove-hook 'pre-command-hook 'my-menu-bar-open-after)
-  (when (eq menu-bar-mode 42)
-  (menu-bar-mode -1)))
-  (defun my-menu-bar-open (&rest args)
-  (interactive)
-  (let ((open menu-bar-mode))
-  (unless open
-  (menu-bar-mode 1))
-  (funcall 'menu-bar-open args)
-  (unless open
-  (setq menu-bar-mode 42)
-  (add-hook 'pre-command-hook 'my-menu-bar-open-after))))
-  (global-set-key [f10] 'my-menu-bar-open)
-  #+END_SRC
-* Enabling the clock
-This turns on the clock globally.
-#+BEGIN_SRC emacs-lisp
-(display-time-mode 1)
-#+END_SRC
-* Configure ivy and counsel
-
-I use ivy and counsel as my completion framework.
-
-This configuration:
-
-    Uses counsel-M-x for command completion,
-    Replaces isearch with swiper,
-    Uses smex to maintain history,
-    Enables fuzzy matching everywhere except swiper (where it’s thoroughly unhelpful), and
-    Includes recent files in the switch buffer.
-#+BEGIN_SRC emacs-lisp
-(use-package counsel
-  :bind
-  ("M-x" . 'counsel-M-x)
-  ("C-s" . 'swiper)
-
-  :config
-  (use-package flx)
-  (use-package smex)
-
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
-  (setq ivy-initial-inputs-alist nil)
-  (setq ivy-re-builders-alist
-        '((swiper . ivy--regex-plus)
-          (t . ivy--regex-fuzzy))))
-#+END_SRC
-* custom src
-#+BEGIN_SRC emacs-lisp
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/dev.org"))
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/webdev.org"))
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/ccpp.org"))
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/words.org"))
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/orgmode.org"))
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/eshell.org"))
-#+END_SRC
+#+TITLE: Emacs Config#+AUTHOR: Abraham Raji#+EMAIL: abrahamraji99@gmail.com#+STARTUP: overview#+CREATOR: avronr#+LANGUAGE: en#+OPTIONS: num:nil#+ATTR_HTML: style margin-left: auto; margin-right: auto;* User Info=user-full-name= returns the full name of the logged-in user or the value of the environment variable =NAME=, if that is set. If the Emacs process’s user-id does not correspond to any known user (and provided =NAME= is not set), the result is "unknown". If uid is non-nil, then it should be a number (a user-id) or a string (a login name). Then =user-full-name= returns the full name corresponding to that user-id or login name. If you specify a user-id or login name that isn’t defined, it returns =nil=.=user-mail-address= holds the nominal email address of the user who is using Emacs. Emacs normally sets this variable to a default value after reading your init files, but not if you have already set it. So you can set the variable to some other value in your init file if you do not want to use the default value.  #+BEGIN_SRC emacs-lisp   (setq user-full-name "Abraham Raji"         user-email "abrahamraji99@gmail.com")#+END_SRC* Set UTF-8 encodingUTF-8 (UCS Transformation Format 8) is the World Wide Web's most common character encoding. Each character is represented by one to four bytes. UTF-8 is backward-compatible with ASCII and can represent any standard Unicode character. This is now a universal standard, so it makes sense for us to enable it by default in our text editor.#+BEGIN_SRC emacs-lisp(setq locale-coding-system 'utf-8)(setq locale-coding-system 'utf-8)(set-terminal-coding-system 'utf-8)(set-terminal-coding-system 'utf-8)(prefer-coding-system 'utf-8)(prefer-coding-system 'utf-8)#+END_SRC* Package ManagementThis piece of code tells emacs where to find packages from or in more proper they are called 'repositories'. I personally use MELPA, ELPA and the official org-mode repo to get the latest version of orgmode. So keep what you want take out there rest. Oh and asuming you are new to emacs-lisp and emacs while editing these lines watch for the '()' and you should be fine.#+BEGIN_SRC emacs-lisp(require 'package) (setq package-archives  '(("melpa" . "https://melpa.org/packages/")    ("gnu" . "https://elpa.gnu.org/packages/")    ("org" . "http://orgmode.org/elpa/")))(package-initialize)#+END_SRC#+RESULTS:Occasionally emacs will tell you it can't find a package in any of your declared repos all you will have to do is refresh your repositories. Unless the package doesn't actually exist in the repos the problem should be fixed. You can install the packages manually by:1. first hit [Meta] and x 2. then type 'package-install' and hit enter3. then type in the name of the package you wish to install and hit enter again.If the package exists in the repositories that you have asked emacs to look in, the packages will be installed or you will recieve an error message. If we directly use use package command in our config it will install the packages every time emacs starts up even if they're already installed so we cannot use it in our configs.You could also alternatively download packages as an archive file from the repos like the ones mentioned above and ask emacs to install them from the file. But unless you are developing packages for emacs and wish to test your package before publishing it, I do not recommend this method. As you may have noticed both process are a bit tedious and will only get worse as time goes by. A better approach in my opinion would be to use a package manager like use-package which is what I do. You just need i the name of the package you wish to install and it will do the rest including updating the package.#+BEGIN_SRC emacs-lisp(unless (package-installed-p 'use-package) ;;lisp equivalent of a while loop (package-refresh-contents)(package-install 'use-package);; We're using package install to install use-package(setq load-prefer-newer t));; to install newer version when available(setq use-package-verbose t);; This line is just a raincheck(setq use-package-always-ensure t);;Always ensure that the package is installed(require 'use-package)#+END_SRC Trace for obsolete packages #+BEGIN_SRC emacs-lisp  (defun debug-on-load-obsolete (filename)    (when (equal (car (last (split-string filename "[/\\]") 2))                 "obsolete")      (debug)))  (add-to-list 'after-load-functions #'debug-on-load-obsolete)#+END_SRCAnd that's about it for package management.* Multiplexing emacs and emacsclientOpening a anew file in the same emacs-session requires the use of emacsclient. Emacs command can be itself wrapped to do the smarter job to open the file if the session exists. To start session you need to start-server. This snippet will create server in first session of emacs. Add this to your emacs configuration file#+BEGIN_SRC emacs-lisp(require 'server)(unless (server-running-p)  (server-start))#+END_SRCTo make this work you need to add this to you .bashrc [which can be found in your home folder if you're using a *nix based OS(Linux, Unix, FreeBSD, MacOS)]:#+BEGIN_SRC shfunction emacs {    if [[ $# -eq 0 ]]; then        /usr/bin/emacs # "emacs" is function, will cause recursion        return    fi    args=($*)    for ((i=0; i <= ${#args}; i++)); do        local a=${args[i]}        # NOTE: -c for creating new frame        if [[ ${a:0:1} == '-' && ${a} != '-c' && ${a} != '--' ]]; then            /usr/bin/emacs ${args[*]}            return        fi    done    setsid emacsclient -n -a /usr/bin/emacs ${args[*]}} #+END_SRC* Asyncasync.el is a module for doing asynchronous processing in Emacs#+BEGIN_SRC emacs-lisp    (use-package async    :ensure t    :init (dired-async-mode 1)    (autoload 'dired-async-mode "dired-async.el" nil t))#+END_SRC=dired-async-mode= will allow you to run asynchronously the dired commands for copying, renaming and symlinking. If you are a helm user, this will allow you to copy, rename etc... asynchronously from helm. Note that with helm you can disable this by running the copy, rename etc... commands with a prefix argument.If you don't want to make dired/helm asynchronous disable it with dired-async-mode.=need to add support for auth-source library=* BackupsThis is one of the things people usually want to change right away. By default, Emacs saves backup files in the current directory. These are the files ending in =~= that are cluttering up your directory lists. The following code stashes them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= (=find-file=) if I really need to.#+begin_src emacs-lisp(setq backup-directory-alist       '(("." . "~/.emacs.d/backups")));; autosave the undo-tree history(setq undo-tree-history-directory-alist      `((".*" . ,temporary-file-directory)))#+end_src Disk space is cheap. Save lots. #+begin_src emacs-lisp(setq delete-old-versions -1)(setq version-control t)(setq vc-make-backup-files t)(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t))) #+end_src* Themes   I'm a dark theme person. Another theme I'd suggest is the =liso-theme=.#+BEGIN_SRC emacs-lisp(use-package doom-themes:ensure t)(load-theme ' doom-gruvbox t)(setq sml/no-confirm-load-theme t); Global settings (defaults)(setq doom-themes-enable-bold t    ; if nil, bold is universally disableddoom-themes-enable-italic t) ; if nil, italics is universally disabled;; Corrects (and improves) org-mode's native fontification.(doom-themes-org-config)#+END_SRC* Doom modeline     #+BEGIN_SRC emacs-lisp    (use-package doom-modeline    :ensure t    :defer t    :hook (after-init . doom-modeline-init))    #+END_SRC**** Customizations      #+BEGIN_SRC emacs-lisp     ;; How tall the mode-line should be (only respected in GUI Emacs).     (setq doom-modeline-height 25)          ;; How wide the mode-line bar should be (only respected in GUI Emacs).     (setq doom-modeline-bar-width 2)          (setq doom-modeline-buffer-file-name-style 'truncate-upto-project)          ;; What executable of Python will be used (if nil nothing will be showed).     (setq doom-modeline-python-executable "python")          ;; Whether show `all-the-icons' or not (if nil nothing will be showed).     ;; The icons may not be showed correctly on Windows. Disable to make it work.     (setq doom-modeline-icon t)          ;; Whether show the icon for major mode. It should respect `doom-modeline-icon'.     (setq doom-modeline-major-mode-icon t)          ;; Whether display minor modes or not. Non-nil to display in mode-line.     (setq doom-modeline-minor-modes nil)     (setq find-file-visit-truename t)     #+END_SRC* WindmoveWindmove is a library built into GnuEmacs starting with version 21. It lets you move point from window to window using Shift and the arrow keys. This is easier to type than ‘C-x o’ and, for some users, may be more intuitive. #+BEGIN_SRC emacs-lisp(windmove-default-keybindings)(global-set-key (kbd "C-c <left>")  'windmove-left)(global-set-key (kbd "C-c <right>") 'windmove-right)(global-set-key (kbd "C-c <up>")    'windmove-up)(global-set-key (kbd "C-c <down>")  'windmove-down)#+END_SRC* Quickly visit certain filesAs you keep using emacs or a specific desktop setup, you'll notice that you open certain files/folder more often than others, hence it's only sensible to set up key bindings that will open those specific files and save you the time of navigating through your file system.- Emacs configuration  #+BEGIN_SRC emacs-lisp     (defun 4br/visit-emacs-config ()     (interactive)     (find-file "~/.emacs.d/config.org"))     (global-set-key (kbd "C-c e") '4br/visit-emacs-config)  #+END_SRC- ResourcesThis is a habit of mine. Whenever a find some good material on a paricular topic I list it in this org file.A small description on what it is and a link to it.   #+BEGIN_SRC emacs-lisp     (defun 4br/visit-resources ()      (interactive)      (find-file "~/Documents/Resources/resources.org"))     (global-set-key (kbd "C-c r") '4br/visit-resources)  #+END_SRC- dotemacs  I like to hoard good emacs configs. This org file lists them.  #+BEGIN_SRC emacs-lisp     (defun 4br/visit-dotemacs ()     (interactive)     (find-file "~/Documents/dotemacs/index.org"))     (global-set-key (kbd "C-c d") '4br/visit-dotemacs)  #+END_SRC- i3 Config file  #+BEGIN_SRC emacs-lisp     (defun 4br/visit-i3config ()     (interactive)     (find-file "~/.config/i3/config"))     (global-set-key (kbd "C-c i") '4br/visit-i3config)  #+END_SRC* Minor Conveniences- First, let’s increase the cache before starting garbage collection:#+BEGIN_SRC emacs-lisp  (setq gc-cons-threshold 50000000)#+END_SRC- Set custom settings to load in own fileThis stops emacs adding customised settings to init.el. I try to avoid using customize anyway, preferring programmatic control of variables. Creating it as a temporary file effectively disables it (i.e. any changes are session local).#+BEGIN_SRC emacs-lisp(setq custom-file (make-temp-file "emacs-custom"))#+END_SRC#+END_SRC - Inhibit Startup Message#+BEGIN_SRC emacs-lisp(setq inhibit-startup-message t)#+END_SRC- Found [[https://github.com/wasamasa/dotemacs/blob/master/init.org#init][here]] how to remove the warnings from the GnuTLS library when using HTTPSincrease the minimum prime bits size:#+BEGIN_SRC emacs-lisp(setq gnutls-min-prime-bits 4096)#+END_SRC- Disables Toolbar#+BEGIN_SRC emacs-lisp(tool-bar-mode -1)#+END_SRC- Text wrapping#+BEGIN_SRC emacs-lisp(setq visual-line-mode t)#+END_SRC- Use y/n instead of yes/no#+BEGIN_SRC emacs-lisp(fset 'yes-or-no-p 'y-or-n-p)#+END_SRC- make home and end buttons do their job#+BEGIN_SRC emacs-lisp(global-set-key (kbd "<home>") 'move-begining-of-line)(global-set-key (kbd "<end>") 'move-end-of-line)#+END_SRC- don't require two spaces for sentence end.#+BEGIN_SRC emacs-lisp(setq sentence-end-double-space nil)#+END_SRC- The beeping can be annoying--turn it off#+BEGIN_SRC emacs-lisp(setq visible-bell t        ring-bell-function 'ignore)#+END_SRC- Start in fullscreen#+BEGIN_SRC emacs-lisp;(toggle-frame-fullscreen)#+END_SRC- Kill current buffer#+BEGIN_SRC emacs-lisp(global-set-key (kbd "C-x w") 'kill-current-buffer)#+END_SRC- Setting keybinding for eshell#+BEGIN_SRC emacs-lisp(global-set-key (kbd "<M-return>") 'eshell)#+END_SRC* Relative Line numbers#+BEGIN_SRC emacs-lisp(use-package linum-relative  :ensure t  :config    (setq linum-relative-current-symbol "")    (add-hook 'prog-mode-hook 'linum-relative-mode))(linum-relative-global-mode 1)#+END_SRC* Text  - Fancy symbols    #+BEGIN_SRC emacs-lisp   (global-prettify-symbols-mode t)    #+END_SRC  - Highlight current line    #+BEGIN_SRC emacs-lisp    (global-hl-line-mode t)    ;    (set-face-attribute 'hl-line nil :inherit nil :background "#1e2224")    #+END_SRC  - Fancy Font      #+BEGIN_SRC emacs-lisp      ;; set a default font      (when (member "Liberation Mono" (font-family-list))      (set-face-attribute 'default nil :font "Liberation Mono"))      #+END_SRC* TrySometimes if I'm not really sure about a package, I find it hard to convince myselfto add them to my config just for the sake of trying it or to install them to findthat I dont really like it and then uninstall it. This package let's me "try" stuffIt actually installs a package but only temporarely. Any package I install with trywill be lost if and when I restart emacs.#+BEGIN_SRC emacs-lisp(use-package try	:ensure t)#+END_SRC* Init File Support   Load up a collection of enhancements to Emacs Lisp, including [[https://github.com/magnars/dash.el][dash]],   [[https://github.com/magnars/s.el][s]] for string manipulation, and [[https://github.com/rejeep/f.el][f]] for file manipulation.   #+BEGIN_SRC emacs-lisp     (require 'cl)     (use-package dash       :ensure t       :config (eval-after-load "dash" '(dash-enable-font-lock)))     (use-package s       :ensure t)     (use-package f       :ensure t)    #+END_SRC* Scrolling-  System Scroll bars.    #+BEGIN_SRC emacs-lisp    (when (window-system)      (tool-bar-mode 0)      (when (fboundp 'horizontal-scroll-bar-mode)        (horizontal-scroll-bar-mode -1))      (scroll-bar-mode -1))    #+END_SRC  -  Mini-buffer Scroll bars.    #+BEGIN_SRC emacs-lisp   (set-window-scroll-bars (minibuffer-window) nil nil)    #+END_SRC  - Scroll Smoothly and Conservatively   #+BEGIN_SRC emacs-lisp     (setq scroll-conservatively 10000           scroll-preserve-screen-position t)   #+END_SRC* Menu bar  Toggles reveal and hide menubar with the f10 key  #+BEGIN_SRC emacs-lisp  (menu-bar-mode -1)  (defun my-menu-bar-open-after ()  (remove-hook 'pre-command-hook 'my-menu-bar-open-after)  (when (eq menu-bar-mode 42)  (menu-bar-mode -1)))  (defun my-menu-bar-open (&rest args)  (interactive)  (let ((open menu-bar-mode))  (unless open  (menu-bar-mode 1))  (funcall 'menu-bar-open args)  (unless open  (setq menu-bar-mode 42)  (add-hook 'pre-command-hook 'my-menu-bar-open-after))))  (global-set-key [f10] 'my-menu-bar-open)  #+END_SRC* Enabling the clockThis turns on the clock globally.#+BEGIN_SRC emacs-lisp(display-time-mode 1)#+END_SRC* Configure ivy and counselI use ivy and counsel as my completion framework.This configuration:    Uses counsel-M-x for command completion,    Replaces isearch with swiper,    Uses smex to maintain history,    Enables fuzzy matching everywhere except swiper (where it’s thoroughly unhelpful), and    Includes recent files in the switch buffer.#+BEGIN_SRC emacs-lisp(use-package counsel  :bind  ("M-C-x" . 'counsel-M-x)  ("C-S-s" . 'swiper)  :config  (use-package flx)  (use-package smex)  (ivy-mode 0)  (setq ivy-use-virtual-buffers t)  (setq ivy-count-format "(%d/%d) ")  (setq ivy-initial-inputs-alist nil)  (setq ivy-re-builders-alist        '((swiper . ivy--regex-plus)          (t . ivy--regex-fuzzy))))#+END_SRC* custom src#+BEGIN_SRC emacs-lisp(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/dev.org"))(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/webdev.org"))(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/ccpp.org"))(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/words.org"))(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/orgmode.org"))(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/eshell.org"))#+END_SRC
