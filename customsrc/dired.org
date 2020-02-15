@@ -1,0 +1,54 @@
+* dired
+Hide dotfiles by default, but toggle their visibility with ..
+#+BEGIN_SRC emacs-lisp
+(use-package dired-hide-dotfiles
+  :config
+  (dired-hide-dotfiles-mode)
+  (define-key dired-mode-map "." 'dired-hide-dotfiles-mode))
+#+END_SRC
+Open media with the appropriate programs.
+#+BEGIN_SRC emacs-lisp
+(use-package dired-open
+  :config
+  (setq dired-open-extensions
+        '(("pdf" . "zathura")
+          ("mkv" . "mpv")
+          ("mp3" . "mpv")
+          ("mp4" . "mpv")
+          ("webm" . "mpv")
+          ("avi" . "mpv"))))
+#+END_SRC
+These are the switches that get passed to ls when dired gets a list of files. We’re using:
+
+    l: Use the long listing format.
+    h: Use human-readable sizes.
+    v: Sort numbers naturally.
+    A: Almost all. Doesn’t include ”.” or ”..”.
+#+BEGIN_SRC emacs-lisp
+(setq-default dired-listing-switches "-lhvA")
+#+END_SRC
+
+Kill buffers of files/directories that are deleted in dired.
+#+BEGIN_SRC emacs-lisp
+(setq dired-clean-up-buffers-too t)
+#+END_SRC
+
+Always copy directories recursively instead of asking every time.
+#+BEGIN_SRC emacs-lisp
+(setq dired-recursive-copies 'always)
+#+END_SRC
+
+Ask before recursively deleting a directory, though.
+#+BEGIN_SRC emacs-lisp
+(setq dired-recursive-deletes 'top)
+#+END_SRC
+
+Open a file with an external program (that is, through xdg-open) by hitting C-c C-o.
+#+BEGIN_SRC emacs-lisp
+(defun dired-xdg-open ()
+  "In dired, open the file named on this line."
+  (interactive)
+  (let* ((file (dired-get-filename nil t)))
+    (call-process "xdg-open" nil 0 nil file)))
+(define-key dired-mode-map (kbd "C-c C-o") 'dired-xdg-open)
+#+END_SRC

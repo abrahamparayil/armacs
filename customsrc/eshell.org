@@ -1,0 +1,451 @@
+#+TITLE: Eshell
+#+AUTHOR: Abraham Raji
+#+EMAIL: abrahamraji99@gmail.com
+#+STARTUP: overview
+#+CREATOR: avronr
+#+LANGUAGE: en
+#+OPTIONS: num:nil
+
+* Eshell
+** Basics
+*** Set up the Correct Path
+   Need the correct PATH even if we start Emacs from the GUI:
+   #+BEGIN_SRC emacs-lisp
+     (setenv "PATH"
+             (concat
+              "/usr/local/bin:/usr/local/sbin:"
+              (getenv "PATH")))
+   #+END_SRC
+*** Pager Setup
+   If any program wants to pause the output through the =$PAGER= variable, well
+   , we don't really need that:
+   #+BEGIN_SRC emacs-lisp
+     (setenv "PAGER" "cat")
+   #+END_SRC
+*** Navigation and Keys
+
+   Eshell comes with some interesting features:
+   - ~M-RET~ can be used to accumulate further commands while a command is currently
+   running.  Since all input is passed to the subprocess being executed, there is no
+   automatic input queueing as there is with other shells.
+   - ~C-c C-t~ can be used to truncate the buffer if it grows too large.
+   - ~C-c C-r~ will move point to the beginning of the output of the last command.
+   With a prefix argument, it will narrow to view only that output.
+   - ~C-c C-o~ will delete the output from the last command.
+   - ~C-c C-f~ will move forward a complete shell argument.
+   - ~C-c C-b~ will move backward a complete shell argument.
+** Configuration
+Scrolling through the output and searching for results that can be copied to the
+ kill ring is a great feature of Eshell. However, instead of running =end-of-buffer
+= key-binding, the following setting means any other key will jump back to the prompt:
+  #+BEGIN_SRC emacs-lisp
+    (use-package eshell
+      :init
+      (setq ;; eshell-buffer-shorthand t ...  Can't see Bug#19391
+            eshell-scroll-to-bottom-on-input 'all
+            eshell-error-if-no-glob t
+            eshell-hist-ignoredups t
+            eshell-save-history-on-exit t
+            eshell-prefer-lisp-functions nil
+            eshell-destroy-buffer-when-process-dies t))
+  #+END_SRC
+   I can never seem to remember that =find= and =chmod= behave differently from
+   Emacs than their Unix counterparts, so the last setting will prefer the native
+   implementations.
+** Visual Executables
+  Eshell would get somewhat confused if I ran the following commands directly through
+  the normal Emacs-Lisp library, as these need the better handling of ansiterm:
+  #+BEGIN_SRC emacs-lisp
+    (use-package eshell
+      :init
+      (add-hook 'eshell-mode-hook
+                (lambda ()
+                  (add-to-list 'eshell-visual-commands "ssh")
+                  (add-to-list 'eshell-visual-commands "tail")
+                  (add-to-list 'eshell-visual-commands "top"))))
+  #+END_SRC
+** Aliases
+  Gotta have some [[http://www.emacswiki.org/emacs/EshellAlias][shell aliases]], right?
+  #+BEGIN_SRC emacs-lisp
+      (add-hook 'eshell-mode-hook (lambda ()
+          (eshell/alias "e" "find-file $1")
+          (eshell/alias "ff" "find-file $1")
+          (eshell/alias "emacs" "find-file $1")
+          (eshell/alias "ee" "find-file-other-window $1")
+
+          (eshell/alias "gd" "magit-diff-unstaged")
+          (eshell/alias "gds" "magit-diff-staged")
+          (eshell/alias "d" "dired $1")
+
+          ;; The 'ls' executable requires the Gnu version on the Mac
+          (let ((ls (if (file-exists-p "/usr/local/bin/gls")
+                        "/usr/local/bin/gls"
+                      "/bin/ls")))
+            (eshell/alias "ll" (concat ls " -AlohG --color=always")))))
+  #+END_SRC
+** Git
+   My =gst= command is just an alias to =magit-status=, but using the =alias= doesn't
+   pull in the current working directory, so I make it a function, instead:
+   #+BEGIN_SRC emacs-lisp
+     (defun eshell/gst (&rest args)
+         (magit-status (pop args) nil)
+         (eshell/echo))   ;; The echo command suppresses output
+   #+END_SRC
+** Find File
+   We should have an "f" alias for searching the current directory for a file, and
+   a "ef" for editing that file.
+   #+BEGIN_SRC emacs-lisp
+     (defun eshell/f (filename &optional dir try-count)
+       "Searches for files matching FILENAME in either DIR or the
+     current directory. Just a typical wrapper around the standard
+     `find' executable.
+
+     Since any wildcards in FILENAME need to be escaped, this wraps the shell command.
+
+     If not results were found, it calls the `find' executable up to
+     two more times, wrapping the FILENAME pattern in wildcat
+     matches. This seems to be more helpful to me."
+       (let* ((cmd (concat
+                    (executable-find "find")
+                    " " (or dir ".")
+                    "      -not -path '*/.git*'"
+                    " -and -not -path '*node_modules*'"
+                    " -and -not -path '*classes*'"
+                    " -and "
+                    " -type f -and "
+                    "-iname '" filename "'"))
+              (results (shell-command-to-string cmd)))
+
+         (if (not (s-blank-str? results))
+             results
+           (cond
+            ((or (null try-count) (= 0 try-count))
+             (eshell/f (concat filename "*") dir 1))
+            ((or (null try-count) (= 1 try-count))
+             (eshell/f (concat "*" filename) dir 2))
+            (t "")))))
+
+     (defun eshell/ef (filename &optional dir)
+       "Searches for the first matching filename and loads it into a
+     file to edit."
+       (let* ((files (eshell/f filename dir))
+              (file (car (s-split "\n" files))))
+         (find-file file)))
+   #+END_SRC
+   Typing =find= in Eshell runs the =find= function, which doesn’t do what I expect
+   , and creating an alias is ineffective in overriding it, so a function will do:
+   #+BEGIN_SRC emacs-lisp
+     (defun eshell/find (&rest args)
+       "Wrapper around the ‘find’ executable."
+       (let ((cmd (concat "find " (string-join args))))
+         (shell-command-to-string cmd)))
+   #+END_SRC
+** Clear
+   While deleting and recreating =eshell= may be just as fast, I always
+   forget and type =clear=, so let's implement it:
+
+   #+BEGIN_SRC emacs-lisp
+     (defun eshell/clear ()
+       "Clear the eshell buffer."
+       (let ((inhibit-read-only t))
+         (erase-buffer)
+         (eshell-send-input)))
+   #+END_SRC
+** Predicate Filters and Modifiers
+  The =T= predicate filter allows me to limit file results that have have internal
+  =org-mode= tags. For instance, files that have a =#+TAGS:= header with a =mac=
+  label will be given to the =grep= function:
+  #+BEGIN_SRC sh
+     $ grep brew *.org(T'mac')
+  #+END_SRC
+  To extend Eshell, we need a two-part function.
+  1. Parse the Eshell buffer to look for the parameter (and move the point past the parameter).
+  2. A predicate function that takes a file as a parameter.
+
+  For the first step, we have our function /called/ as it helps parse the text at
+  this time. Based on what it sees, it returns the predicate function used to filter
+  the files:
+  #+BEGIN_SRC emacs-lisp
+    (defun eshell-org-file-tags ()
+      "Helps the eshell parse the text the point is currently on,
+    looking for parameters surrounded in single quotes. Returns a
+    function that takes a FILE and returns nil if the file given to
+    it doesn't contain the org-mode #+TAGS: entry specified."
+
+      (if (looking-at "'\\([^)']+\\)'")
+          (let* ((tag (match-string 1))
+                 (reg (concat "^#\\+TAGS:.* " tag "\\b")))
+            (goto-char (match-end 0))
+
+            `(lambda (file)
+               (with-temp-buffer
+                 (insert-file-contents file)
+                 (re-search-forward ,reg nil t 1))))
+        (error "The `T' predicate takes an org-mode tag value in single quotes.")))
+  #+END_SRC
+
+  Add it to the =eshell-predicate-alist= as the =T= tag:
+  #+BEGIN_SRC emacs-lisp
+    (add-hook 'eshell-pred-load-hook (lambda ()
+      (add-to-list 'eshell-predicate-alist '(?T . (eshell-org-file-tags)))))
+  #+END_SRC
+  *Note:* We can’t add it to the list until after we start our first
+  eshell session, so we just add it to the =eshell-pred-load-hook=
+  which is sufficient.
+** Special Prompt
+
+  Following [[http://blog.liangzan.net/blog/2012/12/12/customizing-your-emacs-eshell-prompt/][these instructions]], we build a better prompt with the Git
+  branch in it (Of course, it matches my Bash prompt). First, we need
+  a function that returns a string with the Git branch in it,
+  e.g. ":master"
+
+  #+BEGIN_SRC emacs-lisp
+    (defun curr-dir-git-branch-string (pwd)
+      "Returns current git branch as a string, or the empty string if
+    PWD is not in a git repo (or the git command is not found)."
+      (interactive)
+      (when (and (not (file-remote-p pwd))
+                 (eshell-search-path "git")
+                 (locate-dominating-file pwd ".git"))
+        (let* ((git-url (shell-command-to-string "git config --get remote.origin.url"))
+               (git-repo (file-name-base (s-trim git-url)))
+               (git-output (shell-command-to-string (concat "git rev-parse --abbrev-ref HEAD")))
+               (git-branch (s-trim git-output))
+               (git-icon  "\xe0a0")
+               (git-icon2 (propertize "\xf020" 'face `(:family "octicons"))))
+          (concat git-repo " " git-icon2 " " git-branch))))
+  #+END_SRC
+
+  The function takes the current directory passed in via =pwd= and
+  replaces the =$HOME= part with a tilde. I'm sure this function
+  already exists in the eshell source, but I didn't find it...
+
+  #+BEGIN_SRC emacs-lisp
+    (defun pwd-replace-home (pwd)
+      "Replace home in PWD with tilde (~) character."
+      (interactive)
+      (let* ((home (expand-file-name (getenv "HOME")))
+             (home-len (length home)))
+        (if (and
+             (>= (length pwd) home-len)
+             (equal home (substring pwd 0 home-len)))
+            (concat "~" (substring pwd home-len))
+          pwd)))
+  #+END_SRC
+
+  Make the directory name be shorter...by replacing all directory
+  names with just its first names. However, we leave the last two to
+  be the full names. Why yes, I did steal this.
+
+  #+BEGIN_SRC emacs-lisp
+    (defun pwd-shorten-dirs (pwd)
+      "Shorten all directory names in PWD except the last two."
+      (let ((p-lst (split-string pwd "/")))
+        (if (> (length p-lst) 2)
+            (concat
+             (mapconcat (lambda (elm) (if (zerop (length elm)) ""
+                                   (substring elm 0 1)))
+                        (butlast p-lst 2)
+                        "/")
+             "/"
+             (mapconcat (lambda (elm) elm)
+                        (last p-lst 2)
+                        "/"))
+          pwd)))  ;; Otherwise, we just return the PWD
+  #+END_SRC
+
+  Break up the directory into a "parent" and a "base":
+
+  #+BEGIN_SRC emacs-lisp
+    (defun split-directory-prompt (directory)
+      (if (string-match-p ".*/.*" directory)
+          (list (file-name-directory directory) (file-name-base directory))
+        (list "" directory)))
+  #+END_SRC
+
+  Using virtual environments for certain languages is helpful to know,
+  especially since I change them based on the directory.
+
+  #+BEGIN_SRC emacs-lisp
+    (defun ruby-prompt ()
+      "Returns a string (may be empty) based on the current Ruby Virtual Environment."
+      (let* ((executable "~/.rvm/bin/rvm-prompt")
+             (command    (concat executable "v g")))
+        (when (file-exists-p executable)
+          (let* ((results (shell-command-to-string executable))
+                 (cleaned (string-trim results))
+                 (gem     (propertize "\xe92b" 'face `(:family "alltheicons"))))
+            (when (and cleaned (not (equal cleaned "")))
+              (s-replace "ruby-" gem cleaned))))))
+
+    (defun python-prompt ()
+      "Returns a string (may be empty) based on the current Python
+       Virtual Environment. Assuming the M-x command: `pyenv-mode-set'
+       has been called."
+      (when (fboundp #'pyenv-mode-version)
+        (let ((venv (pyenv-mode-version)))
+          (when venv
+            (concat
+             (propertize "\xe928" 'face `(:family "alltheicons"))
+             (pyenv-mode-version))))))
+  #+END_SRC
+
+  Now tie it all together with a prompt function can color each of the
+  prompts components.
+
+  #+BEGIN_SRC emacs-lisp
+    (defun eshell/eshell-local-prompt-function ()
+      "A prompt for eshell that works locally (in that is assumes
+    that it could run certain commands) in order to make a prettier,
+    more-helpful local prompt."
+      (interactive)
+      (let* ((pwd        (eshell/pwd))
+             (directory (split-directory-prompt
+                         (pwd-shorten-dirs
+                          (pwd-replace-home pwd))))
+             (parent (car directory))
+             (name   (cadr directory))
+             (branch (curr-dir-git-branch-string pwd))
+             (ruby   (when (not (file-remote-p pwd)) (ruby-prompt)))
+             (python (when (not (file-remote-p pwd)) (python-prompt)))
+
+             (dark-env (eq 'dark (frame-parameter nil 'background-mode)))
+             (for-bars                 `(:weight bold))
+             (for-parent  (if dark-env `(:foreground "dark orange") `(:foreground "blue")))
+             (for-dir     (if dark-env `(:foreground "orange" :weight bold)
+                            `(:foreground "blue" :weight bold)))
+             (for-git                  `(:foreground "green"))
+             (for-ruby                 `(:foreground "red"))
+             (for-python               `(:foreground "#5555FF")))
+
+        (concat
+         (propertize "⟣─ "    'face for-bars)
+         (propertize parent   'face for-parent)
+         (propertize name     'face for-dir)
+         (when branch
+           (concat (propertize " ── "    'face for-bars)
+                   (propertize branch   'face for-git)))
+         (when ruby
+           (concat (propertize " ── " 'face for-bars)
+                   (propertize ruby   'face for-ruby)))
+         (when python
+           (concat (propertize " ── " 'face for-bars)
+                   (propertize python 'face for-python)))
+         (propertize "\n"     'face for-bars)
+         (propertize (if (= (user-uid) 0) " #" " $") 'face `(:weight ultra-bold))
+         ;; (propertize " └→" 'face (if (= (user-uid) 0) `(:weight ultra-bold :foreground "red") `(:weight ultra-bold)))
+         (propertize " "    'face `(:weight bold)))))
+
+    (setq-default eshell-prompt-function #'eshell/eshell-local-prompt-function)
+  #+END_SRC
+
+  Turn off the default prompt, otherwise, it won't use ours:
+
+  #+BEGIN_SRC emacs-lisp
+    (setq eshell-highlight-prompt nil)
+  #+END_SRC
+
+  Here is the result:
+  [[http://imgur.com/nkpwII0.png]]
+** Tramp
+
+  The ability to edit files on remote systems is a wonderful win,
+  since it means I don't need to have my Emacs environment running on
+  remote machines (still a possibility, just not a requirement).
+
+  According to [[http://www.gnu.org/software/emacs/manual/html_node/tramp/Filename-Syntax.html][the manual]], I can access a file over SSH, via:
+
+  #+BEGIN_EXAMPLE
+  /ssh:10.52.224.67:blah
+  #+END_EXAMPLE
+
+  However, if I set the default method to SSH, I can do this:
+
+  #+BEGIN_EXAMPLE
+  /10.52.224.67:blah
+  #+END_EXAMPLE
+
+  So, let's do it...
+
+  #+BEGIN_SRC emacs-lisp
+    (setq tramp-default-method "ssh")
+  #+END_SRC
+** Better Command Line History
+
+  On [[http://www.reddit.com/r/emacs/comments/1zkj2d/advanced_usage_of_eshell/][this discussion]] a little gem for using IDO to search back through
+  the history, instead of =M-R= to display the history in a selectable
+  buffer.
+
+  Also, while =M-p= cycles through the history, =M-P= actually moves
+  up the history in the buffer (easier than =C-c p= and =C-c n=?):
+
+  Since eshell's history often gets confused with blank lines in the
+  output, we can fix that with a better replacement functions pegged
+  to the =eshell-prompt-regexp= string:
+
+  #+BEGIN_SRC emacs-lisp
+      (defun eshell-next-prompt (n)
+        "Move to end of Nth next prompt in the buffer. See `eshell-prompt-regexp'."
+        (interactive "p")
+        (re-search-forward eshell-prompt-regexp nil t n)
+        (when eshell-highlight-prompt
+          (while (not (get-text-property (line-beginning-position) 'read-only) )
+            (re-search-forward eshell-prompt-regexp nil t n)))
+        (eshell-skip-prompt))
+
+      (defun eshell-previous-prompt (n)
+        "Move to end of Nth previous prompt in the buffer. See `eshell-prompt-regexp'."
+        (interactive "p")
+        (backward-char)
+        (eshell-next-prompt (- n)))
+
+      (defun eshell-insert-history ()
+        "Displays the eshell history to select and insert back into your eshell."
+        (interactive)
+        (insert (ido-completing-read "Eshell history: "
+                                     (delete-dups
+                                      (ring-elements eshell-history-ring)))))
+
+      (add-hook 'eshell-mode-hook (lambda ()
+          (define-key eshell-mode-map (kbd "M-S-P") 'eshell-previous-prompt)
+          (define-key eshell-mode-map (kbd "M-S-N") 'eshell-next-prompt)
+          (define-key eshell-mode-map (kbd "M-r") 'eshell-insert-history)))
+  #+END_SRC
+** Helpers
+
+  Sometimes you just need to change something about the current file
+  you are editing...like the permissions or even execute it. Hitting
+  =Command-1= will prompt for a shell command string and then append
+  the current file to it and execute it.
+
+  #+BEGIN_SRC emacs-lisp
+    (defun execute-command-on-file-buffer (cmd)
+      (interactive "sCommand to execute: ")
+      (let* ((file-name (buffer-file-name))
+             (full-cmd (concat cmd " " file-name)))
+        (shell-command full-cmd)))
+
+    (bind-key "A-1" #'execute-command-on-file-buffer)
+
+    (defun execute-command-on-file-directory (cmd)
+      (interactive "sCommand to execute: ")
+      (let* ((dir-name (file-name-directory (buffer-file-name)))
+             (full-cmd (concat "cd " dir-name "; " cmd)))
+        (shell-command full-cmd)))
+
+    (bind-key "A-!" #'execute-command-on-file-directory)
+    (bind-key "s-!" #'execute-command-on-file-directory)
+  #+END_SRC
+
+  Some prompts, shells and terminal programs that display the exit
+  code as an icon in the fringe. So can the [[http://projects.ryuslash.org/eshell-fringe-status/][eshell-fringe-status]]
+  project. Seems to me, that if would be useful to rejuggle those
+  fringe markers so that the marker matched the command entered
+  (instead of seeing a red mark, and needing to scroll back in order
+  to wonder what command it was that made it). Still...
+
+  #+BEGIN_SRC emacs-lisp
+  (use-package eshell-fringe-status
+    :config
+    (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode))
+  #+END_SRC

@@ -1,0 +1,76 @@
+* Brackets using electric
+If you write any code, you may enjoy this. Typing the first character in a set 
+of 2, completes the second one after your cursor. Opening a bracket? It’s 
+closed for you already. Quoting something? It’s closed for you already. You 
+can easily add and remove pairs yourself, have a look.
+#+BEGIN_SRC emacs-lisp
+(setq electric-pair-pairs '(
+                           (?\{ . ?\})
+                           (?\( . ?\))
+                           (?\[ . ?\])
+                           (?\" . ?\")
+                           ))
+(electric-pair-mode t)
+#+END_SRC
+* Semantic Selection
+So what this package does is it select text in way that's sensibe towards the 
+syntax. So for example if I'm in a html tag that is the child of another tag, 
+invoking the keybinding for this package will first select the child then the 
+parent and hierarchichally move upwards. No need to drag the mouse around, 
+this is selection done sensibly.
+#+BEGIN_SRC emacs-lisp
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
+#+END_SRC
+* Multiple Cursors
+Multiple cursors for Emacs. Multiple cursors is a very nice package that lets 
+you create several cursors that all do the same thing as you type (see the 
+example below). You can add it to emacs using the steps described here Once 
+you have installed it, it is useful to set up a keybinding (a keyboard short-
+cut) for it. You can do this by adding the following to your emacs config file 
+to set C-c m c as the binding for multiple cursors. 
+#+BEGIN_SRC emacs-lisp
+(use-package multiple-cursors
+:ensure t)
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+#+END_SRC
+* Project Management
+*Projectile* is a project interaction library for Emacs. Its goal is to 
+provide a nice set of features operating on a project level without 
+introducing external dependencies (when feasible). For instance - finding 
+project files has a portable implementation written in pure Emacs Lisp without 
+the use of GNU find (but for performance sake an indexing mechanism backed by 
+external commands exists as well).
+
+Projectile tries to be practical - portability is great, but if some external 
+tools could speed up some task substantially and the tools are available, 
+Projectile will leverage them
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+:ensure t
+  :init
+  (projectile-mode 1))
+#+END_SRC
+* Parentheses
+- When programming I like my editor to try to help me with keeping parentheses balanced.
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+    :diminish smartparens-mode
+    :config
+    (add-hook 'prog-mode-hook 'smartparens-mode))
+#+END_SRC
+
+- Highlight parens etc. for improved readability.
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :config
+    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+END_SRC
+* Version Control
+#+BEGIN_SRC emacs-lisp
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/versionctrl.org"))
+#+END_SRC

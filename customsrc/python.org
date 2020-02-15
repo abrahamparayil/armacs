@@ -1,0 +1,37 @@
+#+TITLE: Python
+#+AUTHOR: Abraham Raji
+#+EMAIL: abrahamraji99@gmail.com
+#+STARTUP: overview
+#+CREATOR: avronr
+#+LANGUAGE: en
+#+OPTIONS: num:nil
+
+* Python
+**** Elpy
+#+BEGIN_SRC emacs-lisp
+(use-package elpy
+:ensure t
+:config
+(elpy-enable))
+#+END_SRC
+**** Black 
+Black is an opinionated pyton formatter. Install with =pip install black= so the
+ command line tool is available.
+#+BEGIN_SRC emacs-lisp
+  (use-package blacken)
+#+END_SRC
+**** Kivy
+Sometimes I use kivy.
+#+BEGIN_SRC emacs-lisp
+  (use-package kivy-mode
+    :mode ("\\.kv\\'" . kivy-mode))
+#+END_SRC
+**** yasnippet
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'python-mode-hook 'yas-minor-mode)
+#+END_SRC
+
+**** flycheck
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'python-mode-hook 'flycheck-mode)
+#+END_SRC

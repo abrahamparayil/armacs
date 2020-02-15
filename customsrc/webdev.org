@@ -1,0 +1,150 @@
+* Web Development
+I do quite a bit of web-development and have snippets, automatic indentation and autocompletion is a big help . =web-mode.el= is an autonomous emacs major-mode for editing web templates. It also takes care of basic stuff like syntax highlighting, auto pairing tags, removing white spaces etc. Web-mode is feature rich and as extensible as Emacs itself. For more details visit this [[http://web-mode.org/][link]]
+#+BEGIN_SRC emacs-lisp
+(use-package web-mode
+:ensure t)
+
+;;Automatically load web-mode when opening web-related files
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+
+(setq web-mode-engines-alist
+      '(("php"    . "\\.phtml\\'")
+        ("blade"  . "\\.blade\\.")))
+
+;;Set indentations
+(defun my-web-mode-hook ()
+"Hooks for Web mode."
+(setq web-mode-markup-indent-offset 2)
+(setq web-mode-code-indent-offset 2)
+(setq web-mode-css-indent-offset 2))
+(add-hook 'web-mode-hook  'my-web-mode-hook)    
+(setq tab-width 2)
+
+;;Highlight of columns
+(setq web-mode-enable-current-column-highlight t)
+(setq web-mode-enable-current-element-highlight t)
+
+;;Autoremove final white spaces on save
+(add-hook 'local-write-file-hooks
+            (lambda ()
+               (delete-trailing-whitespace)
+               nil))
+(defun my-web-mode-hook ()
+  (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files))
+)
+#+END_SRC
+*** Emmet Mode
+Emmet (formerly *Zen Coding*) is a web-developer’s toolkit that can greatly improve your HTML & CSS workflow. With Emmet, you can type CSS-like expressions that can be dynamically parsed, and produce output depending on what you type in the abbreviation. Emmet is developed and optimised for web-developers whose workflow depends on HTML/XML and CSS, but can be used with programming languages too. For example, this abbreviation:
+#+BEGIN_SRC html
+ ul#nav>li.item$*4>a{Item $}
+#+END_SRC
+...can be expanded into:
+#+BEGIN_SRC html
+	<ul id="nav">
+		<li class="item1"><a href="">Item 1</a></li>
+		<li class="item2"><a href="">Item 2</a></li>
+		<li class="item3"><a href="">Item 3</a></li>
+		<li class="item4"><a href="">Item 4</a></li>
+	</ul>
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package emmet-mode
+:ensure t)
+;;Turn on Emmet in web-mode.
+(add-hook 'web-mode-hook  'emmet-mode) 
+;;Web-mode is able to switch modes into css (style tags) or js (script tags) in an html file. For Emmet to switch between html and css properly in the same document, this hook is added.
+ (add-hook 'web-mode-before-auto-complete-hooks
+   '(lambda ()
+    (let ((web-mode-cur-language
+ 	    (web-mode-language-at-pos)))
+              (if (string= web-mode-cur-language "php")
+   	   (yas-activate-extra-mode 'php-mode)
+     	 (yas-deactivate-extra-mode 'php-mode))
+              (if (string= web-mode-cur-language "css")
+   	   (setq emmet-use-css-transform t)
+     	 (setq emmet-use-css-transform nil)))))
+#+END_SRC
+** Modes
+
+  I need these packages installed:
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package mustache-mode
+       :ensure t)
+  #+END_SRC
+
+  Need the smart parens:
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package smartparens
+      :init (add-hook 'css-mode-hook 'smartparens-mode))
+  #+END_SRC
+** Skewer
+
+  Live coding for HTML/CSS/JavaScript with a [[https://github.com/skeeto/skewer-mode][Skewer server]] running in Emacs.
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package skewer-mode
+      :ensure t
+      :commands skewer-mode run-skewer
+      :config (skewer-setup))
+  #+END_SRC
+
+  Useful key-bindings with the =skewer-setup=:
+
+  - =C-x C-e= :: Evaluate the form before the point and display the result in the
+  - =minibuffer. If given a prefix argument, insert the result into the current
+  - =buffer.
+  - =C-M-x= :: Evaluate the top-level form around the point.
+  - =C-c C-k= :: Load the current buffer.
+  - =C-c C-z= :: Select the REPL buffer.
+** Impatient Mode
+When you are editting html files, it is kind of a pain to switch between 
+windows and refresh them everytime you want to see if your code works or not. 
+It is for this reason we have Impatient mode. This mode let's us see the 
+effect of our code as we type.
+Using ~impatient-mode~
+
+Enable the web server provided by ~simple-httpd~:
+
+=M-x httpd-start=
+
+Publish buffers by enabling the minor mode `impatient-mode`.
+
+=M-x impatient-mode=
+
+And then point your browser to http://localhost:8080/imp/, select a
+buffer, and watch your changes appear as you type!
+
+If you are editing HTML that references resources in other files (like
+CSS) you can enable impatient-mode on those buffers as well. This will
+cause your browser to live refresh the page when you edit a referenced
+resource.
+#+BEGIN_SRC emacs-lisp
+(use-package impatient-mode
+:ensure t)
+#+END_SRC
+
+*Security implications*
+Please be aware that enabling `impatient-mode` exposes the whole directory in 
+which the file resides, not only the file itself. If our file is accessible 
+under `http://localhost:8080/imp/live/example.txt/`, it is possible to access `
+http://localhost:8080/imp/live/example.txt/a-file-in-the-same-directory/or-even/a-subdirectory-of-it.txt`. 
+It's especially dangerous when enabling `impatient-mode` for files like 
+`~/.bashrc` because it allows to access any file in the user's home directory 
+files such as `~/.ssh/id_rsa`.
+
+This behavior is not a bug, it is needed for the HTML files to work properly 
+along with their resources (such as CSS and JS). Please be aware of what is 
+exposed and/or configure your filewall accordingly.
