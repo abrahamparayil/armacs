@@ -9,8 +9,9 @@ I love it. You could get the same functionality with other text editors too but 
 :init
 (progn
 (bind-key "C-x g" 'magit-status)))
+(use-package evil-magit)
+(use-package with-editor)
 #+END_SRC
-
 *** Git-gutter
 Display line changes in gutter based on git history. Enable it everywhere.
 Originally a Sublime Text plug-in to show information about files in a git repository:

@@ -249,7 +249,7 @@ easier to type than ‘C-x o’ and, for some users, may be more intuitive.
     (global-evil-leader-mode))
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
-   "f f" 'projectile-find-file
+   "f f" 'find-file-at-point
    "f s" 'save-buffer
    "g g" 'magit-status
    "1" 'delete-other-windows
