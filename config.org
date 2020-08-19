@@ -83,14 +83,6 @@ install and it will do the rest including updating the package.
 (setq use-package-always-ensure t);;Always ensure that the package is installed
 (require 'use-package)
 #+END_SRC 
-Trace for obsolete packages 
-#+BEGIN_SRC emacs-lisp
-  (defun debug-on-load-obsolete (filename)
-    (when (equal (car (last (split-string filename "[/\\]") 2))
-                 "obsolete")
-      (debug)))
-  (add-to-list 'after-load-functions #'debug-on-load-obsolete)
-#+END_SRC
 
 And that's about it for package management.
 * Multiplexing emacs and emacsclient
@@ -247,6 +239,32 @@ easier to type than ‘C-x o’ and, for some users, may be more intuitive.
 (global-set-key (kbd "C-c <right>") 'windmove-right)
 (global-set-key (kbd "C-c <up>")    'windmove-up)
 (global-set-key (kbd "C-c <down>")  'windmove-down)
+#+END_SRC
+* Evil mode
+** Evil Leader
+#+BEGIN_SRC emacs-lisp
+ (use-package evil-leader
+    :ensure t
+    :config
+    (global-evil-leader-mode))
+(evil-leader/set-leader "<SPC>")
+(evil-leader/set-key
+   "f f" 'projectile-find-file
+   "f s" 'save-buffer
+   "g g" 'magit-status
+   "1" 'delete-other-windows
+   "e" 'counsel-find-file
+   "b" 'switch-to-buffer
+   "k" 'kill-current-buffer) 
+#+END_SRC
+** Installing Evil Mode
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path "~/.emacs.d/depends/goto-chg.el")
+  (use-package cl-lib
+  :ensure t)
+  (use-package evil
+  :ensure t)
+  (evil-mode 1)
 #+END_SRC
 * Quickly visit certain files
 As you keep using emacs or a specific desktop setup, you'll notice that you open 
@@ -458,7 +476,7 @@ This configuration:
   (use-package flx)
   (use-package smex)
 
-  (ivy-mode 0)
+  (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
   (setq ivy-initial-inputs-alist nil)
@@ -470,8 +488,8 @@ This configuration:
 #+BEGIN_SRC emacs-lisp
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/dev.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/webdev.org"))
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/ccpp.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/words.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/orgmode.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/eshell.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/ccpp.org"))
 #+END_SRC
