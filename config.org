@@ -155,7 +155,7 @@ them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f=
 #+BEGIN_SRC emacs-lisp
 (use-package doom-themes
 :ensure t)
-(load-theme ' doom-gruvbox t)
+(load-theme ' doom-one t)
 (setq sml/no-confirm-load-theme t)
 ; Global settings (defaults)
 (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -249,11 +249,11 @@ easier to type than ‘C-x o’ and, for some users, may be more intuitive.
     (global-evil-leader-mode))
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
-   "f f" 'find-file-at-point
+   "f f" 'counsel-find-file
    "f s" 'save-buffer
    "g g" 'magit-status
    "1" 'delete-other-windows
-   "e" 'counsel-find-file
+   "o s t" 'org-insert-structure-template
    "b" 'switch-to-buffer
    "k" 'kill-current-buffer) 
 #+END_SRC
@@ -457,7 +457,7 @@ This turns on the clock globally.
 #+END_SRC
 * Configure ivy and counsel
 
-I use ivy and counsel as my completion framework.
+I use ivy and counsel as mycompletion framework.
 
 This configuration:
 
@@ -469,20 +469,19 @@ This configuration:
 #+BEGIN_SRC emacs-lisp
 (use-package counsel
   :bind
-  ("M-C-x" . 'counsel-M-x)
+  ("M-C-x" . 'Counsel-M-x)
   ("C-S-s" . 'swiper)
-
   :config
   (use-package flx)
   (use-package smex)
 
-  (ivy-mode 1)
+  (ivy-mode -1)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
   (setq ivy-initial-inputs-alist nil)
   (setq ivy-re-builders-alist
         '((swiper . ivy--regex-plus)
-          (t . ivy--regex-fuzzy))))
+          (t . ivy--regex-fuzzy)))
 #+END_SRC
 * custom src
 #+BEGIN_SRC emacs-lisp

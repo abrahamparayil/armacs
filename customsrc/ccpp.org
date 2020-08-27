@@ -33,11 +33,6 @@ Insert and delete C++ header files automatically
 (use-package cpp-auto-include
 :ensure t)
 #+END_SRC
-Completion-at-point backend for c/c++ using clang.
-#+BEGIN_SRC emacs-lisp
-(use-package cpp-capf
-:ensure t)
-#+END_SRC
 Easy realtime C++ syntax check and IntelliSense with CMake.
 #+BEGIN_SRC emacs-lisp
 (use-package cpputils-cmake
