@@ -1,6 +1,6 @@
 #+TITLE: Emacs Config
 #+AUTHOR: Abraham Raji
-#+EMAIL: abrahamraji99@gmail.com
+#+EMAIL: avronr@tuta.io
 #+STARTUP: overview
 #+CREATOR: avronr
 #+LANGUAGE: en
