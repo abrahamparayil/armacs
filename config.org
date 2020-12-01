@@ -455,6 +455,15 @@ This turns on the clock globally.
 #+BEGIN_SRC emacs-lisp
 (display-time-mode 1)
 #+END_SRC
+* custom src
+#+BEGIN_SRC emacs-lisp
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/dev.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/webdev.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/words.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/orgmode.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/eshell.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/ccpp.org"))
+#+END_SRC
 * Configure ivy and counsel
 
 I use ivy and counsel as mycompletion framework.
@@ -470,10 +479,10 @@ This configuration:
 (use-package counsel
   :bind
   ("M-C-x" . 'Counsel-M-x)
-  ("C-S-s" . 'swiper)
+  ("C-S-s" . 'swipe)
   :config
   (use-package flx)
-  (use-package smex)
+  (use-package smex))
 
   (ivy-mode -1)
   (setq ivy-use-virtual-buffers t)
@@ -482,13 +491,4 @@ This configuration:
   (setq ivy-re-builders-alist
         '((swiper . ivy--regex-plus)
           (t . ivy--regex-fuzzy)))
-#+END_SRC
-* custom src
-#+BEGIN_SRC emacs-lisp
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/dev.org"))
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/webdev.org"))
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/words.org"))
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/orgmode.org"))
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/eshell.org"))
-(org-babel-load-file (expand-file-name "~/.emacs.d/customsrc/ccpp.org"))
 #+END_SRC
