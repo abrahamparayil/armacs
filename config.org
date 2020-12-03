@@ -77,14 +77,6 @@ to copy, rename etc... asynchronously from helm. Note that with helm you can
 disable this by running the copy, rename etc... commands with a prefix argument.
 If you don't want to make dired/helm asynchronous disable it with 
 dired-async-mode =need to add support for auth-source library=
-* Column Enforce Mode
-#+BEGIN_SRC emacs-lisp
-(straight-use-package
- '(column-enforce-mode :type git :host github :repo 
- "jordonbiondo/column-enforce-mode"))
-(require 'column-enforce-mode)
-(column-enforce-mode 1)
-#+END_SRC
 * Minor Conveniences
 - First, let’s increase the cache before starting garbage collection:
 #+BEGIN_SRC emacs-lisp
@@ -151,4 +143,134 @@ increase the minimum prime bits size:
 (setq linum-relative-current-symbol "")
 (add-hook 'prog-mode-hook 'linum-relative-mode)
 (linum-relative-global-mode 1)
+#+END_SRC
+* Column Enforce Mode
+#+BEGIN_SRC emacs-lisp
+(straight-use-package
+ '(column-enforce-mode :type git :host github :repo 
+ "jordonbiondo/column-enforce-mode"))
+(require 'column-enforce-mode)
+(column-enforce-mode 1)
+#+END_SRC
+* Quickly visit certain files
+As you keep using emacs or a specific desktop setup, you'll notice that you open 
+certain files/folder more often than others, hence it's only sensible to set up 
+key bindings that will open those specific files and save you the time of 
+navigating through your file system.
+- Emacs configuration
+  #+BEGIN_SRC emacs-lisp
+     (defun armacs/visit-emacs-config ()
+     (interactive)
+     (find-file "~/.emacs.d/config.org"))
+     (global-set-key (kbd "C-c e") 'armacs/visit-emacs-config)
+  #+END_SRC
+- Resources
+This is a habit of mine. Whenever a find some good material on a paricular topic 
+I list it in this org file.A small description on what it is and a link to it. 
+  #+BEGIN_SRC emacs-lisp
+     (defun armacs/visit-resources ()
+      (interactive)
+      (find-file "~/Documents/Resources/resources.org"))
+     (global-set-key (kbd "C-c r") 'armacs/visit-resources)
+  #+END_SRC
+- dotemacs
+  I like to hoard good emacs configs. This org file lists them.
+  #+BEGIN_SRC emacs-lisp
+     (defun armacs/visit-dotemacs ()
+     (interactive)
+     (find-file "~/Documents/dotemacs/index.org"))
+     (global-set-key (kbd "C-c d") 'armacs/visit-dotemacs)
+  #+END_SRC
+- Sway Config file
+  #+BEGIN_SRC emacs-lisp
+     (defun armacs/visit-swayconfig ()
+     (interactive)
+     (find-file "~/.config/sway/config"))
+     (global-set-key (kbd "C-c s") 'armacs/visit-swayconfig)
+  #+END_SRC
+* Scrolling
+-  System Scroll bars.
+    #+BEGIN_SRC emacs-lisp
+    (when (window-system)
+      (tool-bar-mode 0)
+      (when (fboundp 'horizontal-scroll-bar-mode)
+        (horizontal-scroll-bar-mode -1))
+      (scroll-bar-mode -1))
+    #+END_SRC
+  -  Mini-buffer Scroll bars.
+    #+BEGIN_SRC emacs-lisp
+   (set-window-scroll-bars (minibuffer-window) nil nil)
+    #+END_SRC
+  - Scroll Smoothly and Conservatively
+   #+BEGIN_SRC emacs-lisp
+     (setq scroll-conservatively 10000
+           scroll-preserve-screen-position t)
+   #+END_SRC
+* Menu bar
+  Toggles reveal and hide menubar with the f10 key
+  #+BEGIN_SRC emacs-lisp
+  (menu-bar-mode -1)
+  (defun my-menu-bar-open-after ()
+  (remove-hook 'pre-command-hook 'my-menu-bar-open-after)
+  (when (eq menu-bar-mode 42)
+  (menu-bar-mode -1)))
+  (defun my-menu-bar-open (&rest args)
+  (interactive)
+  (let ((open menu-bar-mode))
+  (unless open
+  (menu-bar-mode 1))
+  (funcall 'menu-bar-open args)
+  (unless open
+  (setq menu-bar-mode 42)
+  (add-hook 'pre-command-hook 'my-menu-bar-open-after))))
+  (global-set-key [f10] 'my-menu-bar-open)
+  #+END_SRC
+* Backups
+This is one of the things people usually want to change right away. By default, 
+Emacs saves backup files in the current directory. These are the files ending 
+in =~= that are cluttering up your directory lists. The following code stashes 
+them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= 
+(=find-file=) if I really need to.
+#+begin_src emacs-lisp
+(setq backup-directory-alist 
+      '(("." . "~/.emacs.d/backups")))
+;; autosave the undo-tree history
+(setq undo-tree-history-directory-alist
+      `((".*" . ,temporary-file-directory)))
+#+end_src
+ Disk space is cheap. Save lots.
+ #+begin_src emacs-lisp
+(setq delete-old-versions -1)
+(setq version-control t)
+(setq vc-make-backup-files t)
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+ #+end_src
+* Enabling the clock
+This turns on the clock globally.
+#+BEGIN_SRC emacs-lisp
+(display-time-mode 1)
+#+END_SRC
+* Evil mode
+** Installing Evil Mode
+#+BEGIN_SRC emacs-lisp
+(straight-use-package
+ '(goto-chg :type git :host github :repo 
+ "emacs-evil/goto-chg"))
+(straight-use-package 'cl-lib)
+(straight-use-package 'evil)
+(evil-mode 1)
+#+END_SRC
+** Evil Leader
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'evil-leader)
+(global-evil-leader-mode)
+(evil-leader/set-leader "<SPC>")
+(evil-leader/set-key
+"f f" 'counsel-find-file
+"f s" 'save-buffer
+"g g" 'magit-status
+"1" 'delete-other-windows
+"o s t" 'org-insert-structure-template
+"b" 'switch-to-buffer
+"k" 'kill-current-buffer) 
 #+END_SRC
