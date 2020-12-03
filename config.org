@@ -274,3 +274,7 @@ This turns on the clock globally.
 "b" 'switch-to-buffer
 "k" 'kill-current-buffer) 
 #+END_SRC
+* Color Theme
+#+BEGIN_SRC emacs-lisp
+(load-theme 'misterioso)
+#+END_SRC
