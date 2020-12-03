@@ -250,12 +250,18 @@ This turns on the clock globally.
 #+BEGIN_SRC emacs-lisp
 (display-time-mode 1)
 #+END_SRC
+* Magit
+Magit is an interface to the version control system Git, implemented as an Emacs package. Magit aspires to be a complete Git porcelain. While we cannot (yet) claim that Magit wraps and improves upon each and every Git command, it is complete enough to allow even experienced Git users to perform almost all of their daily version control tasks directly from within Emacs. While many fine Git clients exist, only Magit and Git itself deserve to be called porcelains.
+
+I love it. You could get the same functionality with other text editors too but none so light wieght or polished in my opinion.
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'magit)
+(straight-use-package 'evil-magit)
+(straight-use-package 'with-editor)
+#+END_SRC
 * Evil mode
 ** Installing Evil Mode
 #+BEGIN_SRC emacs-lisp
-(straight-use-package
- '(goto-chg :type git :host github :repo 
- "emacs-evil/goto-chg"))
 (straight-use-package 'cl-lib)
 (straight-use-package 'evil)
 (evil-mode 1)
